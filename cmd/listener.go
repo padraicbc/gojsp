@@ -5,22 +5,22 @@ import (
 	"log"
 
 	antlr "github.com/padraicbc/antlr4"
-	"github.com/padraicbc/parserv"
+	"github.com/padraicbc/gojsp"
 )
 
 type listener struct {
-	parserv.BaseJavaScriptParserListener
+	gojsp.BaseJavaScriptParserListener
 }
 
 func show(fname, text string) {
 
 	// log.Printf("%s %s\n", fname, text)
 }
-func (l *listener) EnterBlock(ctx *parserv.BlockContext) {
+func (l *listener) EnterBlock(ctx *gojsp.BlockContext) {
 	show("EnterBlock", ctx.GetText())
 }
 
-func (l *listener) EnterFunctionDeclaration(ctx *parserv.FunctionDeclarationContext) {
+func (l *listener) EnterFunctionDeclaration(ctx *gojsp.FunctionDeclarationContext) {
 	show("EnterFunctionDeclaration", ctx.FunctionBody().GetText())
 }
 
@@ -36,7 +36,7 @@ func (s *listener) VisitTerminal(node antlr.TerminalNode) {
 // importFromBlock
 //     : importDefault? (importNamespace | moduleItems) importF
 // EnterImportStatement is called when production importStatement is entered.
-func (s *listener) EnterImportStatement(ctx *parserv.ImportStatementContext) {
+func (s *listener) EnterImportStatement(ctx *gojsp.ImportStatementContext) {
 	impf := ctx.ImportFromBlock()
 	log.Println(impf.GetChildCount())
 
@@ -45,21 +45,21 @@ func (s *listener) EnterImportStatement(ctx *parserv.ImportStatementContext) {
 	if impf != nil {
 		for _, ch := range impf.GetChildren() {
 			switch vv := ch.(type) {
-			case *parserv.ImportDefaultContext:
+			case *gojsp.ImportDefaultContext:
 				fmt.Println("\tImportDefaultContext", vv.GetText())
 
-			case *parserv.ImportNamespaceContext:
+			case *gojsp.ImportNamespaceContext:
 				fmt.Println("\tImportNamespaceContext", vv.GetText())
 
-			case *parserv.ModuleItemsContext:
+			case *gojsp.ModuleItemsContext:
 				fmt.Println("\tModuleItemsContext", vv.GetText())
 
-			case *parserv.ImportFromContext:
+			case *gojsp.ImportFromContext:
 				fmt.Println("\tPath", vv.GetText())
 
-			case *parserv.EosContext:
+			case *gojsp.EosContext:
 				fmt.Println("\t", vv.GetText())
-			case *parserv.LiteralContext:
+			case *gojsp.LiteralContext:
 				fmt.Println("\tSimple", vv.GetText())
 
 			default:
@@ -78,63 +78,63 @@ func (s *listener) EnterImportStatement(ctx *parserv.ImportStatementContext) {
 }
 
 // ExitImportStatement is called when production importStatement is exited.
-func (s *listener) ExitImportStatement(ctx *parserv.ImportStatementContext) {
+func (s *listener) ExitImportStatement(ctx *gojsp.ImportStatementContext) {
 	show("ExitImportStatement", ctx.GetText())
 	// log.Println(ctx.ToStringTree(nil, nil))
 
 }
 
 // EnterImportFromBlock is called when production importFromBlock is entered.
-func (s *listener) EnterImportFromBlock(ctx *parserv.ImportFromBlockContext) {
+func (s *listener) EnterImportFromBlock(ctx *gojsp.ImportFromBlockContext) {
 
 	show("EnterImportFromBlock", ctx.GetText())
 }
 
 // ExitImportFromBlock is called when production importFromBlock is exited.
-func (s *listener) ExitImportFromBlock(ctx *parserv.ImportFromBlockContext) {
+func (s *listener) ExitImportFromBlock(ctx *gojsp.ImportFromBlockContext) {
 	show("ExitImportFromBlock", ctx.GetText())
 
 }
 
 // EnterModuleItems is called when production moduleItems is entered.
-func (s *listener) EnterModuleItems(ctx *parserv.ModuleItemsContext) {
+func (s *listener) EnterModuleItems(ctx *gojsp.ModuleItemsContext) {
 	show("EnterModuleItems", ctx.GetText())
 
 }
 
 // ExitModuleItems is called when production moduleItems is exited.
-func (s *listener) ExitModuleItems(ctx *parserv.ModuleItemsContext) {
+func (s *listener) ExitModuleItems(ctx *gojsp.ModuleItemsContext) {
 	show("ExitModuleItems", ctx.GetText())
 
 }
 
 // EnterImportDefault is called when production importDefault is entered.
-func (s *listener) EnterImportDefault(ctx *parserv.ImportDefaultContext) {
+func (s *listener) EnterImportDefault(ctx *gojsp.ImportDefaultContext) {
 	show("EnterImportDefault", ctx.GetText())
 
 }
 
 // ExitImportDefault is called when production importDefault is exited.
-func (s *listener) ExitImportDefault(ctx *parserv.ImportDefaultContext) {
+func (s *listener) ExitImportDefault(ctx *gojsp.ImportDefaultContext) {
 	show("ExitImportDefault", ctx.GetText())
 }
 
 // EnterImportNamespace is called when production importNamespace is entered.
-func (s *listener) EnterImportNamespace(ctx *parserv.ImportNamespaceContext) {
+func (s *listener) EnterImportNamespace(ctx *gojsp.ImportNamespaceContext) {
 	show("EnterImportNamespace", ctx.GetText())
 }
 
 // ExitImportNamespace is called when production importNamespace is exited.
-func (s *listener) ExitImportNamespace(ctx *parserv.ImportNamespaceContext) {
+func (s *listener) ExitImportNamespace(ctx *gojsp.ImportNamespaceContext) {
 	show("ExitImportNamespace", ctx.GetText())
 }
 
 // EnterImportFrom is called when production importFrom is entered.
-func (s *listener) EnterImportFrom(ctx *parserv.ImportFromContext) {
+func (s *listener) EnterImportFrom(ctx *gojsp.ImportFromContext) {
 	show("EnterImportFrom", ctx.GetText())
 }
 
 // ExitImportFrom is called when production importFrom is exited.
-func (s *listener) ExitImportFrom(ctx *parserv.ImportFromContext) {
+func (s *listener) ExitImportFrom(ctx *gojsp.ImportFromContext) {
 	show("ExitImportFrom", ctx.GetText())
 }

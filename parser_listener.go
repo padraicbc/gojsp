@@ -1,4 +1,4 @@
-package parserv // JavaScriptParser
+package gojsp // JavaScriptParser
 
 import antlr "github.com/padraicbc/antlr4"
 

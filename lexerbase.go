@@ -1,4 +1,4 @@
-package parserv
+package gojsp
 
 import antlr "github.com/padraicbc/antlr4"
 

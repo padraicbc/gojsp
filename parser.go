@@ -1,4 +1,4 @@
-package parserv // JavaScriptParser
+package gojsp // JavaScriptParser
 
 import (
 	"fmt"
@@ -125,7 +125,7 @@ func (s *ProgramContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ProgramContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitProgram(s)
 
 	default:
@@ -250,7 +250,7 @@ func (s *SourceElementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *SourceElementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 
 		return t.VisitSourceElement(s)
 
@@ -548,7 +548,7 @@ func (s *StatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *StatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitStatement(s)
 
 	default:
@@ -802,7 +802,7 @@ func (s *BlockContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *BlockContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitBlock(s)
 
 	default:
@@ -934,7 +934,7 @@ func (s *StatementListContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *StatementListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitStatementList(s)
 
 	default:
@@ -1063,7 +1063,7 @@ func (s *ImportStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 func (s *ImportStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 
 		return t.VisitImportStatement(s)
 
@@ -1219,7 +1219,7 @@ func (s *ImportFromBlockContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ImportFromBlockContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitImportFromBlock(s)
 
 	default:
@@ -1251,7 +1251,7 @@ func (p *JavaScriptParser) ImportFromBlock() (localctx IImportFromBlockContext) 
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
-	case JavaScriptParserOpenBrace, JavaScriptParserMultiply, JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptParserVar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptParserVoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
+	case JavaScriptParserOpenBrace, JavaScriptParserMultiply, JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptgojspar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptgojspoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		p.SetState(197)
 		p.GetErrorHandler().Sync(p)
@@ -1266,7 +1266,7 @@ func (p *JavaScriptParser) ImportFromBlock() (localctx IImportFromBlockContext) 
 		p.GetErrorHandler().Sync(p)
 
 		switch p.GetTokenStream().LA(1) {
-		case JavaScriptParserMultiply, JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptParserVar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptParserVoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
+		case JavaScriptParserMultiply, JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptgojspar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptgojspoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
 			{
 				p.SetState(199)
 				p.ImportNamespace()
@@ -1407,7 +1407,7 @@ func (s *ModuleItemsContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ModuleItemsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitModuleItems(s)
 
 	default:
@@ -1467,7 +1467,7 @@ func (p *JavaScriptParser) ModuleItems() (localctx IModuleItemsContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	if (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserBreak-59))|(1<<(JavaScriptParserDo-59))|(1<<(JavaScriptParserInstanceof-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserCase-59))|(1<<(JavaScriptParserElse-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptParserVar-59))|(1<<(JavaScriptParserCatch-59))|(1<<(JavaScriptParserFinally-59))|(1<<(JavaScriptParserReturn-59))|(1<<(JavaScriptParserVoid-59))|(1<<(JavaScriptParserContinue-59))|(1<<(JavaScriptParserFor-59))|(1<<(JavaScriptParserSwitch-59))|(1<<(JavaScriptParserWhile-59))|(1<<(JavaScriptParserDebugger-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59))|(1<<(JavaScriptParserWith-59))|(1<<(JavaScriptParserDefault-59)))) != 0) || (((_la-91)&-(0x1f+1)) == 0 && ((1<<uint((_la-91)))&((1<<(JavaScriptParserIf-91))|(1<<(JavaScriptParserThrow-91))|(1<<(JavaScriptParserDelete-91))|(1<<(JavaScriptParserIn-91))|(1<<(JavaScriptParserTry-91))|(1<<(JavaScriptParserAs-91))|(1<<(JavaScriptParserFrom-91))|(1<<(JavaScriptParserClass-91))|(1<<(JavaScriptParserEnum-91))|(1<<(JavaScriptParserExtends-91))|(1<<(JavaScriptParserSuper-91))|(1<<(JavaScriptParserConst-91))|(1<<(JavaScriptParserExport-91))|(1<<(JavaScriptParserImport-91))|(1<<(JavaScriptParserAsync-91))|(1<<(JavaScriptParserAwait-91))|(1<<(JavaScriptParserImplements-91))|(1<<(JavaScriptParserStrictLet-91))|(1<<(JavaScriptParserNonStrictLet-91))|(1<<(JavaScriptParserPrivate-91))|(1<<(JavaScriptParserPublic-91))|(1<<(JavaScriptParserInterface-91))|(1<<(JavaScriptParserPackage-91))|(1<<(JavaScriptParserProtected-91))|(1<<(JavaScriptParserStatic-91))|(1<<(JavaScriptParserYield-91))|(1<<(JavaScriptParserIdentifier-91)))) != 0) {
+	if (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserBreak-59))|(1<<(JavaScriptParserDo-59))|(1<<(JavaScriptParserInstanceof-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserCase-59))|(1<<(JavaScriptParserElse-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptgojspar-59))|(1<<(JavaScriptParserCatch-59))|(1<<(JavaScriptParserFinally-59))|(1<<(JavaScriptParserReturn-59))|(1<<(JavaScriptgojspoid-59))|(1<<(JavaScriptParserContinue-59))|(1<<(JavaScriptParserFor-59))|(1<<(JavaScriptParserSwitch-59))|(1<<(JavaScriptParserWhile-59))|(1<<(JavaScriptParserDebugger-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59))|(1<<(JavaScriptParserWith-59))|(1<<(JavaScriptParserDefault-59)))) != 0) || (((_la-91)&-(0x1f+1)) == 0 && ((1<<uint((_la-91)))&((1<<(JavaScriptParserIf-91))|(1<<(JavaScriptParserThrow-91))|(1<<(JavaScriptParserDelete-91))|(1<<(JavaScriptParserIn-91))|(1<<(JavaScriptParserTry-91))|(1<<(JavaScriptParserAs-91))|(1<<(JavaScriptParserFrom-91))|(1<<(JavaScriptParserClass-91))|(1<<(JavaScriptParserEnum-91))|(1<<(JavaScriptParserExtends-91))|(1<<(JavaScriptParserSuper-91))|(1<<(JavaScriptParserConst-91))|(1<<(JavaScriptParserExport-91))|(1<<(JavaScriptParserImport-91))|(1<<(JavaScriptParserAsync-91))|(1<<(JavaScriptParserAwait-91))|(1<<(JavaScriptParserImplements-91))|(1<<(JavaScriptParserStrictLet-91))|(1<<(JavaScriptParserNonStrictLet-91))|(1<<(JavaScriptParserPrivate-91))|(1<<(JavaScriptParserPublic-91))|(1<<(JavaScriptParserInterface-91))|(1<<(JavaScriptParserPackage-91))|(1<<(JavaScriptParserProtected-91))|(1<<(JavaScriptParserStatic-91))|(1<<(JavaScriptParserYield-91))|(1<<(JavaScriptParserIdentifier-91)))) != 0) {
 		{
 			p.SetState(219)
 			p.AliasName()
@@ -1566,7 +1566,7 @@ func (s *ImportDefaultContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ImportDefaultContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitImportDefault(s)
 
 	default:
@@ -1698,7 +1698,7 @@ func (s *ImportNamespaceContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ImportNamespaceContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitImportNamespace(s)
 
 	default:
@@ -1738,7 +1738,7 @@ func (p *JavaScriptParser) ImportNamespace() (localctx IImportNamespaceContext) 
 			p.Match(JavaScriptParserMultiply)
 		}
 
-	case JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptParserVar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptParserVoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
+	case JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptgojspar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptgojspoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
 		{
 			p.SetState(231)
 			p.IdentifierName()
@@ -1834,7 +1834,7 @@ func (s *ImportFromContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ImportFromContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 
 		return t.VisitImportFrom(s)
 
@@ -1964,7 +1964,7 @@ func (s *AliasNameContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *AliasNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitAliasName(s)
 
 	default:
@@ -2127,7 +2127,7 @@ func (s *ExportDefaultDeclarationContext) ExitRule(listener antlr.ParseTreeListe
 
 func (s *ExportDefaultDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitExportDefaultDeclaration(s)
 
 	default:
@@ -2201,7 +2201,7 @@ func (s *ExportDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ExportDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitExportDeclaration(s)
 
 	default:
@@ -2386,7 +2386,7 @@ func (s *ExportFromBlockContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ExportFromBlockContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitExportFromBlock(s)
 
 	default:
@@ -2418,7 +2418,7 @@ func (p *JavaScriptParser) ExportFromBlock() (localctx IExportFromBlockContext) 
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
-	case JavaScriptParserMultiply, JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptParserVar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptParserVoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
+	case JavaScriptParserMultiply, JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptgojspar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptgojspoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(260)
@@ -2550,7 +2550,7 @@ func (s *DeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *DeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitDeclaration(s)
 
 	default:
@@ -2582,7 +2582,7 @@ func (p *JavaScriptParser) Declaration() (localctx IDeclarationContext) {
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
-	case JavaScriptParserVar, JavaScriptParserConst, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet:
+	case JavaScriptgojspar, JavaScriptParserConst, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(272)
@@ -2690,7 +2690,7 @@ func (s *VariableStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *VariableStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitVariableStatement(s)
 
 	default:
@@ -2832,7 +2832,7 @@ func (s *VariableDeclarationListContext) ExitRule(listener antlr.ParseTreeListen
 
 func (s *VariableDeclarationListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitVariableDeclarationList(s)
 
 	default:
@@ -2979,7 +2979,7 @@ func (s *VariableDeclarationContext) ExitRule(listener antlr.ParseTreeListener) 
 
 func (s *VariableDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitVariableDeclaration(s)
 
 	default:
@@ -3094,7 +3094,7 @@ func (s *EmptyStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *EmptyStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitEmptyStatement(s)
 
 	default:
@@ -3211,7 +3211,7 @@ func (s *ExpressionStatementContext) ExitRule(listener antlr.ParseTreeListener) 
 
 func (s *ExpressionStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitExpressionStatement(s)
 
 	default:
@@ -3366,7 +3366,7 @@ func (s *IfStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *IfStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitIfStatement(s)
 
 	default:
@@ -3561,7 +3561,7 @@ func (s *DoStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *DoStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitDoStatement(s)
 
 	default:
@@ -3633,7 +3633,7 @@ func (s *WhileStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *WhileStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitWhileStatement(s)
 
 	default:
@@ -3736,7 +3736,7 @@ func (s *ForStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ForStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitForStatement(s)
 
 	default:
@@ -3832,7 +3832,7 @@ func (s *ForInStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ForInStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitForInStatement(s)
 
 	default:
@@ -3938,7 +3938,7 @@ func (s *ForOfStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ForOfStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitForOfStatement(s)
 
 	default:
@@ -4059,7 +4059,7 @@ func (p *JavaScriptParser) IterationStatement() (localctx IIterationStatementCon
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptParserVoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserNonStrictLet-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
+		if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptgojspoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserNonStrictLet-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
 			{
 				p.SetState(330)
 				p.ExpressionSequence()
@@ -4073,7 +4073,7 @@ func (p *JavaScriptParser) IterationStatement() (localctx IIterationStatementCon
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptParserVoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserNonStrictLet-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
+		if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptgojspoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserNonStrictLet-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
 			{
 				p.SetState(334)
 				p.ExpressionSequence()
@@ -4235,7 +4235,7 @@ func NewVarModifierContext(parser antlr.Parser, parent antlr.ParserRuleContext, 
 func (s *VarModifierContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *VarModifierContext) Var() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserVar, 0)
+	return s.GetToken(JavaScriptgojspar, 0)
 }
 
 func (s *VarModifierContext) Let_() ILet_Context {
@@ -4274,7 +4274,7 @@ func (s *VarModifierContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *VarModifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitVarModifier(s)
 
 	default:
@@ -4306,11 +4306,11 @@ func (p *JavaScriptParser) VarModifier() (localctx IVarModifierContext) {
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
-	case JavaScriptParserVar:
+	case JavaScriptgojspar:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(367)
-			p.Match(JavaScriptParserVar)
+			p.Match(JavaScriptgojspar)
 		}
 
 	case JavaScriptParserStrictLet, JavaScriptParserNonStrictLet:
@@ -4418,7 +4418,7 @@ func (s *ContinueStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ContinueStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitContinueStatement(s)
 
 	default:
@@ -4558,7 +4558,7 @@ func (s *BreakStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *BreakStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitBreakStatement(s)
 
 	default:
@@ -4698,7 +4698,7 @@ func (s *ReturnStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ReturnStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitReturnStatement(s)
 
 	default:
@@ -4838,7 +4838,7 @@ func (s *YieldStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *YieldStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitYieldStatement(s)
 
 	default:
@@ -4986,7 +4986,7 @@ func (s *WithStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *WithStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitWithStatement(s)
 
 	default:
@@ -5131,7 +5131,7 @@ func (s *SwitchStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *SwitchStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitSwitchStatement(s)
 
 	default:
@@ -5285,7 +5285,7 @@ func (s *CaseBlockContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *CaseBlockContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitCaseBlock(s)
 
 	default:
@@ -5441,7 +5441,7 @@ func (s *CaseClausesContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *CaseClausesContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitCaseClauses(s)
 
 	default:
@@ -5577,7 +5577,7 @@ func (s *CaseClauseContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *CaseClauseContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitCaseClause(s)
 
 	default:
@@ -5709,7 +5709,7 @@ func (s *DefaultClauseContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *DefaultClauseContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitDefaultClause(s)
 
 	default:
@@ -5843,7 +5843,7 @@ func (s *LabelledStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *LabelledStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitLabelledStatement(s)
 
 	default:
@@ -5972,7 +5972,7 @@ func (s *ThrowStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ThrowStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitThrowStatement(s)
 
 	default:
@@ -6116,7 +6116,7 @@ func (s *TryStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *TryStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitTryStatement(s)
 
 	default:
@@ -6277,7 +6277,7 @@ func (s *CatchProductionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *CatchProductionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitCatchProduction(s)
 
 	default:
@@ -6418,7 +6418,7 @@ func (s *FinallyProductionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *FinallyProductionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitFinallyProduction(s)
 
 	default:
@@ -6533,7 +6533,7 @@ func (s *DebuggerStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *DebuggerStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitDebuggerStatement(s)
 
 	default:
@@ -6684,7 +6684,7 @@ func (s *FunctionDeclarationContext) ExitRule(listener antlr.ParseTreeListener) 
 
 func (s *FunctionDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitFunctionDeclaration(s)
 
 	default:
@@ -6852,7 +6852,7 @@ func (s *ClassDeclarationContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ClassDeclarationContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitClassDeclaration(s)
 
 	default:
@@ -7002,7 +7002,7 @@ func (s *ClassTailContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ClassTailContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitClassTail(s)
 
 	default:
@@ -7247,7 +7247,7 @@ func (s *ClassElementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ClassElementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitClassElement(s)
 
 	default:
@@ -7514,7 +7514,7 @@ func (s *MethodDefinitionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *MethodDefinitionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitMethodDefinition(s)
 
 	default:
@@ -7785,7 +7785,7 @@ func (s *FormalParameterListContext) ExitRule(listener antlr.ParseTreeListener) 
 
 func (s *FormalParameterListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitFormalParameterList(s)
 
 	default:
@@ -7960,7 +7960,7 @@ func (s *FormalParameterArgContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *FormalParameterArgContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitFormalParameterArg(s)
 
 	default:
@@ -8087,7 +8087,7 @@ func (s *LastFormalParameterArgContext) ExitRule(listener antlr.ParseTreeListene
 
 func (s *LastFormalParameterArgContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitLastFormalParameterArg(s)
 
 	default:
@@ -8206,7 +8206,7 @@ func (s *FunctionBodyContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *FunctionBodyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitFunctionBody(s)
 
 	default:
@@ -8339,7 +8339,7 @@ func (s *SourceElementsContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *SourceElementsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitSourceElements(s)
 
 	default:
@@ -8471,7 +8471,7 @@ func (s *ArrayLiteralContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ArrayLiteralContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArrayLiteral(s)
 
 	default:
@@ -8607,7 +8607,7 @@ func (s *ElementListContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ElementListContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitElementList(s)
 
 	default:
@@ -8658,7 +8658,7 @@ func (p *JavaScriptParser) ElementList() (localctx IElementListContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserEllipsis)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptParserVoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserNonStrictLet-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
+	if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserEllipsis)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptgojspoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserNonStrictLet-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
 		{
 			p.SetState(618)
 			p.ArrayElement()
@@ -8786,7 +8786,7 @@ func (s *ArrayElementContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ArrayElementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArrayElement(s)
 
 	default:
@@ -8940,7 +8940,7 @@ func (s *PropertyExpressionAssignmentContext) ExitRule(listener antlr.ParseTreeL
 
 func (s *PropertyExpressionAssignmentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPropertyExpressionAssignment(s)
 
 	default:
@@ -9015,7 +9015,7 @@ func (s *ComputedPropertyExpressionAssignmentContext) ExitRule(listener antlr.Pa
 
 func (s *ComputedPropertyExpressionAssignmentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitComputedPropertyExpressionAssignment(s)
 
 	default:
@@ -9069,7 +9069,7 @@ func (s *PropertyShorthandContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *PropertyShorthandContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPropertyShorthand(s)
 
 	default:
@@ -9147,7 +9147,7 @@ func (s *PropertySetterContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *PropertySetterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPropertySetter(s)
 
 	default:
@@ -9215,7 +9215,7 @@ func (s *PropertyGetterContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *PropertyGetterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPropertyGetter(s)
 
 	default:
@@ -9301,7 +9301,7 @@ func (s *FunctionPropertyContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *FunctionPropertyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitFunctionProperty(s)
 
 	default:
@@ -9591,7 +9591,7 @@ func (s *PropertyNameContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *PropertyNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPropertyName(s)
 
 	default:
@@ -9623,7 +9623,7 @@ func (p *JavaScriptParser) PropertyName() (localctx IPropertyNameContext) {
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
-	case JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptParserVar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptParserVoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
+	case JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptgojspar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptgojspoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(684)
@@ -9765,7 +9765,7 @@ func (s *ArgumentsContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ArgumentsContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArguments(s)
 
 	default:
@@ -9805,7 +9805,7 @@ func (p *JavaScriptParser) Arguments() (localctx IArgumentsContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserEllipsis)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptParserVoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserNonStrictLet-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
+	if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserEllipsis)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptgojspoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserNonStrictLet-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
 		{
 			p.SetState(694)
 			p.Argument()
@@ -9934,7 +9934,7 @@ func (s *ArgumentContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ArgumentContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArgument(s)
 
 	default:
@@ -10085,7 +10085,7 @@ func (s *ExpressionSequenceContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ExpressionSequenceContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitExpressionSequence(s)
 
 	default:
@@ -10240,7 +10240,7 @@ func (s *TemplateStringExpressionContext) ExitRule(listener antlr.ParseTreeListe
 
 func (s *TemplateStringExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitTemplateStringExpression(s)
 
 	default:
@@ -10311,7 +10311,7 @@ func (s *TernaryExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *TernaryExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitTernaryExpression(s)
 
 	default:
@@ -10378,7 +10378,7 @@ func (s *LogicalAndExpressionContext) ExitRule(listener antlr.ParseTreeListener)
 
 func (s *LogicalAndExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitLogicalAndExpression(s)
 
 	default:
@@ -10445,7 +10445,7 @@ func (s *PowerExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *PowerExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPowerExpression(s)
 
 	default:
@@ -10499,7 +10499,7 @@ func (s *PreIncrementExpressionContext) ExitRule(listener antlr.ParseTreeListene
 
 func (s *PreIncrementExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPreIncrementExpression(s)
 
 	default:
@@ -10549,7 +10549,7 @@ func (s *ObjectLiteralExpressionContext) ExitRule(listener antlr.ParseTreeListen
 
 func (s *ObjectLiteralExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitObjectLiteralExpression(s)
 
 	default:
@@ -10607,7 +10607,7 @@ func (s *MetaExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *MetaExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitMetaExpression(s)
 
 	default:
@@ -10674,7 +10674,7 @@ func (s *InExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *InExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitInExpression(s)
 
 	default:
@@ -10741,7 +10741,7 @@ func (s *LogicalOrExpressionContext) ExitRule(listener antlr.ParseTreeListener) 
 
 func (s *LogicalOrExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitLogicalOrExpression(s)
 
 	default:
@@ -10795,7 +10795,7 @@ func (s *NotExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *NotExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitNotExpression(s)
 
 	default:
@@ -10849,7 +10849,7 @@ func (s *PreDecreaseExpressionContext) ExitRule(listener antlr.ParseTreeListener
 
 func (s *PreDecreaseExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPreDecreaseExpression(s)
 
 	default:
@@ -10909,7 +10909,7 @@ func (s *ArgumentsExpressionContext) ExitRule(listener antlr.ParseTreeListener) 
 
 func (s *ArgumentsExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArgumentsExpression(s)
 
 	default:
@@ -10963,7 +10963,7 @@ func (s *AwaitExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *AwaitExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitAwaitExpression(s)
 
 	default:
@@ -11007,7 +11007,7 @@ func (s *ThisExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ThisExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitThisExpression(s)
 
 	default:
@@ -11057,7 +11057,7 @@ func (s *FunctionExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *FunctionExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitFunctionExpression(s)
 
 	default:
@@ -11111,7 +11111,7 @@ func (s *UnaryMinusExpressionContext) ExitRule(listener antlr.ParseTreeListener)
 
 func (s *UnaryMinusExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitUnaryMinusExpression(s)
 
 	default:
@@ -11178,7 +11178,7 @@ func (s *AssignmentExpressionContext) ExitRule(listener antlr.ParseTreeListener)
 
 func (s *AssignmentExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitAssignmentExpression(s)
 
 	default:
@@ -11232,7 +11232,7 @@ func (s *PostDecreaseExpressionContext) ExitRule(listener antlr.ParseTreeListene
 
 func (s *PostDecreaseExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPostDecreaseExpression(s)
 
 	default:
@@ -11286,7 +11286,7 @@ func (s *TypeofExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *TypeofExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitTypeofExpression(s)
 
 	default:
@@ -11353,7 +11353,7 @@ func (s *InstanceofExpressionContext) ExitRule(listener antlr.ParseTreeListener)
 
 func (s *InstanceofExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitInstanceofExpression(s)
 
 	default:
@@ -11407,7 +11407,7 @@ func (s *UnaryPlusExpressionContext) ExitRule(listener antlr.ParseTreeListener) 
 
 func (s *UnaryPlusExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitUnaryPlusExpression(s)
 
 	default:
@@ -11461,7 +11461,7 @@ func (s *DeleteExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *DeleteExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitDeleteExpression(s)
 
 	default:
@@ -11523,7 +11523,7 @@ func (s *ImportExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ImportExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitImportExpression(s)
 
 	default:
@@ -11602,7 +11602,7 @@ func (s *EqualityExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *EqualityExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitEqualityExpression(s)
 
 	default:
@@ -11669,7 +11669,7 @@ func (s *BitXOrExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *BitXOrExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitBitXOrExpression(s)
 
 	default:
@@ -11713,7 +11713,7 @@ func (s *SuperExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *SuperExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitSuperExpression(s)
 
 	default:
@@ -11788,7 +11788,7 @@ func (s *MultiplicativeExpressionContext) ExitRule(listener antlr.ParseTreeListe
 
 func (s *MultiplicativeExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitMultiplicativeExpression(s)
 
 	default:
@@ -11863,7 +11863,7 @@ func (s *BitShiftExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *BitShiftExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitBitShiftExpression(s)
 
 	default:
@@ -11921,7 +11921,7 @@ func (s *ParenthesizedExpressionContext) ExitRule(listener antlr.ParseTreeListen
 
 func (s *ParenthesizedExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitParenthesizedExpression(s)
 
 	default:
@@ -11992,7 +11992,7 @@ func (s *AdditiveExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *AdditiveExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitAdditiveExpression(s)
 
 	default:
@@ -12071,7 +12071,7 @@ func (s *RelationalExpressionContext) ExitRule(listener antlr.ParseTreeListener)
 
 func (s *RelationalExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitRelationalExpression(s)
 
 	default:
@@ -12125,7 +12125,7 @@ func (s *PostIncrementExpressionContext) ExitRule(listener antlr.ParseTreeListen
 
 func (s *PostIncrementExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitPostIncrementExpression(s)
 
 	default:
@@ -12175,7 +12175,7 @@ func (s *YieldExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *YieldExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitYieldExpression(s)
 
 	default:
@@ -12229,7 +12229,7 @@ func (s *BitNotExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *BitNotExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitBitNotExpression(s)
 
 	default:
@@ -12293,7 +12293,7 @@ func (s *NewExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *NewExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitNewExpression(s)
 
 	default:
@@ -12343,7 +12343,7 @@ func (s *LiteralExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *LiteralExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitLiteralExpression(s)
 
 	default:
@@ -12393,7 +12393,7 @@ func (s *ArrayLiteralExpressionContext) ExitRule(listener antlr.ParseTreeListene
 
 func (s *ArrayLiteralExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArrayLiteralExpression(s)
 
 	default:
@@ -12465,7 +12465,7 @@ func (s *MemberDotExpressionContext) ExitRule(listener antlr.ParseTreeListener) 
 
 func (s *MemberDotExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitMemberDotExpression(s)
 
 	default:
@@ -12529,7 +12529,7 @@ func (s *ClassExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ClassExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitClassExpression(s)
 
 	default:
@@ -12597,7 +12597,7 @@ func (s *MemberIndexExpressionContext) ExitRule(listener antlr.ParseTreeListener
 
 func (s *MemberIndexExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitMemberIndexExpression(s)
 
 	default:
@@ -12647,7 +12647,7 @@ func (s *IdentifierExpressionContext) ExitRule(listener antlr.ParseTreeListener)
 
 func (s *IdentifierExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitIdentifierExpression(s)
 
 	default:
@@ -12714,7 +12714,7 @@ func (s *BitAndExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *BitAndExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitBitAndExpression(s)
 
 	default:
@@ -12781,7 +12781,7 @@ func (s *BitOrExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *BitOrExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitBitOrExpression(s)
 
 	default:
@@ -12854,7 +12854,7 @@ func (s *AssignmentOperatorExpressionContext) ExitRule(listener antlr.ParseTreeL
 
 func (s *AssignmentOperatorExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitAssignmentOperatorExpression(s)
 
 	default:
@@ -12881,7 +12881,7 @@ func (s *VoidExpressionContext) GetRuleContext() antlr.RuleContext {
 }
 
 func (s *VoidExpressionContext) Void() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserVoid, 0)
+	return s.GetToken(JavaScriptgojspoid, 0)
 }
 
 func (s *VoidExpressionContext) SingleExpression() ISingleExpressionContext {
@@ -12908,7 +12908,7 @@ func (s *VoidExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *VoidExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitVoidExpression(s)
 
 	default:
@@ -12975,7 +12975,7 @@ func (s *CoalesceExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *CoalesceExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitCoalesceExpression(s)
 
 	default:
@@ -13110,7 +13110,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		_prevctx = localctx
 		{
 			p.SetState(741)
-			p.Match(JavaScriptParserVoid)
+			p.Match(JavaScriptgojspoid)
 		}
 		{
 			p.SetState(742)
@@ -13890,7 +13890,7 @@ func (s *AssignableContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *AssignableContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitAssignable(s)
 
 	default:
@@ -14049,7 +14049,7 @@ func (s *ObjectLiteralContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ObjectLiteralContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitObjectLiteral(s)
 
 	default:
@@ -14255,7 +14255,7 @@ func (s *AnoymousFunctionDeclContext) ExitRule(listener antlr.ParseTreeListener)
 
 func (s *AnoymousFunctionDeclContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitAnoymousFunctionDecl(s)
 
 	default:
@@ -14323,7 +14323,7 @@ func (s *ArrowFunctionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ArrowFunctionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArrowFunction(s)
 
 	default:
@@ -14373,7 +14373,7 @@ func (s *FunctionDeclContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *FunctionDeclContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitFunctionDecl(s)
 
 	default:
@@ -14581,7 +14581,7 @@ func (s *ArrowFunctionParametersContext) ExitRule(listener antlr.ParseTreeListen
 
 func (s *ArrowFunctionParametersContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArrowFunctionParameters(s)
 
 	default:
@@ -14729,7 +14729,7 @@ func (s *ArrowFunctionBodyContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ArrowFunctionBodyContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitArrowFunctionBody(s)
 
 	default:
@@ -14887,7 +14887,7 @@ func (s *AssignmentOperatorContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *AssignmentOperatorContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitAssignmentOperator(s)
 
 	default:
@@ -15032,7 +15032,7 @@ func (s *LiteralContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *LiteralContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitLiteral(s)
 
 	default:
@@ -15200,7 +15200,7 @@ func (s *NumericLiteralContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *NumericLiteralContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitNumericLiteral(s)
 
 	default:
@@ -15321,7 +15321,7 @@ func (s *BigintLiteralContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *BigintLiteralContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitBigintLiteral(s)
 
 	default:
@@ -15446,7 +15446,7 @@ func (s *GetterContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *GetterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitGetter(s)
 
 	default:
@@ -15572,7 +15572,7 @@ func (s *SetterContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *SetterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitSetter(s)
 
 	default:
@@ -15698,7 +15698,7 @@ func (s *IdentifierNameContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *IdentifierNameContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitIdentifierName(s)
 
 	default:
@@ -15820,7 +15820,7 @@ func (s *IdentifierContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *IdentifierContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitIdentifier(s)
 
 	default:
@@ -15943,7 +15943,7 @@ func (s *ReservedWordContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *ReservedWordContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitReservedWord(s)
 
 	default:
@@ -15975,7 +15975,7 @@ func (p *JavaScriptParser) ReservedWord() (localctx IReservedWordContext) {
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
-	case JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptParserVar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptParserVoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield:
+	case JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptgojspar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptgojspoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(946)
@@ -16070,7 +16070,7 @@ func (s *KeywordContext) New() antlr.TerminalNode {
 }
 
 func (s *KeywordContext) Var() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserVar, 0)
+	return s.GetToken(JavaScriptgojspar, 0)
 }
 
 func (s *KeywordContext) Catch() antlr.TerminalNode {
@@ -16086,7 +16086,7 @@ func (s *KeywordContext) Return() antlr.TerminalNode {
 }
 
 func (s *KeywordContext) Void() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserVoid, 0)
+	return s.GetToken(JavaScriptgojspoid, 0)
 }
 
 func (s *KeywordContext) Continue() antlr.TerminalNode {
@@ -16253,7 +16253,7 @@ func (s *KeywordContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *KeywordContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitKeyword(s)
 
 	default:
@@ -16334,11 +16334,11 @@ func (p *JavaScriptParser) Keyword() (localctx IKeywordContext) {
 			p.Match(JavaScriptParserNew)
 		}
 
-	case JavaScriptParserVar:
+	case JavaScriptgojspar:
 		p.EnterOuterAlt(localctx, 8)
 		{
 			p.SetState(958)
-			p.Match(JavaScriptParserVar)
+			p.Match(JavaScriptgojspar)
 		}
 
 	case JavaScriptParserCatch:
@@ -16362,11 +16362,11 @@ func (p *JavaScriptParser) Keyword() (localctx IKeywordContext) {
 			p.Match(JavaScriptParserReturn)
 		}
 
-	case JavaScriptParserVoid:
+	case JavaScriptgojspoid:
 		p.EnterOuterAlt(localctx, 12)
 		{
 			p.SetState(962)
-			p.Match(JavaScriptParserVoid)
+			p.Match(JavaScriptgojspoid)
 		}
 
 	case JavaScriptParserContinue:
@@ -16682,7 +16682,7 @@ func (s *Let_Context) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *Let_Context) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitLet_(s)
 
 	default:
@@ -16795,7 +16795,7 @@ func (s *EosContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (s *EosContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
+	case JavaScriptgojspisitor:
 		return t.VisitEos(s)
 
 	default:

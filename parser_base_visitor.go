@@ -1,4 +1,4 @@
-package parserv // JavaScriptParser
+package gojsp // JavaScriptParser
 
 import (
 	"log"
@@ -6,667 +6,667 @@ import (
 	antlr "github.com/padraicbc/antlr4"
 )
 
-type BaseJavaScriptParserVisitor struct {
+type BaseJavaScriptgojspisitor struct {
 	*antlr.BaseParseTreeVisitor
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitProgram(ctx *ProgramContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitProgram(ctx *ProgramContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitSourceElement(ctx *SourceElementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitSourceElement(ctx *SourceElementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitStatement(ctx *StatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitStatement(ctx *StatementContext) interface{} {
 	// //log.Println(ctx)
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBlock(ctx *BlockContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitBlock(ctx *BlockContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitStatementList(ctx *StatementListContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitStatementList(ctx *StatementListContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitImportStatement(ctx *ImportStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitImportStatement(ctx *ImportStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitImportFromBlock(ctx *ImportFromBlockContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitImportFromBlock(ctx *ImportFromBlockContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitModuleItems(ctx *ModuleItemsContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitModuleItems(ctx *ModuleItemsContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitImportDefault(ctx *ImportDefaultContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitImportDefault(ctx *ImportDefaultContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitImportNamespace(ctx *ImportNamespaceContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitImportNamespace(ctx *ImportNamespaceContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitImportFrom(ctx *ImportFromContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitImportFrom(ctx *ImportFromContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitAliasName(ctx *AliasNameContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitAliasName(ctx *AliasNameContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitExportDeclaration(ctx *ExportDeclarationContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitExportDeclaration(ctx *ExportDeclarationContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitExportDefaultDeclaration(ctx *ExportDefaultDeclarationContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitExportDefaultDeclaration(ctx *ExportDefaultDeclarationContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitExportFromBlock(ctx *ExportFromBlockContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitExportFromBlock(ctx *ExportFromBlockContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitDeclaration(ctx *DeclarationContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitDeclaration(ctx *DeclarationContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitVariableStatement(ctx *VariableStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitVariableStatement(ctx *VariableStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitVariableDeclarationList(ctx *VariableDeclarationListContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitVariableDeclarationList(ctx *VariableDeclarationListContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitVariableDeclaration(ctx *VariableDeclarationContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitVariableDeclaration(ctx *VariableDeclarationContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitEmptyStatement(ctx *EmptyStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitEmptyStatement(ctx *EmptyStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitExpressionStatement(ctx *ExpressionStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitExpressionStatement(ctx *ExpressionStatementContext) interface{} {
 	// //log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitIfStatement(ctx *IfStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitIfStatement(ctx *IfStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitDoStatement(ctx *DoStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitDoStatement(ctx *DoStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitWhileStatement(ctx *WhileStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitWhileStatement(ctx *WhileStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitForStatement(ctx *ForStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitForStatement(ctx *ForStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitForInStatement(ctx *ForInStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitForInStatement(ctx *ForInStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitForOfStatement(ctx *ForOfStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitForOfStatement(ctx *ForOfStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitVarModifier(ctx *VarModifierContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitVarModifier(ctx *VarModifierContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitContinueStatement(ctx *ContinueStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitContinueStatement(ctx *ContinueStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBreakStatement(ctx *BreakStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitBreakStatement(ctx *BreakStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitReturnStatement(ctx *ReturnStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitReturnStatement(ctx *ReturnStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitYieldStatement(ctx *YieldStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitYieldStatement(ctx *YieldStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitWithStatement(ctx *WithStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitWithStatement(ctx *WithStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitSwitchStatement(ctx *SwitchStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitSwitchStatement(ctx *SwitchStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitCaseBlock(ctx *CaseBlockContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitCaseBlock(ctx *CaseBlockContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitCaseClauses(ctx *CaseClausesContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitCaseClauses(ctx *CaseClausesContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitCaseClause(ctx *CaseClauseContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitCaseClause(ctx *CaseClauseContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitDefaultClause(ctx *DefaultClauseContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitDefaultClause(ctx *DefaultClauseContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitLabelledStatement(ctx *LabelledStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitLabelledStatement(ctx *LabelledStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitThrowStatement(ctx *ThrowStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitThrowStatement(ctx *ThrowStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitTryStatement(ctx *TryStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitTryStatement(ctx *TryStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitCatchProduction(ctx *CatchProductionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitCatchProduction(ctx *CatchProductionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitFinallyProduction(ctx *FinallyProductionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitFinallyProduction(ctx *FinallyProductionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitDebuggerStatement(ctx *DebuggerStatementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitDebuggerStatement(ctx *DebuggerStatementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitFunctionDeclaration(ctx *FunctionDeclarationContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitFunctionDeclaration(ctx *FunctionDeclarationContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitClassDeclaration(ctx *ClassDeclarationContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitClassDeclaration(ctx *ClassDeclarationContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitClassTail(ctx *ClassTailContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitClassTail(ctx *ClassTailContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitClassElement(ctx *ClassElementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitClassElement(ctx *ClassElementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitMethodDefinition(ctx *MethodDefinitionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitMethodDefinition(ctx *MethodDefinitionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitFormalParameterList(ctx *FormalParameterListContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitFormalParameterList(ctx *FormalParameterListContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitFormalParameterArg(ctx *FormalParameterArgContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitFormalParameterArg(ctx *FormalParameterArgContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitLastFormalParameterArg(ctx *LastFormalParameterArgContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitLastFormalParameterArg(ctx *LastFormalParameterArgContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitFunctionBody(ctx *FunctionBodyContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitFunctionBody(ctx *FunctionBodyContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitSourceElements(ctx *SourceElementsContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitSourceElements(ctx *SourceElementsContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArrayLiteral(ctx *ArrayLiteralContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArrayLiteral(ctx *ArrayLiteralContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitElementList(ctx *ElementListContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitElementList(ctx *ElementListContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArrayElement(ctx *ArrayElementContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArrayElement(ctx *ArrayElementContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPropertyExpressionAssignment(ctx *PropertyExpressionAssignmentContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPropertyExpressionAssignment(ctx *PropertyExpressionAssignmentContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitComputedPropertyExpressionAssignment(ctx *ComputedPropertyExpressionAssignmentContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitComputedPropertyExpressionAssignment(ctx *ComputedPropertyExpressionAssignmentContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitFunctionProperty(ctx *FunctionPropertyContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitFunctionProperty(ctx *FunctionPropertyContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPropertyGetter(ctx *PropertyGetterContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPropertyGetter(ctx *PropertyGetterContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPropertySetter(ctx *PropertySetterContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPropertySetter(ctx *PropertySetterContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPropertyShorthand(ctx *PropertyShorthandContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPropertyShorthand(ctx *PropertyShorthandContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPropertyName(ctx *PropertyNameContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPropertyName(ctx *PropertyNameContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArguments(ctx *ArgumentsContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArguments(ctx *ArgumentsContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArgument(ctx *ArgumentContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArgument(ctx *ArgumentContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitExpressionSequence(ctx *ExpressionSequenceContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitExpressionSequence(ctx *ExpressionSequenceContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitTemplateStringExpression(ctx *TemplateStringExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitTemplateStringExpression(ctx *TemplateStringExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitTernaryExpression(ctx *TernaryExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitTernaryExpression(ctx *TernaryExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitLogicalAndExpression(ctx *LogicalAndExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitLogicalAndExpression(ctx *LogicalAndExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPowerExpression(ctx *PowerExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPowerExpression(ctx *PowerExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPreIncrementExpression(ctx *PreIncrementExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPreIncrementExpression(ctx *PreIncrementExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitObjectLiteralExpression(ctx *ObjectLiteralExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitObjectLiteralExpression(ctx *ObjectLiteralExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitMetaExpression(ctx *MetaExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitMetaExpression(ctx *MetaExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitInExpression(ctx *InExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitInExpression(ctx *InExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitLogicalOrExpression(ctx *LogicalOrExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitLogicalOrExpression(ctx *LogicalOrExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitNotExpression(ctx *NotExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitNotExpression(ctx *NotExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPreDecreaseExpression(ctx *PreDecreaseExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPreDecreaseExpression(ctx *PreDecreaseExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArgumentsExpression(ctx *ArgumentsExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArgumentsExpression(ctx *ArgumentsExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitAwaitExpression(ctx *AwaitExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitAwaitExpression(ctx *AwaitExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitThisExpression(ctx *ThisExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitThisExpression(ctx *ThisExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitFunctionExpression(ctx *FunctionExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitFunctionExpression(ctx *FunctionExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitUnaryMinusExpression(ctx *UnaryMinusExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitUnaryMinusExpression(ctx *UnaryMinusExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitAssignmentExpression(ctx *AssignmentExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitAssignmentExpression(ctx *AssignmentExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPostDecreaseExpression(ctx *PostDecreaseExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPostDecreaseExpression(ctx *PostDecreaseExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitTypeofExpression(ctx *TypeofExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitTypeofExpression(ctx *TypeofExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitInstanceofExpression(ctx *InstanceofExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitInstanceofExpression(ctx *InstanceofExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitUnaryPlusExpression(ctx *UnaryPlusExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitUnaryPlusExpression(ctx *UnaryPlusExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitDeleteExpression(ctx *DeleteExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitDeleteExpression(ctx *DeleteExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitImportExpression(ctx *ImportExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitImportExpression(ctx *ImportExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitEqualityExpression(ctx *EqualityExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitEqualityExpression(ctx *EqualityExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBitXOrExpression(ctx *BitXOrExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitBitXOrExpression(ctx *BitXOrExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitSuperExpression(ctx *SuperExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitSuperExpression(ctx *SuperExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitMultiplicativeExpression(ctx *MultiplicativeExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitMultiplicativeExpression(ctx *MultiplicativeExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBitShiftExpression(ctx *BitShiftExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitBitShiftExpression(ctx *BitShiftExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitParenthesizedExpression(ctx *ParenthesizedExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitParenthesizedExpression(ctx *ParenthesizedExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitAdditiveExpression(ctx *AdditiveExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitAdditiveExpression(ctx *AdditiveExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitRelationalExpression(ctx *RelationalExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitRelationalExpression(ctx *RelationalExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitPostIncrementExpression(ctx *PostIncrementExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitPostIncrementExpression(ctx *PostIncrementExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitYieldExpression(ctx *YieldExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitYieldExpression(ctx *YieldExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBitNotExpression(ctx *BitNotExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitBitNotExpression(ctx *BitNotExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitNewExpression(ctx *NewExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitNewExpression(ctx *NewExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitLiteralExpression(ctx *LiteralExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitLiteralExpression(ctx *LiteralExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArrayLiteralExpression(ctx *ArrayLiteralExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArrayLiteralExpression(ctx *ArrayLiteralExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitMemberDotExpression(ctx *MemberDotExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitMemberDotExpression(ctx *MemberDotExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitClassExpression(ctx *ClassExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitClassExpression(ctx *ClassExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitMemberIndexExpression(ctx *MemberIndexExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitMemberIndexExpression(ctx *MemberIndexExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitIdentifierExpression(ctx *IdentifierExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitIdentifierExpression(ctx *IdentifierExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBitAndExpression(ctx *BitAndExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitBitAndExpression(ctx *BitAndExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBitOrExpression(ctx *BitOrExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitBitOrExpression(ctx *BitOrExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitAssignmentOperatorExpression(ctx *AssignmentOperatorExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitAssignmentOperatorExpression(ctx *AssignmentOperatorExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitVoidExpression(ctx *VoidExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitVoidExpression(ctx *VoidExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitCoalesceExpression(ctx *CoalesceExpressionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitCoalesceExpression(ctx *CoalesceExpressionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitAssignable(ctx *AssignableContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitAssignable(ctx *AssignableContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitObjectLiteral(ctx *ObjectLiteralContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitObjectLiteral(ctx *ObjectLiteralContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitFunctionDecl(ctx *FunctionDeclContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitFunctionDecl(ctx *FunctionDeclContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitAnoymousFunctionDecl(ctx *AnoymousFunctionDeclContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitAnoymousFunctionDecl(ctx *AnoymousFunctionDeclContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArrowFunction(ctx *ArrowFunctionContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArrowFunction(ctx *ArrowFunctionContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArrowFunctionParameters(ctx *ArrowFunctionParametersContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArrowFunctionParameters(ctx *ArrowFunctionParametersContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitArrowFunctionBody(ctx *ArrowFunctionBodyContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitArrowFunctionBody(ctx *ArrowFunctionBodyContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitAssignmentOperator(ctx *AssignmentOperatorContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitAssignmentOperator(ctx *AssignmentOperatorContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitLiteral(ctx *LiteralContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitLiteral(ctx *LiteralContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitNumericLiteral(ctx *NumericLiteralContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitNumericLiteral(ctx *NumericLiteralContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBigintLiteral(ctx *BigintLiteralContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitBigintLiteral(ctx *BigintLiteralContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitGetter(ctx *GetterContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitGetter(ctx *GetterContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitSetter(ctx *SetterContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitSetter(ctx *SetterContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitIdentifierName(ctx *IdentifierNameContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitIdentifierName(ctx *IdentifierNameContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitIdentifier(ctx *IdentifierContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitIdentifier(ctx *IdentifierContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitReservedWord(ctx *ReservedWordContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitReservedWord(ctx *ReservedWordContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitKeyword(ctx *KeywordContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitKeyword(ctx *KeywordContext) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitLet_(ctx *Let_Context) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitLet_(ctx *Let_Context) interface{} {
 	//log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitEos(ctx *EosContext) interface{} {
+func (v *BaseJavaScriptgojspisitor) VisitEos(ctx *EosContext) interface{} {
 	// //log.Println(ctx)
 	return v.VisitChildren(ctx)
 }

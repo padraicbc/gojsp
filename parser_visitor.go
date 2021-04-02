@@ -1,11 +1,11 @@
 // Code generated from JavaScriptParser.g4 by ANTLR 4.9.2. DO NOT EDIT.
 
-package parserv // JavaScriptParser
+package gojsp // JavaScriptParser
 
 import "github.com/padraicbc/antlr4"
 
 // A complete Visitor for a parse tree produced by JavaScriptParser.
-type JavaScriptParserVisitor interface {
+type JavaScriptgojspisitor interface {
 	antlr.ParseTreeVisitor
 
 	// Visit a parse tree produced by JavaScriptParser#program.

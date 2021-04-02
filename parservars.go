@@ -1,4 +1,4 @@
-package parserv
+package gojsp
 
 import antlr "github.com/padraicbc/antlr4"
 
@@ -636,11 +636,11 @@ const (
 	JavaScriptParserCase                       = 74
 	JavaScriptParserElse                       = 75
 	JavaScriptParserNew                        = 76
-	JavaScriptParserVar                        = 77
+	JavaScriptgojspar                          = 77
 	JavaScriptParserCatch                      = 78
 	JavaScriptParserFinally                    = 79
 	JavaScriptParserReturn                     = 80
-	JavaScriptParserVoid                       = 81
+	JavaScriptgojspoid                         = 81
 	JavaScriptParserContinue                   = 82
 	JavaScriptParserFor                        = 83
 	JavaScriptParserSwitch                     = 84

@@ -1,6 +1,6 @@
 // Code generated from JavaScriptLexer.g4 by ANTLR 4.9.2. DO NOT EDIT.
 
-package parserv
+package gojsp
 
 import (
 	"fmt"

@@ -6,11 +6,11 @@ import (
 	"strings"
 
 	antlr "github.com/padraicbc/antlr4"
-	"github.com/padraicbc/parserv"
+	"github.com/padraicbc/gojsp"
 )
 
 type visitor struct {
-	*parserv.BaseJavaScriptParserVisitor
+	*gojsp.BaseJavaScriptParserVisitor
 	// todo:  syntax errors with line/col ...
 	errors []string
 }
@@ -22,11 +22,11 @@ func (v *visitor) defaultResult() interface{} {
 func (v *visitor) aggregateResult(aggregate interface{}, nextResult interface{}) interface{} {
 	return nextResult
 }
-func (v *visitor) VisitStatement(ctx *parserv.StatementContext) interface{} {
+func (v *visitor) VisitStatement(ctx *gojsp.StatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitProgram(ctx *parserv.ProgramContext) interface{} {
+func (v *visitor) VisitProgram(ctx *gojsp.ProgramContext) interface{} {
 
 	// sourceElements as called when .Program() is used...
 	return ctx.GetChild(0).(antlr.ParserRuleContext).Accept(v)
@@ -37,7 +37,7 @@ func (v *visitor) VisitProgram(ctx *parserv.ProgramContext) interface{} {
 // VisitChildren(node RuleNode) interface{}
 // VisitTerminal(node TerminalNode) interface{}
 // VisitErrorNode(node ErrorNode) interface{}
-func (v *visitor) VisitSourceElement(ctx *parserv.SourceElementContext) interface{} {
+func (v *visitor) VisitSourceElement(ctx *gojsp.SourceElementContext) interface{} {
 	// log.Println("VisitSourceElement", ctx.GetText(), ctx.GetChildCount())
 	return v.VisitChildren(ctx)
 
@@ -58,7 +58,7 @@ func (v *visitor) Visit(tree antlr.ParseTree) interface{} {
 }
 
 // VisitSourceElements is called when production sourceElements is entered.
-func (v *visitor) VisitSourceElements(ctx *parserv.SourceElementsContext) interface{} {
+func (v *visitor) VisitSourceElements(ctx *gojsp.SourceElementsContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -74,7 +74,7 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 		if !v.shouldVisitNextChild(node, result) {
 			return result
 		}
-		if ef, ok := ch.(*parserv.EosContext); ok {
+		if ef, ok := ch.(*gojsp.EosContext); ok {
 			result = append(result, ef.GetText())
 			continue
 		}
@@ -84,7 +84,7 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 			result = append(result, rr)
 		case []string:
 			result = append(result, rr...)
-		case *parserv.EosContext:
+		case *gojsp.EosContext:
 			result = append(result, rr.GetText())
 		case nil:
 
@@ -108,13 +108,13 @@ func (v *visitor) VisitErrorNode(node antlr.ErrorNode) interface{} {
 	return nil
 }
 
-func (v *visitor) VisitImportExpression(ctx *parserv.ImportExpressionContext) interface{} {
+func (v *visitor) VisitImportExpression(ctx *gojsp.ImportExpressionContext) interface{} {
 
 	log.Println("VisitImportExpression", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitImportStatement(ctx *parserv.ImportStatementContext) interface{} {
+func (v *visitor) VisitImportStatement(ctx *gojsp.ImportStatementContext) interface{} {
 	var st string
 	// we could format based on some spec. Could be done here, at each step or at the very end...
 	for _, nd := range v.VisitChildren(ctx).([]string) {
@@ -133,7 +133,7 @@ func (v *visitor) VisitImportStatement(ctx *parserv.ImportStatementContext) inte
 //     : importDefault? (importNamespace | moduleItems) importFrom eos
 //     | StringLiteral eos
 //     ;
-func (v *visitor) VisitImportFromBlock(ctx *parserv.ImportFromBlockContext) interface{} {
+func (v *visitor) VisitImportFromBlock(ctx *gojsp.ImportFromBlockContext) interface{} {
 
 	// todo: error as can't have both?
 	// if 	ctx.ImportNamespace() != nil && ctx.ModuleItems() != nil{
@@ -150,17 +150,17 @@ func (v *visitor) VisitImportFromBlock(ctx *parserv.ImportFromBlockContext) inte
 //     : '{' (aliasName ',')* (aliasName ','?)? '}'
 //     ;
 // just pass on the wor if nothign to change
-func (v *visitor) VisitModuleItems1(ctx *parserv.ModuleItemsContext) interface{} {
+func (v *visitor) VisitModuleItems1(ctx *gojsp.ModuleItemsContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
 // call other visit method directly...
-func (v *visitor) VisitModuleItems2(ctx *parserv.ModuleItemsContext) interface{} {
+func (v *visitor) VisitModuleItems2(ctx *gojsp.ModuleItemsContext) interface{} {
 
 	var out string
 	for i, mc := range ctx.AllAliasName() {
-		out += v.VisitAliasName(mc.(*parserv.AliasNameContext)).(string)
+		out += v.VisitAliasName(mc.(*gojsp.AliasNameContext)).(string)
 		// add comma if more than one...
 		if c := ctx.Comma(i); c != nil {
 			out += ", "
@@ -174,13 +174,13 @@ func (v *visitor) VisitModuleItems2(ctx *parserv.ModuleItemsContext) interface{}
 }
 
 //  alternative version where we do the AliasName work ourselves so we can change...
-func (v *visitor) VisitModuleItems(ctx *parserv.ModuleItemsContext) interface{} {
+func (v *visitor) VisitModuleItems(ctx *gojsp.ModuleItemsContext) interface{} {
 
 	var out string
 	for i, mc := range ctx.AllAliasName() {
 		tmp := []string{}
 		// always this
-		actx := (mc.(*parserv.AliasNameContext))
+		actx := (mc.(*gojsp.AliasNameContext))
 		if ident := actx.IdentifierName(0); ident != nil {
 			tmp = append(tmp, "changed"+fmt.Sprint(i)) // ident.GetText())
 
@@ -190,7 +190,7 @@ func (v *visitor) VisitModuleItems(ctx *parserv.ModuleItemsContext) interface{} 
 			tmp = append(tmp, "as")
 			// todo: again syntax error if nil as . is a syntax error
 			if ident := actx.IdentifierName(1); ident != nil {
-				tmp = append(tmp, "a new alias") //ident.GetText())
+				tmp = append(tmp, "aNewAlias") //ident.GetText())
 
 			}
 
@@ -208,7 +208,7 @@ func (v *visitor) VisitModuleItems(ctx *parserv.ModuleItemsContext) interface{} 
 	// . ctx.OpenBrace().GetText() ctx.CloseBrace().GetText()?
 	return fmt.Sprintf("{%s}", out)
 }
-func (v *visitor) VisitImportDefault(ctx *parserv.ImportDefaultContext) interface{} {
+func (v *visitor) VisitImportDefault(ctx *gojsp.ImportDefaultContext) interface{} {
 	// log.Println("VisitImportDefault", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
@@ -216,7 +216,7 @@ func (v *visitor) VisitImportDefault(ctx *parserv.ImportDefaultContext) interfac
 // importNamespace
 //     : ('*' | identifierName) (As identifierName)?
 //     ;
-func (v *visitor) VisitImportNamespace(ctx *parserv.ImportNamespaceContext) interface{} {
+func (v *visitor) VisitImportNamespace(ctx *gojsp.ImportNamespaceContext) interface{} {
 	// log.Println("VisitImportNamespace", ctx.GetText())
 	// todo: add to errors
 	if ctx.GetChildCount() != 1 && ctx.GetChildCount() != 3 {
@@ -224,7 +224,7 @@ func (v *visitor) VisitImportNamespace(ctx *parserv.ImportNamespaceContext) inte
 	}
 	var out = []string{}
 	// todo: validate syntax
-	// either this or *parserv.IdentifierNameContext i.e * or any identifier
+	// either this or *gojsp.IdentifierNameContext i.e * or any identifier
 	if vv, ok := ctx.GetChild(0).(*antlr.TerminalNodeImpl); ok {
 		out = append(out, vv.GetText())
 
@@ -250,7 +250,7 @@ func (v *visitor) VisitImportNamespace(ctx *parserv.ImportNamespaceContext) inte
 // importFrom
 //     : From StringLiteral
 //     ;
-func (v *visitor) VisitImportFrom(ctx *parserv.ImportFromContext) interface{} {
+func (v *visitor) VisitImportFrom(ctx *gojsp.ImportFromContext) interface{} {
 
 	if ctx.GetChildCount() != 2 {
 		// todo: error
@@ -266,7 +266,7 @@ func (v *visitor) VisitImportFrom(ctx *parserv.ImportFromContext) interface{} {
 // aliasName
 //     : identifierName (As identifierName)?
 //     ;s
-func (v *visitor) VisitAliasName(ctx *parserv.AliasNameContext) interface{} {
+func (v *visitor) VisitAliasName(ctx *gojsp.AliasNameContext) interface{} {
 	// log.Println("VisitAliasName", ctx.GetChildCount(), ctx.GetText())
 	var out = []string{}
 	// todo: syntax error if nil
@@ -288,132 +288,132 @@ func (v *visitor) VisitAliasName(ctx *parserv.AliasNameContext) interface{} {
 	return strings.Join(out, " ")
 }
 
-func (v *visitor) VisitExportDeclaration(ctx *parserv.ExportDeclarationContext) interface{} {
+func (v *visitor) VisitExportDeclaration(ctx *gojsp.ExportDeclarationContext) interface{} {
 	// log.Println("VisitExportDeclaration", ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitExportDefaultDeclaration(ctx *parserv.ExportDefaultDeclarationContext) interface{} {
+func (v *visitor) VisitExportDefaultDeclaration(ctx *gojsp.ExportDefaultDeclarationContext) interface{} {
 	log.Println("VisitExportDefaultDeclaration", ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitExportFromBlock(ctx *parserv.ExportFromBlockContext) interface{} {
+func (v *visitor) VisitExportFromBlock(ctx *gojsp.ExportFromBlockContext) interface{} {
 	log.Println("VisitExportFromBlock", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitDeclaration(ctx *parserv.DeclarationContext) interface{} {
+func (v *visitor) VisitDeclaration(ctx *gojsp.DeclarationContext) interface{} {
 	// log.Println("VisitDeclaration", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitVariableStatement(ctx *parserv.VariableStatementContext) interface{} {
+func (v *visitor) VisitVariableStatement(ctx *gojsp.VariableStatementContext) interface{} {
 	// log.Println("VisitVariableStatement", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitLabelledStatement(ctx *parserv.LabelledStatementContext) interface{} {
+func (v *visitor) VisitLabelledStatement(ctx *gojsp.LabelledStatementContext) interface{} {
 	log.Println("VisitLabelledStatement")
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFunctionDeclaration(ctx *parserv.FunctionDeclarationContext) interface{} {
+func (v *visitor) VisitFunctionDeclaration(ctx *gojsp.FunctionDeclarationContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitClassDeclaration(ctx *parserv.ClassDeclarationContext) interface{} {
+func (v *visitor) VisitClassDeclaration(ctx *gojsp.ClassDeclarationContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitClassTail(ctx *parserv.ClassTailContext) interface{} {
+func (v *visitor) VisitClassTail(ctx *gojsp.ClassTailContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitClassElement(ctx *parserv.ClassElementContext) interface{} {
+func (v *visitor) VisitClassElement(ctx *gojsp.ClassElementContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitMethodDefinition(ctx *parserv.MethodDefinitionContext) interface{} {
+func (v *visitor) VisitMethodDefinition(ctx *gojsp.MethodDefinitionContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFormalParameterList(ctx *parserv.FormalParameterListContext) interface{} {
+func (v *visitor) VisitFormalParameterList(ctx *gojsp.FormalParameterListContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFormalParameterArg(ctx *parserv.FormalParameterArgContext) interface{} {
+func (v *visitor) VisitFormalParameterArg(ctx *gojsp.FormalParameterArgContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitLastFormalParameterArg(ctx *parserv.LastFormalParameterArgContext) interface{} {
+func (v *visitor) VisitLastFormalParameterArg(ctx *gojsp.LastFormalParameterArgContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFunctionBody(ctx *parserv.FunctionBodyContext) interface{} {
+func (v *visitor) VisitFunctionBody(ctx *gojsp.FunctionBodyContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitArrayLiteral(ctx *parserv.ArrayLiteralContext) interface{} {
+func (v *visitor) VisitArrayLiteral(ctx *gojsp.ArrayLiteralContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitElementList(ctx *parserv.ElementListContext) interface{} {
+func (v *visitor) VisitElementList(ctx *gojsp.ElementListContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitArrayElement(ctx *parserv.ArrayElementContext) interface{} {
+func (v *visitor) VisitArrayElement(ctx *gojsp.ArrayElementContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertyExpressionAssignment(ctx *parserv.PropertyExpressionAssignmentContext) interface{} {
+func (v *visitor) VisitPropertyExpressionAssignment(ctx *gojsp.PropertyExpressionAssignmentContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitComputedPropertyExpressionAssignment(ctx *parserv.ComputedPropertyExpressionAssignmentContext) interface{} {
+func (v *visitor) VisitComputedPropertyExpressionAssignment(ctx *gojsp.ComputedPropertyExpressionAssignmentContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFunctionProperty(ctx *parserv.FunctionPropertyContext) interface{} {
+func (v *visitor) VisitFunctionProperty(ctx *gojsp.FunctionPropertyContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertyGetter(ctx *parserv.PropertyGetterContext) interface{} {
+func (v *visitor) VisitPropertyGetter(ctx *gojsp.PropertyGetterContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertySetter(ctx *parserv.PropertySetterContext) interface{} {
+func (v *visitor) VisitPropertySetter(ctx *gojsp.PropertySetterContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertyShorthand(ctx *parserv.PropertyShorthandContext) interface{} {
+func (v *visitor) VisitPropertyShorthand(ctx *gojsp.PropertyShorthandContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertyName(ctx *parserv.PropertyNameContext) interface{} {
+func (v *visitor) VisitPropertyName(ctx *gojsp.PropertyNameContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitArguments(ctx *parserv.ArgumentsContext) interface{} {
+func (v *visitor) VisitArguments(ctx *gojsp.ArgumentsContext) interface{} {
 	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }

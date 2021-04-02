@@ -1,4 +1,4 @@
-package parserv
+package gojsp
 
 import (
 	"strings"

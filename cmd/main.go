@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	antlr "github.com/padraicbc/antlr4"
-	"github.com/padraicbc/parserv"
+	"github.com/padraicbc/gojsp"
 )
 
 func main() {
@@ -31,7 +31,10 @@ import {
 	reallyReallyLongModuleExportName as shortName,
 	anotherLongModuleName as short
   } from '/modules/my-module.js';
-// var promise = import("module-name")
+import { getUsefulContents } from '/modules2/file.js';
+var promise = import("module-name")
+let module = await import('/modules/my-module.js');
+
 // odds  = evens.map(v => v + 1);
 // pairs = evens.map(v => ({ even: v, odd: v + 1 }));
 // nums  = evens.map((v, i) => v + i)
@@ -41,11 +44,11 @@ import {
 // 	  .slice(0, 2);
 	  	  `)
 	// Create the js Lexer
-	lexer := parserv.NewJavaScriptLexer(stream)
+	lexer := gojsp.NewJavaScriptLexer(stream)
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
-	p := parserv.NewJavaScriptParser(tokenStream)
+	p := gojsp.NewJavaScriptParser(tokenStream)
 
 	// tree := p.Program()
 	tree := p.SourceElements()
@@ -61,7 +64,7 @@ func walk(tree antlr.ParseTree) {
 
 }
 func visit(tree antlr.ParseTree) {
-	v := &visitor{BaseJavaScriptParserVisitor: &parserv.BaseJavaScriptParserVisitor{}}
+	v := &visitor{BaseJavaScriptParserVisitor: &gojsp.BaseJavaScriptParserVisitor{}}
 	vi := v.Visit(tree).([]string)
 	log.Println(strings.Join(vi, "\n"))
 
