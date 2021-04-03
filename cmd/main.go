@@ -17,7 +17,8 @@ func main() {
 
 func antv() {
 
-	stream := antlr.NewInputStream(`import defaultExport from "module-name";
+	stream := antlr.NewInputStream(`
+import defaultExport from "module-name";
 import * as name from "module-name";
 import { export1 } from "module-name";
 import { export1 as alias1 } from "module-name";
@@ -32,7 +33,8 @@ import {
 	anotherLongModuleName as short
   } from '/modules/my-module.js';
 import { getUsefulContents } from '/modules2/file.js';
-var promise = import("module-name")
+// todo
+var promise = import("module-name");
 let module = await import('/modules/my-module.js');
 
 // odds  = evens.map(v => v + 1);
@@ -59,13 +61,11 @@ let module = await import('/modules/my-module.js');
 }
 func walk(tree antlr.ParseTree) {
 	pr := antlr.NewParseTreeWalker()
-
 	pr.Walk(&listener{}, tree)
 
 }
 func visit(tree antlr.ParseTree) {
-	v := &visitor{BaseJavaScriptParserVisitor: &gojsp.BaseJavaScriptParserVisitor{}}
-	vi := v.Visit(tree).([]string)
+	vi := new(visitor).Visit(tree).([]string)
 	log.Println(strings.Join(vi, "\n"))
 
 }

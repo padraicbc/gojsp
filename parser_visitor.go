@@ -5,7 +5,7 @@ package gojsp // JavaScriptParser
 import "github.com/padraicbc/antlr4"
 
 // A complete Visitor for a parse tree produced by JavaScriptParser.
-type JavaScriptgojspisitor interface {
+type JavaScriptParserVisitor interface {
 	antlr.ParseTreeVisitor
 
 	// Visit a parse tree produced by JavaScriptParser#program.

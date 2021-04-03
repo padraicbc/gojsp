@@ -9,10 +9,32 @@ import (
 	"github.com/padraicbc/gojsp"
 )
 
+// need pointer receiver for methods...
 type visitor struct {
-	*gojsp.BaseJavaScriptParserVisitor
+	// any methods not implemented to saitsfy JavaScriptParserVisitor checks in Accept...
+	// JavaScriptParserVisitor embeds antlr.ParseTreeVisitor so we are also a "antlr.ParseTreeVisitor"
+	// any visitor methods we don't add are called on BaseJavaScriptParserVisitor which are no-ops essentially -> nil
+	gojsp.BaseJavaScriptParserVisitor
 	// todo:  syntax errors with line/col ...
 	errors []string
+}
+
+func (v *visitor) VisitIdentifier(ctx *gojsp.IdentifierContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitAssignable(ctx *gojsp.AssignableContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitArgument(ctx *gojsp.ArgumentContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitAdditiveExpression(ctx *gojsp.AdditiveExpressionContext) interface{} {
+
+	return v.VisitChildren(ctx)
 }
 
 // as per the docs but not sure if they will be used
@@ -74,6 +96,7 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 		if !v.shouldVisitNextChild(node, result) {
 			return result
 		}
+
 		if ef, ok := ch.(*gojsp.EosContext); ok {
 			result = append(result, ef.GetText())
 			continue
@@ -87,6 +110,7 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 		case *gojsp.EosContext:
 			result = append(result, rr.GetText())
 		case nil:
+			log.Println(ch)
 
 		default:
 			panic(rr)
@@ -106,12 +130,6 @@ func (v *visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
 func (v *visitor) VisitErrorNode(node antlr.ErrorNode) interface{} {
 	log.Println(node)
 	return nil
-}
-
-func (v *visitor) VisitImportExpression(ctx *gojsp.ImportExpressionContext) interface{} {
-
-	log.Println("VisitImportExpression", ctx.GetText())
-	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitImportStatement(ctx *gojsp.ImportStatementContext) interface{} {
@@ -319,101 +337,148 @@ func (v *visitor) VisitLabelledStatement(ctx *gojsp.LabelledStatementContext) in
 }
 
 func (v *visitor) VisitFunctionDeclaration(ctx *gojsp.FunctionDeclarationContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitClassDeclaration(ctx *gojsp.ClassDeclarationContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitClassTail(ctx *gojsp.ClassTailContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitClassElement(ctx *gojsp.ClassElementContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitMethodDefinition(ctx *gojsp.MethodDefinitionContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitFormalParameterList(ctx *gojsp.FormalParameterListContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitFormalParameterArg(ctx *gojsp.FormalParameterArgContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitLastFormalParameterArg(ctx *gojsp.LastFormalParameterArgContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitFunctionBody(ctx *gojsp.FunctionBodyContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitArrayLiteral(ctx *gojsp.ArrayLiteralContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitElementList(ctx *gojsp.ElementListContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitArrayElement(ctx *gojsp.ArrayElementContext) interface{} {
-	log.Println(ctx)
-	return v.VisitChildren(ctx)
-}
 
-func (v *visitor) VisitPropertyExpressionAssignment(ctx *gojsp.PropertyExpressionAssignmentContext) interface{} {
-	log.Println(ctx)
-	return v.VisitChildren(ctx)
-}
-
-func (v *visitor) VisitComputedPropertyExpressionAssignment(ctx *gojsp.ComputedPropertyExpressionAssignmentContext) interface{} {
-	log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitFunctionProperty(ctx *gojsp.FunctionPropertyContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitPropertyGetter(ctx *gojsp.PropertyGetterContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitPropertySetter(ctx *gojsp.PropertySetterContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitPropertyShorthand(ctx *gojsp.PropertyShorthandContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitPropertyName(ctx *gojsp.PropertyNameContext) interface{} {
-	log.Println(ctx)
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitArguments(ctx *gojsp.ArgumentsContext) interface{} {
-	log.Println(ctx)
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitMemberDotExpression(ctx *gojsp.MemberDotExpressionContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitFunctionExpression(ctx *gojsp.FunctionExpressionContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitIdentifierName(ctx *gojsp.IdentifierNameContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitParenthesizedExpression(ctx *gojsp.ParenthesizedExpressionContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitLiteral(ctx *gojsp.LiteralContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitNumericLiteral(ctx *gojsp.NumericLiteralContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitObjectLiteralExpression(ctx *gojsp.ObjectLiteralExpressionContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitObjectLiteral(ctx *gojsp.ObjectLiteralContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitAwaitExpression(ctx *gojsp.AwaitExpressionContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitVariableDeclaration(ctx *gojsp.VariableDeclarationContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitLet_(ctx *gojsp.Let_Context) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitVariableDeclarationList(ctx *gojsp.VariableDeclarationListContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitVarModifier(ctx *gojsp.VarModifierContext) interface{} {
+
 	return v.VisitChildren(ctx)
 }
