@@ -10,6 +10,7 @@ import (
 
 type listener struct {
 	gojsp.BaseJavaScriptParserListener
+	imports map[string]*ImportDeclaration
 }
 
 func show(fname, text string) {

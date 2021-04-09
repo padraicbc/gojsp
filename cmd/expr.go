@@ -6,10 +6,9 @@ import (
 	"github.com/padraicbc/gojsp"
 )
 
-func (v *visitor) VisitImportExpression(ctx *gojsp.ImportExpressionContext) interface{} {
-
-	log.Println("VisitImportExpression", ctx.GetText())
-	return v.VisitChildren(ctx)
+type Expression struct {
+	OP          string
+	Left, Right string
 }
 
 func (v *visitor) VisitPropertyExpressionAssignment(ctx *gojsp.PropertyExpressionAssignmentContext) interface{} {
@@ -26,12 +25,19 @@ func (v *visitor) VisitExpressionStatement(ctx *gojsp.ExpressionStatementContext
 
 	return v.VisitChildren(ctx)
 }
+
+func (v *visitor) VisitAdditiveExpression(ctx *gojsp.AdditiveExpressionContext) interface{} {
+	log.Println(ctx.GetText())
+	return Expression{OP: "+", Left: ctx.SingleExpression(0).GetText(), Right: ctx.SingleExpression(1).GetText()}
+
+}
 func (v *visitor) VisitExpressionSequence(ctx *gojsp.ExpressionSequenceContext) interface{} {
+	log.Println("VisitExpressionSequence", ctx.GetText())
 
 	return v.VisitChildren(ctx)
 }
 func (v *visitor) VisitAssignmentExpression(ctx *gojsp.AssignmentExpressionContext) interface{} {
-
+	log.Println("VisitAssignmentExpression", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
 func (v *visitor) VisitIdentifierExpression(ctx *gojsp.IdentifierExpressionContext) interface{} {

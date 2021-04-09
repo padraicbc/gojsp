@@ -47,12 +47,15 @@ func NewJavaScriptParser(input antlr.TokenStream) *JavaScriptParser {
 	return this
 }
 
-// IProgramContext is an interface to support dynamic dispatch.
-type IProgramContext interface {
+type BaseContext interface {
 	antlr.ParserRuleContext
-
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+}
+
+// IProgramContext is an interface to support dynamic dispatch.
+type IProgramContext interface {
+	BaseContext
 
 	// IsProgramContext differentiates from other interfaces.
 	IsProgramContext()
@@ -182,10 +185,7 @@ func (p *JavaScriptParser) Program() (localctx IProgramContext) {
 
 // ISourceElementContext is an interface to support dynamic dispatch.
 type ISourceElementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsSourceElementContext differentiates from other interfaces.
 	IsSourceElementContext()
@@ -290,10 +290,7 @@ func (p *JavaScriptParser) SourceElement() (localctx ISourceElementContext) {
 
 // IStatementContext is an interface to support dynamic dispatch.
 type IStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsStatementContext differentiates from other interfaces.
 	IsStatementContext()
@@ -726,10 +723,7 @@ func (p *JavaScriptParser) Statement() (localctx IStatementContext) {
 
 // IBlockContext is an interface to support dynamic dispatch.
 type IBlockContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsBlockContext differentiates from other interfaces.
 	IsBlockContext()
@@ -853,10 +847,7 @@ func (p *JavaScriptParser) Block() (localctx IBlockContext) {
 
 // IStatementListContext is an interface to support dynamic dispatch.
 type IStatementListContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsStatementListContext differentiates from other interfaces.
 	IsStatementListContext()
@@ -990,10 +981,7 @@ func (p *JavaScriptParser) StatementList() (localctx IStatementListContext) {
 
 // IImportStatementContext is an interface to support dynamic dispatch.
 type IImportStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsImportStatementContext differentiates from other interfaces.
 	IsImportStatementContext()
@@ -1107,10 +1095,7 @@ func (p *JavaScriptParser) ImportStatement() (localctx IImportStatementContext) 
 
 // IImportFromBlockContext is an interface to support dynamic dispatch.
 type IImportFromBlockContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsImportFromBlockContext differentiates from other interfaces.
 	IsImportFromBlockContext()
@@ -1310,10 +1295,7 @@ func (p *JavaScriptParser) ImportFromBlock() (localctx IImportFromBlockContext) 
 
 // IModuleItemsContext is an interface to support dynamic dispatch.
 type IModuleItemsContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsModuleItemsContext differentiates from other interfaces.
 	IsModuleItemsContext()
@@ -1494,10 +1476,7 @@ func (p *JavaScriptParser) ModuleItems() (localctx IModuleItemsContext) {
 
 // IImportDefaultContext is an interface to support dynamic dispatch.
 type IImportDefaultContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsImportDefaultContext differentiates from other interfaces.
 	IsImportDefaultContext()
@@ -1609,10 +1588,7 @@ func (p *JavaScriptParser) ImportDefault() (localctx IImportDefaultContext) {
 
 // IImportNamespaceContext is an interface to support dynamic dispatch.
 type IImportNamespaceContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsImportNamespaceContext differentiates from other interfaces.
 	IsImportNamespaceContext()
@@ -1768,10 +1744,7 @@ func (p *JavaScriptParser) ImportNamespace() (localctx IImportNamespaceContext) 
 
 // IImportFromContext is an interface to support dynamic dispatch.
 type IImportFromContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsImportFromContext differentiates from other interfaces.
 	IsImportFromContext()
@@ -1879,10 +1852,7 @@ func (p *JavaScriptParser) ImportFrom() (localctx IImportFromContext) {
 
 // IAliasNameContext is an interface to support dynamic dispatch.
 type IAliasNameContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsAliasNameContext differentiates from other interfaces.
 	IsAliasNameContext()
@@ -2019,10 +1989,7 @@ func (p *JavaScriptParser) AliasName() (localctx IAliasNameContext) {
 
 // IExportStatementContext is an interface to support dynamic dispatch.
 type IExportStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsExportStatementContext differentiates from other interfaces.
 	IsExportStatementContext()
@@ -2288,10 +2255,7 @@ func (p *JavaScriptParser) ExportStatement() (localctx IExportStatementContext) 
 
 // IExportFromBlockContext is an interface to support dynamic dispatch.
 type IExportFromBlockContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsExportFromBlockContext differentiates from other interfaces.
 	IsExportFromBlockContext()
@@ -2462,10 +2426,7 @@ func (p *JavaScriptParser) ExportFromBlock() (localctx IExportFromBlockContext) 
 
 // IDeclarationContext is an interface to support dynamic dispatch.
 type IDeclarationContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsDeclarationContext differentiates from other interfaces.
 	IsDeclarationContext()
@@ -2612,10 +2573,7 @@ func (p *JavaScriptParser) Declaration() (localctx IDeclarationContext) {
 
 // IVariableStatementContext is an interface to support dynamic dispatch.
 type IVariableStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsVariableStatementContext differentiates from other interfaces.
 	IsVariableStatementContext()
@@ -2733,10 +2691,7 @@ func (p *JavaScriptParser) VariableStatement() (localctx IVariableStatementConte
 
 // IVariableDeclarationListContext is an interface to support dynamic dispatch.
 type IVariableDeclarationListContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsVariableDeclarationListContext differentiates from other interfaces.
 	IsVariableDeclarationListContext()
@@ -2897,10 +2852,7 @@ func (p *JavaScriptParser) VariableDeclarationList() (localctx IVariableDeclarat
 
 // IVariableDeclarationContext is an interface to support dynamic dispatch.
 type IVariableDeclarationContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsVariableDeclarationContext differentiates from other interfaces.
 	IsVariableDeclarationContext()
@@ -3032,10 +2984,7 @@ func (p *JavaScriptParser) VariableDeclaration() (localctx IVariableDeclarationC
 
 // IEmptyStatementContext is an interface to support dynamic dispatch.
 type IEmptyStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsEmptyStatementContext differentiates from other interfaces.
 	IsEmptyStatementContext()
@@ -3133,10 +3082,7 @@ func (p *JavaScriptParser) EmptyStatement() (localctx IEmptyStatementContext) {
 
 // IExpressionStatementContext is an interface to support dynamic dispatch.
 type IExpressionStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsExpressionStatementContext differentiates from other interfaces.
 	IsExpressionStatementContext()
@@ -3259,10 +3205,7 @@ func (p *JavaScriptParser) ExpressionStatement() (localctx IExpressionStatementC
 
 // IIfStatementContext is an interface to support dynamic dispatch.
 type IIfStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsIfStatementContext differentiates from other interfaces.
 	IsIfStatementContext()
@@ -3435,10 +3378,7 @@ func (p *JavaScriptParser) IfStatement() (localctx IIfStatementContext) {
 
 // IIterationStatementContext is an interface to support dynamic dispatch.
 type IIterationStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsIterationStatementContext differentiates from other interfaces.
 	IsIterationStatementContext()
@@ -4198,10 +4138,7 @@ func (p *JavaScriptParser) IterationStatement() (localctx IIterationStatementCon
 
 // IVarModifierContext is an interface to support dynamic dispatch.
 type IVarModifierContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsVarModifierContext differentiates from other interfaces.
 	IsVarModifierContext()
@@ -4336,10 +4273,7 @@ func (p *JavaScriptParser) VarModifier() (localctx IVarModifierContext) {
 
 // IContinueStatementContext is an interface to support dynamic dispatch.
 type IContinueStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsContinueStatementContext differentiates from other interfaces.
 	IsContinueStatementContext()
@@ -4476,10 +4410,7 @@ func (p *JavaScriptParser) ContinueStatement() (localctx IContinueStatementConte
 
 // IBreakStatementContext is an interface to support dynamic dispatch.
 type IBreakStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsBreakStatementContext differentiates from other interfaces.
 	IsBreakStatementContext()
@@ -4616,10 +4547,7 @@ func (p *JavaScriptParser) BreakStatement() (localctx IBreakStatementContext) {
 
 // IReturnStatementContext is an interface to support dynamic dispatch.
 type IReturnStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsReturnStatementContext differentiates from other interfaces.
 	IsReturnStatementContext()
@@ -4756,10 +4684,7 @@ func (p *JavaScriptParser) ReturnStatement() (localctx IReturnStatementContext) 
 
 // IYieldStatementContext is an interface to support dynamic dispatch.
 type IYieldStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsYieldStatementContext differentiates from other interfaces.
 	IsYieldStatementContext()
@@ -4896,10 +4821,7 @@ func (p *JavaScriptParser) YieldStatement() (localctx IYieldStatementContext) {
 
 // IWithStatementContext is an interface to support dynamic dispatch.
 type IWithStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsWithStatementContext differentiates from other interfaces.
 	IsWithStatementContext()
@@ -5041,10 +4963,7 @@ func (p *JavaScriptParser) WithStatement() (localctx IWithStatementContext) {
 
 // ISwitchStatementContext is an interface to support dynamic dispatch.
 type ISwitchStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsSwitchStatementContext differentiates from other interfaces.
 	IsSwitchStatementContext()
@@ -5186,10 +5105,7 @@ func (p *JavaScriptParser) SwitchStatement() (localctx ISwitchStatementContext) 
 
 // ICaseBlockContext is an interface to support dynamic dispatch.
 type ICaseBlockContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsCaseBlockContext differentiates from other interfaces.
 	IsCaseBlockContext()
@@ -5360,10 +5276,7 @@ func (p *JavaScriptParser) CaseBlock() (localctx ICaseBlockContext) {
 
 // ICaseClausesContext is an interface to support dynamic dispatch.
 type ICaseClausesContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsCaseClausesContext differentiates from other interfaces.
 	IsCaseClausesContext()
@@ -5491,10 +5404,7 @@ func (p *JavaScriptParser) CaseClauses() (localctx ICaseClausesContext) {
 
 // ICaseClauseContext is an interface to support dynamic dispatch.
 type ICaseClauseContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsCaseClauseContext differentiates from other interfaces.
 	IsCaseClauseContext()
@@ -5633,10 +5543,7 @@ func (p *JavaScriptParser) CaseClause() (localctx ICaseClauseContext) {
 
 // IDefaultClauseContext is an interface to support dynamic dispatch.
 type IDefaultClauseContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsDefaultClauseContext differentiates from other interfaces.
 	IsDefaultClauseContext()
@@ -5761,10 +5668,7 @@ func (p *JavaScriptParser) DefaultClause() (localctx IDefaultClauseContext) {
 
 // ILabelledStatementContext is an interface to support dynamic dispatch.
 type ILabelledStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsLabelledStatementContext differentiates from other interfaces.
 	IsLabelledStatementContext()
@@ -5890,10 +5794,7 @@ func (p *JavaScriptParser) LabelledStatement() (localctx ILabelledStatementConte
 
 // IThrowStatementContext is an interface to support dynamic dispatch.
 type IThrowStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsThrowStatementContext differentiates from other interfaces.
 	IsThrowStatementContext()
@@ -6024,10 +5925,7 @@ func (p *JavaScriptParser) ThrowStatement() (localctx IThrowStatementContext) {
 
 // ITryStatementContext is an interface to support dynamic dispatch.
 type ITryStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsTryStatementContext differentiates from other interfaces.
 	IsTryStatementContext()
@@ -6187,10 +6085,7 @@ func (p *JavaScriptParser) TryStatement() (localctx ITryStatementContext) {
 
 // ICatchProductionContext is an interface to support dynamic dispatch.
 type ICatchProductionContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsCatchProductionContext differentiates from other interfaces.
 	IsCatchProductionContext()
@@ -6346,10 +6241,7 @@ func (p *JavaScriptParser) CatchProduction() (localctx ICatchProductionContext) 
 
 // IFinallyProductionContext is an interface to support dynamic dispatch.
 type IFinallyProductionContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsFinallyProductionContext differentiates from other interfaces.
 	IsFinallyProductionContext()
@@ -6461,10 +6353,7 @@ func (p *JavaScriptParser) FinallyProduction() (localctx IFinallyProductionConte
 
 // IDebuggerStatementContext is an interface to support dynamic dispatch.
 type IDebuggerStatementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsDebuggerStatementContext differentiates from other interfaces.
 	IsDebuggerStatementContext()
@@ -6576,10 +6465,7 @@ func (p *JavaScriptParser) DebuggerStatement() (localctx IDebuggerStatementConte
 
 // IFunctionDeclarationContext is an interface to support dynamic dispatch.
 type IFunctionDeclarationContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsFunctionDeclarationContext differentiates from other interfaces.
 	IsFunctionDeclarationContext()
@@ -6770,10 +6656,7 @@ func (p *JavaScriptParser) FunctionDeclaration() (localctx IFunctionDeclarationC
 
 // IClassDeclarationContext is an interface to support dynamic dispatch.
 type IClassDeclarationContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsClassDeclarationContext differentiates from other interfaces.
 	IsClassDeclarationContext()
@@ -6899,10 +6782,7 @@ func (p *JavaScriptParser) ClassDeclaration() (localctx IClassDeclarationContext
 
 // IClassTailContext is an interface to support dynamic dispatch.
 type IClassTailContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsClassTailContext differentiates from other interfaces.
 	IsClassTailContext()
@@ -7078,10 +6958,7 @@ func (p *JavaScriptParser) ClassTail() (localctx IClassTailContext) {
 
 // IClassElementContext is an interface to support dynamic dispatch.
 type IClassElementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsClassElementContext differentiates from other interfaces.
 	IsClassElementContext()
@@ -7390,10 +7267,7 @@ func (p *JavaScriptParser) ClassElement() (localctx IClassElementContext) {
 
 // IMethodDefinitionContext is an interface to support dynamic dispatch.
 type IMethodDefinitionContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsMethodDefinitionContext differentiates from other interfaces.
 	IsMethodDefinitionContext()
@@ -7686,10 +7560,7 @@ func (p *JavaScriptParser) MethodDefinition() (localctx IMethodDefinitionContext
 
 // IFormalParameterListContext is an interface to support dynamic dispatch.
 type IFormalParameterListContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsFormalParameterListContext differentiates from other interfaces.
 	IsFormalParameterListContext()
@@ -7878,10 +7749,7 @@ func (p *JavaScriptParser) FormalParameterList() (localctx IFormalParameterListC
 
 // IFormalParameterArgContext is an interface to support dynamic dispatch.
 type IFormalParameterArgContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsFormalParameterArgContext differentiates from other interfaces.
 	IsFormalParameterArgContext()
@@ -8015,10 +7883,7 @@ func (p *JavaScriptParser) FormalParameterArg() (localctx IFormalParameterArgCon
 
 // ILastFormalParameterArgContext is an interface to support dynamic dispatch.
 type ILastFormalParameterArgContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsLastFormalParameterArgContext differentiates from other interfaces.
 	IsLastFormalParameterArgContext()
@@ -8130,10 +7995,7 @@ func (p *JavaScriptParser) LastFormalParameterArg() (localctx ILastFormalParamet
 
 // IFunctionBodyContext is an interface to support dynamic dispatch.
 type IFunctionBodyContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsFunctionBodyContext differentiates from other interfaces.
 	IsFunctionBodyContext()
@@ -8258,10 +8120,7 @@ func (p *JavaScriptParser) FunctionBody() (localctx IFunctionBodyContext) {
 
 // ISourceElementsContext is an interface to support dynamic dispatch.
 type ISourceElementsContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsSourceElementsContext differentiates from other interfaces.
 	IsSourceElementsContext()
@@ -8395,10 +8254,7 @@ func (p *JavaScriptParser) SourceElements() (localctx ISourceElementsContext) {
 
 // IArrayLiteralContext is an interface to support dynamic dispatch.
 type IArrayLiteralContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsArrayLiteralContext differentiates from other interfaces.
 	IsArrayLiteralContext()
@@ -8518,10 +8374,7 @@ func (p *JavaScriptParser) ArrayLiteral() (localctx IArrayLiteralContext) {
 
 // IElementListContext is an interface to support dynamic dispatch.
 type IElementListContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsElementListContext differentiates from other interfaces.
 	IsElementListContext()
@@ -8714,10 +8567,7 @@ func (p *JavaScriptParser) ElementList() (localctx IElementListContext) {
 
 // IArrayElementContext is an interface to support dynamic dispatch.
 type IArrayElementContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsArrayElementContext differentiates from other interfaces.
 	IsArrayElementContext()
@@ -8836,10 +8686,7 @@ func (p *JavaScriptParser) ArrayElement() (localctx IArrayElementContext) {
 
 // IPropertyAssignmentContext is an interface to support dynamic dispatch.
 type IPropertyAssignmentContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsPropertyAssignmentContext differentiates from other interfaces.
 	IsPropertyAssignmentContext()
@@ -9491,10 +9338,7 @@ func (p *JavaScriptParser) PropertyAssignment() (localctx IPropertyAssignmentCon
 
 // IPropertyNameContext is an interface to support dynamic dispatch.
 type IPropertyNameContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsPropertyNameContext differentiates from other interfaces.
 	IsPropertyNameContext()
@@ -9668,10 +9512,7 @@ func (p *JavaScriptParser) PropertyName() (localctx IPropertyNameContext) {
 
 // IArgumentsContext is an interface to support dynamic dispatch.
 type IArgumentsContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsArgumentsContext differentiates from other interfaces.
 	IsArgumentsContext()
@@ -9852,10 +9693,7 @@ func (p *JavaScriptParser) Arguments() (localctx IArgumentsContext) {
 
 // IArgumentContext is an interface to support dynamic dispatch.
 type IArgumentContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsArgumentContext differentiates from other interfaces.
 	IsArgumentContext()
@@ -9996,10 +9834,7 @@ func (p *JavaScriptParser) Argument() (localctx IArgumentContext) {
 
 // IExpressionSequenceContext is an interface to support dynamic dispatch.
 type IExpressionSequenceContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsExpressionSequenceContext differentiates from other interfaces.
 	IsExpressionSequenceContext()
@@ -10146,10 +9981,7 @@ func (p *JavaScriptParser) ExpressionSequence() (localctx IExpressionSequenceCon
 
 // ISingleExpressionContext is an interface to support dynamic dispatch.
 type ISingleExpressionContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsSingleExpressionContext differentiates from other interfaces.
 	IsSingleExpressionContext()
@@ -13802,10 +13634,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 
 // IAssignableContext is an interface to support dynamic dispatch.
 type IAssignableContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsAssignableContext differentiates from other interfaces.
 	IsAssignableContext()
@@ -13952,10 +13781,7 @@ func (p *JavaScriptParser) Assignable() (localctx IAssignableContext) {
 
 // IObjectLiteralContext is an interface to support dynamic dispatch.
 type IObjectLiteralContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsObjectLiteralContext differentiates from other interfaces.
 	IsObjectLiteralContext()
@@ -14135,10 +13961,7 @@ func (p *JavaScriptParser) ObjectLiteral() (localctx IObjectLiteralContext) {
 
 // IAnoymousFunctionContext is an interface to support dynamic dispatch.
 type IAnoymousFunctionContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsAnoymousFunctionContext differentiates from other interfaces.
 	IsAnoymousFunctionContext()
@@ -14495,10 +14318,7 @@ func (p *JavaScriptParser) AnoymousFunction() (localctx IAnoymousFunctionContext
 
 // IArrowFunctionParametersContext is an interface to support dynamic dispatch.
 type IArrowFunctionParametersContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsArrowFunctionParametersContext differentiates from other interfaces.
 	IsArrowFunctionParametersContext()
@@ -14651,10 +14471,7 @@ func (p *JavaScriptParser) ArrowFunctionParameters() (localctx IArrowFunctionPar
 
 // IArrowFunctionBodyContext is an interface to support dynamic dispatch.
 type IArrowFunctionBodyContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsArrowFunctionBodyContext differentiates from other interfaces.
 	IsArrowFunctionBodyContext()
@@ -14781,10 +14598,7 @@ func (p *JavaScriptParser) ArrowFunctionBody() (localctx IArrowFunctionBodyConte
 
 // IAssignmentOperatorContext is an interface to support dynamic dispatch.
 type IAssignmentOperatorContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsAssignmentOperatorContext differentiates from other interfaces.
 	IsAssignmentOperatorContext()
@@ -14934,10 +14748,7 @@ func (p *JavaScriptParser) AssignmentOperator() (localctx IAssignmentOperatorCon
 
 // ILiteralContext is an interface to support dynamic dispatch.
 type ILiteralContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsLiteralContext differentiates from other interfaces.
 	IsLiteralContext()
@@ -15122,10 +14933,7 @@ func (p *JavaScriptParser) Literal() (localctx ILiteralContext) {
 
 // INumericLiteralContext is an interface to support dynamic dispatch.
 type INumericLiteralContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsNumericLiteralContext differentiates from other interfaces.
 	IsNumericLiteralContext()
@@ -15247,10 +15055,7 @@ func (p *JavaScriptParser) NumericLiteral() (localctx INumericLiteralContext) {
 
 // IBigintLiteralContext is an interface to support dynamic dispatch.
 type IBigintLiteralContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsBigintLiteralContext differentiates from other interfaces.
 	IsBigintLiteralContext()
@@ -15368,10 +15173,7 @@ func (p *JavaScriptParser) BigintLiteral() (localctx IBigintLiteralContext) {
 
 // IGetterContext is an interface to support dynamic dispatch.
 type IGetterContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsGetterContext differentiates from other interfaces.
 	IsGetterContext()
@@ -15494,10 +15296,7 @@ func (p *JavaScriptParser) Getter() (localctx IGetterContext) {
 
 // ISetterContext is an interface to support dynamic dispatch.
 type ISetterContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsSetterContext differentiates from other interfaces.
 	IsSetterContext()
@@ -15620,10 +15419,7 @@ func (p *JavaScriptParser) Setter() (localctx ISetterContext) {
 
 // IIdentifierNameContext is an interface to support dynamic dispatch.
 type IIdentifierNameContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsIdentifierNameContext differentiates from other interfaces.
 	IsIdentifierNameContext()
@@ -15750,10 +15546,7 @@ func (p *JavaScriptParser) IdentifierName() (localctx IIdentifierNameContext) {
 
 // IIdentifierContext is an interface to support dynamic dispatch.
 type IIdentifierContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsIdentifierContext differentiates from other interfaces.
 	IsIdentifierContext()
@@ -15867,10 +15660,7 @@ func (p *JavaScriptParser) Identifier() (localctx IIdentifierContext) {
 
 // IReservedWordContext is an interface to support dynamic dispatch.
 type IReservedWordContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsReservedWordContext differentiates from other interfaces.
 	IsReservedWordContext()
@@ -16005,10 +15795,7 @@ func (p *JavaScriptParser) ReservedWord() (localctx IReservedWordContext) {
 
 // IKeywordContext is an interface to support dynamic dispatch.
 type IKeywordContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsKeywordContext differentiates from other interfaces.
 	IsKeywordContext()
@@ -16616,10 +16403,7 @@ func (p *JavaScriptParser) Keyword() (localctx IKeywordContext) {
 
 // ILet_Context is an interface to support dynamic dispatch.
 type ILet_Context interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsLet_Context differentiates from other interfaces.
 	IsLet_Context()
@@ -16729,10 +16513,7 @@ func (p *JavaScriptParser) Let_() (localctx ILet_Context) {
 
 // IEosContext is an interface to support dynamic dispatch.
 type IEosContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
+	BaseContext
 
 	// IsEosContext differentiates from other interfaces.
 	IsEosContext()
