@@ -56,7 +56,6 @@ type BaseContext interface {
 // IProgramContext is an interface to support dynamic dispatch.
 type IProgramContext interface {
 	BaseContext
-
 	// IsProgramContext differentiates from other interfaces.
 	IsProgramContext()
 }
@@ -580,6 +579,7 @@ func (p *JavaScriptParser) Statement() (localctx IStatementContext) {
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(160)
+			log.Println("Block")
 			p.Block()
 		}
 
@@ -834,6 +834,7 @@ func (p *JavaScriptParser) Block() (localctx IBlockContext) {
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) == 1 {
 		{
 			p.SetState(183)
+			log.Println("StatementList")
 			p.StatementList()
 		}
 	}
@@ -963,6 +964,7 @@ func (p *JavaScriptParser) StatementList() (localctx IStatementListContext) {
 		switch _alt {
 		case 1:
 			{
+				log.Println("Statement")
 				p.SetState(188)
 				p.Statement()
 			}

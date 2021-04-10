@@ -5,14 +5,14 @@ import (
 )
 
 func (v *visitor) VisitExportDeclaration(ctx *gojsp.ExportDeclarationContext) interface{} {
-	v.nodes = append(v.nodes, v.getSourceInfo(ctx))
+	// v.nodes = append(v.nodes, getSourceInfo(*ctx.BaseParserRuleContext))
 
 	// log.Println("VisitExportDeclaration", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
 
 func (v *visitor) VisitExportDefaultDeclaration(ctx *gojsp.ExportDefaultDeclarationContext) interface{} {
-	v.nodes = append(v.nodes, v.getSourceInfo(ctx))
+	// v.nodes = append(v.nodes, getSourceInfo(ctx))
 	// log.Println("VisitExportDefaultDeclaration", ctx.GetText())
 	return v.VisitChildren(ctx)
 }

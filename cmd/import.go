@@ -8,21 +8,8 @@ import (
 	"github.com/padraicbc/gojsp"
 )
 
-type Import interface {
-	ImportString() string
-
-	// AddInfo()
-}
-
-type SourceInfo struct {
-}
-
-// func (v *visitor) getSourceInfo(ctx gojsp.BaseContext) node {
-// 	return node{line: ctx.GetStart().GetLine(), start: ctx.GetStart().GetStart(), end: ctx.GetStop().GetStart(),
-// 		source: ctx.GetStart().GetInputStream().GetTextFromInterval(&antlr.Interval{
-// 			Start: ctx.GetStart().GetStart(), Stop: ctx.GetStop().GetStop() + 1})}
-// }
-
+// ** Not sure if pointer receivers are better or not. Means checkign for nil a lot more
+// but does allow easily manipulating struct values...**
 // ImportDeclaration
 
 // interface ImportDeclaration <: ModuleDeclaration {
@@ -30,42 +17,57 @@ type SourceInfo struct {
 //     specifiers: [ ImportSpecifier |  | ImportNamespaceSpecifier ];
 //     source: Literal;
 // }
-// Import '(' singleExpression ')'                                       # ImportExpression
+// import '(' singleExpression ')'                                       # ImportExpression
 type ImportExpression struct {
+	*SourceInfo
 	SingleExpression string
 }
 
-func (i ImportExpression) ImportString() string {
+func (i *ImportExpression) Code() string {
+	if i == nil {
+		return ""
+	}
 	return fmt.Sprintf("import (%s)", i.SingleExpression)
+}
+func (i *ImportExpression) Type() string {
+	return "ImportExpression"
 }
 
 // importStatement
-//     : Import importFromBlock
+//     : *SourceInfo importFromBlock
 //     ;
 
 // aliasName
 //     : identifierName (As identifierName)?
 //     ;
 type AliasName struct {
+	*SourceInfo
 	IdentifierName string
 	Alias          string
 }
 
-func (a AliasName) ImportString() string {
+func (a AliasName) Code() string {
 	if a.Alias != "" {
 		return "as " + a.IdentifierName
 	}
 	return a.IdentifierName
+}
+func (i AliasName) Type() string {
+	return "AliasName"
 }
 
 // moduleItems
 //     : '{' (aliasName ',')* (aliasName ','?)? '}'
 //     ;
 type ModulesItems struct {
+	*SourceInfo
 	AliasNames []AliasName
 }
 
-func (m *ModulesItems) ImportString() string {
+func (m *ModulesItems) Code() string {
+	if m == nil {
+		return ""
+	}
 	out := []string{}
 	for _, a := range m.AliasNames {
 		if a.Alias != "" {
@@ -80,28 +82,43 @@ func (m *ModulesItems) ImportString() string {
 
 	return "{" + strings.Join(out, ", ") + "}"
 }
+func (i *ModulesItems) Type() string {
+	return "ModulesItems"
+}
 
 // importNamespace
 //     : ('*' | identifierName) (As identifierName)?
 //     ;
 type ImportNamespace struct {
+	*SourceInfo
 	// Star           string
 	IdentifierName string
 	AliasName      string
 }
 
-func (in *ImportNamespace) ImportString() string {
+func (in *ImportNamespace) Code() string {
+	if in == nil {
+		return ""
+	}
 	if in.AliasName != "" {
 		return strings.TrimSpace(in.IdentifierName + " as " + in.AliasName)
 	}
 	return in.IdentifierName
+}
+func (i *ImportNamespace) Type() string {
+	return "ImportNamespace"
 }
 
 // importDefault
 //     : aliasName ','
 //     ;
 type ImportDefault struct {
+	*SourceInfo
 	AliasName AliasName
+}
+
+func (i *ImportDefault) Type() string {
+	return "ImportDefault"
 }
 
 // importFromBlock
@@ -110,25 +127,29 @@ type ImportDefault struct {
 // importDefault
 // : aliasName ','
 type ImportDeclaration struct {
+	*SourceInfo
 	From            string
-	Default         ImportDefault
-	ModulesItems    ModulesItems
-	ImportNamespace ImportNamespace
+	Default         *ImportDefault
+	ModulesItems    *ModulesItems
+	ImportNamespace *ImportNamespace
 	StringLiteral   string
 	ImportFrom      string
 }
 
-func (i ImportDeclaration) ImportString() string {
+func (i *ImportDeclaration) Type() string {
+	return "ImportDeclaration"
+}
+func (i *ImportDeclaration) Code() string {
 	var def, from string
-	if td := i.Default.AliasName.ImportString(); td != "" {
-		def = " " + td
+	if df := i.Default; df != nil && i.Default.AliasName.Code() != "" {
+		def = " " + i.Default.AliasName.Code()
 	}
 	if i.From != "" {
 		from = " from "
 	}
 
-	return fmt.Sprintf("import%s %s%s%s", def, i.ImportNamespace.ImportString()+
-		i.ModulesItems.ImportString(), from, i.StringLiteral+i.ImportFrom)
+	return fmt.Sprintf("import%s %s%s%s", def, i.ImportNamespace.Code()+
+		i.ModulesItems.Code(), from, i.StringLiteral+i.ImportFrom)
 }
 
 func (v *visitor) VisitImportStatement(ctx *gojsp.ImportStatementContext) interface{} {
@@ -144,13 +165,14 @@ func (v *visitor) VisitImportStatement(ctx *gojsp.ImportStatementContext) interf
 //     ;
 func (v *visitor) VisitImportFromBlock(ctx *gojsp.ImportFromBlockContext) interface{} {
 
-	imp := ImportDeclaration{}
+	var imp = &ImportDeclaration{}
+	imp.SourceInfo = getSourceInfo(*ctx.BaseParserRuleContext)
 	if ct := ctx.ImportDefault(); ct != nil {
-		imp.Default = v.VisitImportDefault(ct.(*gojsp.ImportDefaultContext)).(ImportDefault)
+		imp.Default = v.VisitImportDefault(ct.(*gojsp.ImportDefaultContext)).(*ImportDefault)
 	}
 
 	if ctx.ModuleItems() != nil {
-		imp.ModulesItems = v.VisitModuleItems(ctx.ModuleItems().(*gojsp.ModuleItemsContext)).(ModulesItems)
+		imp.ModulesItems = v.VisitModuleItems(ctx.ModuleItems().(*gojsp.ModuleItemsContext)).(*ModulesItems)
 	}
 
 	if ct := ctx.ImportFrom(); ct != nil {
@@ -158,7 +180,7 @@ func (v *visitor) VisitImportFromBlock(ctx *gojsp.ImportFromBlockContext) interf
 		imp.ImportFrom = (ct.GetChild(1).(*antlr.TerminalNodeImpl).GetText())
 	}
 	if ct := ctx.ImportNamespace(); ct != nil {
-		imp.ImportNamespace = v.VisitImportNamespace(ct.(*gojsp.ImportNamespaceContext)).(ImportNamespace)
+		imp.ImportNamespace = v.VisitImportNamespace(ct.(*gojsp.ImportNamespaceContext)).(*ImportNamespace)
 	}
 	if ct := ctx.StringLiteral(); ct != nil {
 		imp.StringLiteral = ct.GetText()
@@ -167,12 +189,12 @@ func (v *visitor) VisitImportFromBlock(ctx *gojsp.ImportFromBlockContext) interf
 	return imp
 }
 
-// Import '(' singleExpression ')'
+// *SourceInfo '(' singleExpression ')'
 func (v *visitor) VisitImportExpression(ctx *gojsp.ImportExpressionContext) interface{} {
 
-	// log.Println("VisitImportExpression", ctx.GetText())
-
-	return ImportExpression{SingleExpression: ctx.SingleExpression().GetText()}
+	return ImportExpression{
+		SingleExpression: ctx.SingleExpression().GetText(),
+		SourceInfo:       getSourceInfo(*ctx.BaseParserRuleContext)}
 }
 
 // moduleItems
@@ -186,19 +208,17 @@ func (v *visitor) VisitModuleItems1(ctx *gojsp.ModuleItemsContext) interface{} {
 
 //  alternative version where we do the AliasName work ourselves so we can change...
 func (v *visitor) VisitModuleItems(ctx *gojsp.ModuleItemsContext) interface{} {
-	var m ModulesItems
-
+	var m = &ModulesItems{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	for _, mc := range ctx.AllAliasName() {
-
 		m.AliasNames = append(m.AliasNames, v.VisitAliasName((mc.(*gojsp.AliasNameContext))).(AliasName))
-
 	}
 
 	// . ctx.OpenBrace().GetText() ctx.CloseBrace().GetText()?
 	return m
 }
 func (v *visitor) VisitImportDefault(ctx *gojsp.ImportDefaultContext) interface{} {
-	return ImportDefault{AliasName: v.VisitAliasName(ctx.AliasName().(*gojsp.AliasNameContext)).(AliasName)}
+	return &ImportDefault{AliasName: v.VisitAliasName(ctx.AliasName().(*gojsp.AliasNameContext)).(AliasName),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 }
 
 // importNamespace
@@ -208,7 +228,7 @@ func (v *visitor) VisitImportNamespace(ctx *gojsp.ImportNamespaceContext) interf
 	// log.Println("VisitImportNamespace", ctx.GetText())
 	// todo: add to errors
 
-	var imp ImportNamespace
+	var imp = &ImportNamespace{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	// either this or *gojsp.IdentifierNameContext i.e * or any identifier
 	if _, ok := ctx.GetChild(0).(*antlr.TerminalNodeImpl); ok {
 		imp.IdentifierName = "*"
@@ -243,7 +263,7 @@ func (v *visitor) VisitImportFrom(ctx *gojsp.ImportFromContext) interface{} {
 //     ;
 func (v *visitor) VisitAliasName(ctx *gojsp.AliasNameContext) interface{} {
 	// log.Println("VisitAliasName", ctx.GetChildCount(), ctx.GetText())
-	a := AliasName{}
+	a := AliasName{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	// todo: syntax error if nil
 	if ident := ctx.IdentifierName(0); ident != nil {
 		a.IdentifierName = ident.GetText()

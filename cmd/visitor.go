@@ -7,9 +7,23 @@ import (
 	"github.com/padraicbc/gojsp"
 )
 
-type node struct {
-	start, end, line int
-	source           string
+// maybe better just having maybe a "GetNode" and return that, forgetting all other methods...
+type VNode interface {
+	Code() string
+	GetInfo() *SourceInfo
+	Type() string
+	// maybe just store children and forget child type fields...
+	// Children() []VNode
+}
+
+type SourceInfo struct {
+	Start, End, Line int
+	Source           string
+	Children         []VNode
+}
+
+func (s *SourceInfo) GetInfo() *SourceInfo {
+	return s
 }
 
 // need pointer receiver for methods...
@@ -20,15 +34,9 @@ type visitor struct {
 	gojsp.BaseJavaScriptParserVisitor
 	// todo:  syntax errors with line/col ...
 	errors  []string
-	nodes   []node
-	Imports []Import
-	Expr    []Expression
-}
-
-func (v *visitor) getSourceInfo(ctx gojsp.BaseContext) node {
-	return node{line: ctx.GetStart().GetLine(), start: ctx.GetStart().GetStart(), end: ctx.GetStop().GetStart(),
-		source: ctx.GetStart().GetInputStream().GetTextFromInterval(&antlr.Interval{
-			Start: ctx.GetStart().GetStart(), Stop: ctx.GetStop().GetStop() + 1})}
+	nodes   []VNode
+	Imports []VNode
+	Expr    []VNode
 }
 
 func (v *visitor) VisitIdentifier(ctx *gojsp.IdentifierContext) interface{} {
@@ -53,9 +61,6 @@ func (v *visitor) defaultResult() interface{} {
 func (v *visitor) aggregateResult(aggregate interface{}, nextResult interface{}) interface{} {
 	return nextResult
 }
-func (v *visitor) VisitStatement(ctx *gojsp.StatementContext) interface{} {
-	return v.VisitChildren(ctx)
-}
 
 func (v *visitor) VisitProgram(ctx *gojsp.ProgramContext) interface{} {
 
@@ -72,6 +77,19 @@ func (v *visitor) VisitSourceElement(ctx *gojsp.SourceElementContext) interface{
 	// log.Println("VisitSourceElement", ctx.GetText(), ctx.GetChildCount())
 	return v.VisitChildren(ctx)
 
+}
+func (v *visitor) VisitStatement(ctx *gojsp.StatementContext) interface{} {
+	// log.Println("VisitStatement", ctx.GetText())
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitStatementList(ctx *gojsp.StatementListContext) interface{} {
+	log.Println("VisitStatementList", ctx)
+	return v.VisitChildren(ctx)
+}
+func (v *visitor) VisitBlock(ctx *gojsp.BlockContext) interface{} {
+	log.Println("VisitBlock", ctx)
+	return v.VisitChildren(ctx)
 }
 
 // public T visit(ParseTree tree)
@@ -111,23 +129,19 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 		case *gojsp.EosContext:
 			log.Println(rr.GetText())
-		case Expression:
-
+		case *Expression:
 			v.Expr = append(v.Expr, rr)
-		case ImportDeclaration:
-
-			log.Println(rr.ImportString())
-
+		// store full import nodes
+		case *ImportDeclaration:
 			v.Imports = append(v.Imports, rr)
-
-			// default:
-			// 	panic(rr)
+		case VNode:
+			// could add all parts...
 
 		}
 
 	}
 
-	return node
+	return nil
 
 }
 
@@ -150,8 +164,11 @@ func (v *visitor) VisitVariableStatement(ctx *gojsp.VariableStatementContext) in
 }
 
 func (v *visitor) VisitLabelledStatement(ctx *gojsp.LabelledStatementContext) interface{} {
-	log.Println("VisitLabelledStatement")
-	return v.VisitChildren(ctx)
+	log.Println("VisitLabelledStatement", ctx.GetText())
+	// for _, ch := range ctx.GetChildren() {
+	// 	log.Println(ch)
+	// }
+	return nil
 }
 
 func (v *visitor) VisitFunctionDeclaration(ctx *gojsp.FunctionDeclarationContext) interface{} {

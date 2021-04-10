@@ -16,7 +16,109 @@ func main() {
 
 func antv() {
 
-	stream := antlr.NewInputStream(`import defaultExport from "default-module-name";
+	// impexp()
+	// multAddExp()
+	// singleExp()
+	// labeledStatementOK()
+	labeledStatementRecurLoop()
+
+}
+func walk(tree antlr.ParseTree) {
+	pr := antlr.NewParseTreeWalker()
+	pr.Walk(&listener{}, tree)
+
+}
+func visit(tree antlr.ParseTree, v *visitor) interface{} {
+
+	return v.Visit(tree)
+
+}
+func singleExp() {
+
+	// single exp
+	stream := antlr.NewInputStream(`i + j;`)
+	lexer := gojsp.NewJavaScriptLexer(stream)
+
+	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	p := gojsp.NewJavaScriptParser(tokenStream)
+
+	tree := p.ExpressionStatement()
+	v := new(visitor)
+
+	visit(tree, v)
+	exp := v.Expr[0].(*Expression)
+	log.Println("Single -> ", exp.Left, exp.OP, exp.Right)
+}
+
+func multAddExp() {
+
+	stream := antlr.NewInputStream(`4 / 8
+4 % 8
+4 -8
+4 =8
+4 * 8`)
+	// Create the js L exer
+	lexer := gojsp.NewJavaScriptLexer(stream)
+
+	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	p := gojsp.NewJavaScriptParser(tokenStream)
+	// all
+	tree := p.Program()
+
+	v := new(visitor)
+	visit(tree, v)
+
+	for _, v := range v.Expr {
+		log.Println(v.Type())
+		log.Println(v.GetInfo().Source)
+		log.Println(v.Code())
+		v.(*Expression).Left = "100"
+		log.Println(v.Code())
+
+	}
+
+}
+func labeledStatementOK() {
+	stream := antlr.NewInputStream(`
+	$: console.log("ok")
+	`)
+	// Create the js L exer
+	lexer := gojsp.NewJavaScriptLexer(stream)
+
+	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	p := gojsp.NewJavaScriptParser(tokenStream)
+	// all
+	v := new(visitor)
+	tree := p.Program()
+	visit(tree, v)
+}
+
+// {} blows the stack
+func labeledStatementRecurLoop() {
+	// {} blows the stack
+	// parser.go:582: Block
+	// parser.go:837: StatementList
+	// parser.go:967: Statement
+	stream := antlr.NewInputStream(`
+	$: { }
+	`)
+	// Create the js L exer
+	lexer := gojsp.NewJavaScriptLexer(stream)
+
+	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	p := gojsp.NewJavaScriptParser(tokenStream)
+	// all
+	v := new(visitor)
+	tree := p.Program()
+	visit(tree, v)
+}
+func impexp() {
+	stream := antlr.NewInputStream(`
+	import defaultExport from "default-module-name";
 import * as name from "star-module-name";
 import { export1 } from "exp1-module-name";
 import { export1 as alias1 } from "module-name";
@@ -31,7 +133,7 @@ import {
 	anotherLongModuleName as short
   } from '/modules/my-module.js';
 import { getUsefulContents } from '/modules2/file.js';
-// todo
+todo
 var promise = import("promise-module-name");
 let module = await import('/await/modules/my-module.js');
 import('/then/modules/my-module.js')
@@ -40,7 +142,7 @@ import('/then/modules/my-module.js')
   });// Export list
 export { name1, name2, nameN };
 
-// Renaming exports
+//Renaming exports
 export { variable1 as name1, variable2 as name2, nameN };
 export * from 'whatever'; // does not set the default export
 // Exporting destructured assignments with renaming
@@ -48,16 +150,7 @@ export const { name1, name2: bar } = o;
 
 export default expression;
 export default function () { } // also class, function*
-// odds  = evens.map(v => v + 1);
-// pairs = evens.map(v => ({ even: v, odd: v + 1 }));
-// nums  = evens.map((v, i) => v + i)
-// let top2 = allContent
-// 	  .filter((content) => content.type == "article")
-// 	  .sort((a, b) => a.date > b.date)
-// 	  .slice(0, 2);
-	  	  `)
-
-	// Create the js Lexer
+`)
 	lexer := gojsp.NewJavaScriptLexer(stream)
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
@@ -68,48 +161,21 @@ export default function () { } // also class, function*
 
 	v := new(visitor)
 	visit(tree, v)
-	// log.Println(v.Imports)
-	// Create the js Lexer
 
-	// two exp
-	stream = antlr.NewInputStream(`i + j;f + k`)
-	lexer = gojsp.NewJavaScriptLexer(stream)
+	for _, v := range v.Imports {
 
-	tokenStream = antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+		log.Println(v.Code())
+		if v.Type() == "ImportDeclaration" {
+			id := v.(*ImportDeclaration)
+			id.ImportFrom = `"/whatever/new/path"`
 
-	p = gojsp.NewJavaScriptParser(tokenStream)
+			if id.ModulesItems != nil {
+				id.ModulesItems.AliasNames[0].IdentifierName = "WhateverName"
+			}
+		}
 
-	tree2 := p.Program()
-	v = new(visitor)
+		log.Println(v.Code())
 
-	visit(tree2, v)
-	for _, exp := range v.Expr {
-		log.Println(exp.Left, exp.OP, exp.Right)
 	}
-
-	// single exp
-	stream = antlr.NewInputStream(`i + j;`)
-	lexer = gojsp.NewJavaScriptLexer(stream)
-
-	tokenStream = antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p = gojsp.NewJavaScriptParser(tokenStream)
-
-	tree3 := p.ExpressionStatement()
-	v = new(visitor)
-
-	visit(tree3, v)
-	exp := v.Expr[0]
-	log.Println(exp.Left, exp.OP, exp.Right)
-
-}
-func walk(tree antlr.ParseTree) {
-	pr := antlr.NewParseTreeWalker()
-	pr.Walk(&listener{}, tree)
-
-}
-func visit(tree antlr.ParseTree, v *visitor) interface{} {
-
-	return v.Visit(tree)
 
 }
