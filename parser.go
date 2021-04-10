@@ -579,7 +579,7 @@ func (p *JavaScriptParser) Statement() (localctx IStatementContext) {
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(160)
-			log.Println("Block")
+			// log.Println("Block")
 			p.Block()
 		}
 
@@ -834,7 +834,7 @@ func (p *JavaScriptParser) Block() (localctx IBlockContext) {
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) == 1 {
 		{
 			p.SetState(183)
-			log.Println("StatementList")
+			// log.Println("StatementList")
 			p.StatementList()
 		}
 	}
@@ -964,7 +964,7 @@ func (p *JavaScriptParser) StatementList() (localctx IStatementListContext) {
 		switch _alt {
 		case 1:
 			{
-				log.Println("Statement")
+				// log.Println("Statement")
 				p.SetState(188)
 				p.Statement()
 			}
