@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	log.SetFlags(log.Lshortfile)
+	log.SetFlags(log.Llongfile)
 
 	antv()
 }
@@ -17,9 +17,10 @@ func main() {
 func antv() {
 
 	impexp()
-	multAddExp()
-	singleExp()
-	labeledStatementOK()
+	// multAddExp()
+	// singleExp()
+	// seqExp()
+	// labeledStatementOK()
 	// labeledStatementRecurLoop()
 
 }
@@ -48,10 +49,29 @@ func singleExp() {
 	v := new(visitor)
 
 	visit(tree, v)
-	exp := v.Expr[0].(*Expression)
+
+	exp := v.Nodes[0].(*ExpressionSequence).Children[0]
+
 	log.Println("Single -> ", exp.Left, exp.OP, exp.Right)
 }
+func seqExp() {
 
+	// single exp
+	stream := antlr.NewInputStream(`i + j, h + o;`)
+	lexer := parser.NewJavaScriptLexer(stream)
+
+	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	p := parser.NewJavaScriptParser(tokenStream)
+
+	tree := p.ExpressionStatement()
+	v := new(visitor)
+
+	visit(tree, v)
+	for _, exp := range v.Expr {
+		log.Println("Sequence -> ", exp.Left, exp.OP, exp.Right, exp.Source)
+	}
+}
 func multAddExp() {
 
 	stream := antlr.NewInputStream(`4 / 8
@@ -75,7 +95,7 @@ func multAddExp() {
 		log.Println(v.Type())
 		log.Println(v.GetInfo().Source)
 		log.Println(v.Code())
-		v.(*Expression).Left = "100"
+		v.Left = "100"
 		log.Println(v.Code())
 
 	}
@@ -141,7 +161,6 @@ import {
 	anotherLongModuleName as short
   } from '/modules/my-module.js';
 import { getUsefulContents } from '/modules2/file.js';
-todo
 var promise = import("promise-module-name");
 let module = await import('/await/modules/my-module.js');
 import('/then/modules/my-module.js')
@@ -170,9 +189,9 @@ export default function () { } // also class, function*
 	v := new(visitor)
 	visit(tree, v)
 
-	for _, v := range v.Imports {
+	for _, v := range v.Nodes {
 
-		log.Println(v.Code())
+		log.Println(v.Type(), v.Code())
 		if v.Type() == "ImportDeclaration" {
 			id := v.(*ImportDeclaration)
 			id.ImportFrom = `"/whatever/new/path"`

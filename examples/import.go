@@ -33,10 +33,6 @@ func (i *ImportExpression) Type() string {
 	return "ImportExpression"
 }
 
-// importStatement
-//     : *SourceInfo importFromBlock
-//     ;
-
 // aliasName
 //     : identifierName (As identifierName)?
 //     ;
@@ -136,6 +132,24 @@ type ImportDeclaration struct {
 	ImportFrom      string
 }
 
+type Imports struct {
+	typeOf   string
+	Children []*ImportDeclaration
+	VNode
+}
+
+func (im *Imports) Type() string {
+	return im.typeOf
+}
+func (im *Imports) Code() string {
+	var str strings.Builder
+
+	for _, ee := range im.Children {
+		str.WriteString(ee.Code())
+	}
+	return str.String()
+}
+
 func (i *ImportDeclaration) Type() string {
 	return "ImportDeclaration"
 }
@@ -154,8 +168,11 @@ func (i *ImportDeclaration) Code() string {
 
 func (v *visitor) VisitImportStatement(ctx *parser.ImportStatementContext) interface{} {
 
-	// we could format based on some spec. Could be done here, at each step or at the very end...
-	return v.VisitChildren(ctx)
+	v.Nodes = append(v.Nodes, &Imports{
+		typeOf:   "Imports",
+		Children: v.VisitChildren(ctx).([]*ImportDeclaration)})
+
+	return nil
 
 }
 

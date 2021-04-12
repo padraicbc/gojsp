@@ -16,7 +16,7 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 126, 1010,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 126, 971,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
 	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 4, 13,
 	9, 13, 4, 14, 9, 14, 4, 15, 9, 15, 4, 16, 9, 16, 4, 17, 9, 17, 4, 18, 9,
@@ -101,36 +101,32 @@ var parserATN = []uint16{
 	3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3,
 	59, 3, 59, 3, 59, 5, 59, 778, 10, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59,
 	3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3,
-	59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59,
-	3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3,
-	59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59,
-	3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3,
-	59, 3, 59, 3, 59, 3, 59, 3, 59, 5, 59, 842, 10, 59, 3, 59, 3, 59, 5, 59,
-	846, 10, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3,
-	59, 3, 59, 3, 59, 7, 59, 859, 10, 59, 12, 59, 14, 59, 862, 11, 59, 3, 60,
-	3, 60, 3, 60, 5, 60, 867, 10, 60, 3, 61, 3, 61, 3, 61, 3, 61, 7, 61, 873,
-	10, 61, 12, 61, 14, 61, 876, 11, 61, 5, 61, 878, 10, 61, 3, 61, 5, 61,
-	881, 10, 61, 3, 61, 3, 61, 3, 62, 3, 62, 5, 62, 887, 10, 62, 3, 62, 3,
-	62, 5, 62, 891, 10, 62, 3, 62, 3, 62, 5, 62, 895, 10, 62, 3, 62, 3, 62,
-	3, 62, 5, 62, 900, 10, 62, 3, 62, 3, 62, 3, 62, 3, 62, 5, 62, 906, 10,
-	62, 3, 63, 3, 63, 3, 63, 5, 63, 911, 10, 63, 3, 63, 5, 63, 914, 10, 63,
-	3, 64, 3, 64, 5, 64, 918, 10, 64, 3, 65, 3, 65, 3, 66, 3, 66, 3, 66, 3,
-	66, 3, 66, 3, 66, 3, 66, 5, 66, 929, 10, 66, 3, 67, 3, 67, 3, 68, 3, 68,
-	3, 69, 3, 69, 3, 69, 3, 69, 3, 70, 3, 70, 3, 70, 3, 70, 3, 71, 3, 71, 5,
-	71, 945, 10, 71, 3, 72, 3, 72, 3, 73, 3, 73, 3, 73, 5, 73, 952, 10, 73,
+	59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 5, 59, 803, 10, 59,
+	3, 59, 3, 59, 5, 59, 807, 10, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 3,
+	59, 3, 59, 3, 59, 3, 59, 3, 59, 3, 59, 7, 59, 820, 10, 59, 12, 59, 14,
+	59, 823, 11, 59, 3, 60, 3, 60, 3, 60, 5, 60, 828, 10, 60, 3, 61, 3, 61,
+	3, 61, 3, 61, 7, 61, 834, 10, 61, 12, 61, 14, 61, 837, 11, 61, 5, 61, 839,
+	10, 61, 3, 61, 5, 61, 842, 10, 61, 3, 61, 3, 61, 3, 62, 3, 62, 5, 62, 848,
+	10, 62, 3, 62, 3, 62, 5, 62, 852, 10, 62, 3, 62, 3, 62, 5, 62, 856, 10,
+	62, 3, 62, 3, 62, 3, 62, 5, 62, 861, 10, 62, 3, 62, 3, 62, 3, 62, 3, 62,
+	5, 62, 867, 10, 62, 3, 63, 3, 63, 3, 63, 5, 63, 872, 10, 63, 3, 63, 5,
+	63, 875, 10, 63, 3, 64, 3, 64, 5, 64, 879, 10, 64, 3, 65, 3, 65, 3, 66,
+	3, 66, 3, 66, 3, 66, 3, 66, 3, 66, 3, 66, 5, 66, 890, 10, 66, 3, 67, 3,
+	67, 3, 68, 3, 68, 3, 69, 3, 69, 3, 69, 3, 69, 3, 70, 3, 70, 3, 70, 3, 70,
+	3, 71, 3, 71, 5, 71, 906, 10, 71, 3, 72, 3, 72, 3, 73, 3, 73, 3, 73, 5,
+	73, 913, 10, 73, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74,
 	3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3,
 	74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74,
 	3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3,
-	74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74,
-	3, 74, 3, 74, 3, 74, 3, 74, 5, 74, 1000, 10, 74, 3, 75, 3, 75, 3, 76, 3,
-	76, 3, 76, 3, 76, 5, 76, 1008, 10, 76, 3, 76, 2, 3, 116, 77, 2, 4, 6, 8,
-	10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44,
-	46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80,
-	82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112,
-	114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 142,
-	144, 146, 148, 150, 2, 12, 3, 2, 26, 28, 3, 2, 22, 23, 3, 2, 32, 34, 3,
-	2, 35, 38, 3, 2, 39, 42, 3, 2, 48, 59, 3, 2, 63, 67, 3, 2, 68, 71, 5, 2,
-	107, 107, 111, 111, 119, 119, 3, 2, 110, 111, 2, 1174, 2, 153, 3, 2, 2,
+	74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 3, 74, 5, 74, 961, 10, 74, 3, 75,
+	3, 75, 3, 76, 3, 76, 3, 76, 3, 76, 5, 76, 969, 10, 76, 3, 76, 2, 3, 116,
+	77, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36,
+	38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72,
+	74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106,
+	108, 110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136,
+	138, 140, 142, 144, 146, 148, 150, 2, 8, 7, 2, 22, 23, 26, 28, 30, 30,
+	35, 42, 44, 47, 4, 2, 15, 15, 48, 59, 3, 2, 63, 67, 3, 2, 68, 71, 5, 2,
+	107, 107, 111, 111, 119, 119, 3, 2, 110, 111, 2, 1122, 2, 153, 3, 2, 2,
 	2, 4, 160, 3, 2, 2, 2, 6, 182, 3, 2, 2, 2, 8, 184, 3, 2, 2, 2, 10, 191,
 	3, 2, 2, 2, 12, 195, 3, 2, 2, 2, 14, 210, 3, 2, 2, 2, 16, 212, 3, 2, 2,
 	2, 18, 229, 3, 2, 2, 2, 20, 234, 3, 2, 2, 2, 22, 240, 3, 2, 2, 2, 24, 243,
@@ -147,13 +143,13 @@ var parserATN = []uint16{
 	3, 2, 2, 2, 96, 599, 3, 2, 2, 2, 98, 606, 3, 2, 2, 2, 100, 610, 3, 2, 2,
 	2, 102, 617, 3, 2, 2, 2, 104, 641, 3, 2, 2, 2, 106, 684, 3, 2, 2, 2, 108,
 	693, 3, 2, 2, 2, 110, 695, 3, 2, 2, 2, 112, 712, 3, 2, 2, 2, 114, 718,
-	3, 2, 2, 2, 116, 777, 3, 2, 2, 2, 118, 866, 3, 2, 2, 2, 120, 868, 3, 2,
-	2, 2, 122, 905, 3, 2, 2, 2, 124, 913, 3, 2, 2, 2, 126, 917, 3, 2, 2, 2,
-	128, 919, 3, 2, 2, 2, 130, 928, 3, 2, 2, 2, 132, 930, 3, 2, 2, 2, 134,
-	932, 3, 2, 2, 2, 136, 934, 3, 2, 2, 2, 138, 938, 3, 2, 2, 2, 140, 944,
-	3, 2, 2, 2, 142, 946, 3, 2, 2, 2, 144, 951, 3, 2, 2, 2, 146, 999, 3, 2,
-	2, 2, 148, 1001, 3, 2, 2, 2, 150, 1007, 3, 2, 2, 2, 152, 154, 7, 3, 2,
-	2, 153, 152, 3, 2, 2, 2, 153, 154, 3, 2, 2, 2, 154, 156, 3, 2, 2, 2, 155,
+	3, 2, 2, 2, 116, 777, 3, 2, 2, 2, 118, 827, 3, 2, 2, 2, 120, 829, 3, 2,
+	2, 2, 122, 866, 3, 2, 2, 2, 124, 874, 3, 2, 2, 2, 126, 878, 3, 2, 2, 2,
+	128, 880, 3, 2, 2, 2, 130, 889, 3, 2, 2, 2, 132, 891, 3, 2, 2, 2, 134,
+	893, 3, 2, 2, 2, 136, 895, 3, 2, 2, 2, 138, 899, 3, 2, 2, 2, 140, 905,
+	3, 2, 2, 2, 142, 907, 3, 2, 2, 2, 144, 912, 3, 2, 2, 2, 146, 960, 3, 2,
+	2, 2, 148, 962, 3, 2, 2, 2, 150, 968, 3, 2, 2, 2, 152, 154, 7, 3, 2, 2,
+	153, 152, 3, 2, 2, 2, 153, 154, 3, 2, 2, 2, 154, 156, 3, 2, 2, 2, 155,
 	157, 5, 98, 50, 2, 156, 155, 3, 2, 2, 2, 156, 157, 3, 2, 2, 2, 157, 158,
 	3, 2, 2, 2, 158, 159, 7, 2, 2, 3, 159, 3, 3, 2, 2, 2, 160, 161, 5, 6, 4,
 	2, 161, 5, 3, 2, 2, 2, 162, 183, 5, 8, 5, 2, 163, 183, 5, 32, 17, 2, 164,
@@ -375,13 +371,13 @@ var parserATN = []uint16{
 	778, 5, 84, 43, 2, 733, 734, 7, 78, 2, 2, 734, 736, 5, 116, 59, 2, 735,
 	737, 5, 110, 56, 2, 736, 735, 3, 2, 2, 2, 736, 737, 3, 2, 2, 2, 737, 778,
 	3, 2, 2, 2, 738, 739, 7, 78, 2, 2, 739, 740, 7, 19, 2, 2, 740, 778, 5,
-	142, 72, 2, 741, 742, 7, 95, 2, 2, 742, 778, 5, 116, 59, 39, 743, 744,
-	7, 83, 2, 2, 744, 778, 5, 116, 59, 38, 745, 746, 7, 75, 2, 2, 746, 778,
-	5, 116, 59, 37, 747, 748, 7, 20, 2, 2, 748, 778, 5, 116, 59, 36, 749, 750,
-	7, 21, 2, 2, 750, 778, 5, 116, 59, 35, 751, 752, 7, 22, 2, 2, 752, 778,
-	5, 116, 59, 34, 753, 754, 7, 23, 2, 2, 754, 778, 5, 116, 59, 33, 755, 756,
-	7, 24, 2, 2, 756, 778, 5, 116, 59, 32, 757, 758, 7, 25, 2, 2, 758, 778,
-	5, 116, 59, 31, 759, 760, 7, 108, 2, 2, 760, 778, 5, 116, 59, 30, 761,
+	142, 72, 2, 741, 742, 7, 95, 2, 2, 742, 778, 5, 116, 59, 26, 743, 744,
+	7, 83, 2, 2, 744, 778, 5, 116, 59, 25, 745, 746, 7, 75, 2, 2, 746, 778,
+	5, 116, 59, 24, 747, 748, 7, 20, 2, 2, 748, 778, 5, 116, 59, 23, 749, 750,
+	7, 21, 2, 2, 750, 778, 5, 116, 59, 22, 751, 752, 7, 22, 2, 2, 752, 778,
+	5, 116, 59, 21, 753, 754, 7, 23, 2, 2, 754, 778, 5, 116, 59, 20, 755, 756,
+	7, 24, 2, 2, 756, 778, 5, 116, 59, 19, 757, 758, 7, 25, 2, 2, 758, 778,
+	5, 116, 59, 18, 759, 760, 7, 108, 2, 2, 760, 778, 5, 116, 59, 17, 761,
 	762, 7, 106, 2, 2, 762, 763, 7, 9, 2, 2, 763, 764, 5, 116, 59, 2, 764,
 	765, 7, 10, 2, 2, 765, 778, 3, 2, 2, 2, 766, 778, 5, 54, 28, 2, 767, 778,
 	7, 90, 2, 2, 768, 778, 5, 142, 72, 2, 769, 778, 7, 103, 2, 2, 770, 778,
@@ -394,119 +390,101 @@ var parserATN = []uint16{
 	2, 2, 777, 759, 3, 2, 2, 2, 777, 761, 3, 2, 2, 2, 777, 766, 3, 2, 2, 2,
 	777, 767, 3, 2, 2, 2, 777, 768, 3, 2, 2, 2, 777, 769, 3, 2, 2, 2, 777,
 	770, 3, 2, 2, 2, 777, 771, 3, 2, 2, 2, 777, 772, 3, 2, 2, 2, 777, 773,
-	3, 2, 2, 2, 778, 860, 3, 2, 2, 2, 779, 780, 12, 29, 2, 2, 780, 781, 7,
-	29, 2, 2, 781, 859, 5, 116, 59, 29, 782, 783, 12, 28, 2, 2, 783, 784, 9,
-	2, 2, 2, 784, 859, 5, 116, 59, 29, 785, 786, 12, 27, 2, 2, 786, 787, 9,
-	3, 2, 2, 787, 859, 5, 116, 59, 28, 788, 789, 12, 26, 2, 2, 789, 790, 7,
-	30, 2, 2, 790, 859, 5, 116, 59, 27, 791, 792, 12, 25, 2, 2, 792, 793, 9,
-	4, 2, 2, 793, 859, 5, 116, 59, 26, 794, 795, 12, 24, 2, 2, 795, 796, 9,
-	5, 2, 2, 796, 859, 5, 116, 59, 25, 797, 798, 12, 23, 2, 2, 798, 799, 7,
-	74, 2, 2, 799, 859, 5, 116, 59, 24, 800, 801, 12, 22, 2, 2, 801, 802, 7,
-	96, 2, 2, 802, 859, 5, 116, 59, 23, 803, 804, 12, 21, 2, 2, 804, 805, 9,
-	6, 2, 2, 805, 859, 5, 116, 59, 22, 806, 807, 12, 20, 2, 2, 807, 808, 7,
-	43, 2, 2, 808, 859, 5, 116, 59, 21, 809, 810, 12, 19, 2, 2, 810, 811, 7,
-	44, 2, 2, 811, 859, 5, 116, 59, 20, 812, 813, 12, 18, 2, 2, 813, 814, 7,
-	45, 2, 2, 814, 859, 5, 116, 59, 19, 815, 816, 12, 17, 2, 2, 816, 817, 7,
-	46, 2, 2, 817, 859, 5, 116, 59, 18, 818, 819, 12, 16, 2, 2, 819, 820, 7,
-	47, 2, 2, 820, 859, 5, 116, 59, 17, 821, 822, 12, 15, 2, 2, 822, 823, 7,
-	16, 2, 2, 823, 824, 5, 116, 59, 2, 824, 825, 7, 17, 2, 2, 825, 826, 5,
-	116, 59, 16, 826, 859, 3, 2, 2, 2, 827, 828, 12, 14, 2, 2, 828, 829, 7,
-	15, 2, 2, 829, 859, 5, 116, 59, 14, 830, 831, 12, 13, 2, 2, 831, 832, 5,
-	128, 65, 2, 832, 833, 5, 116, 59, 13, 833, 859, 3, 2, 2, 2, 834, 835, 12,
-	46, 2, 2, 835, 836, 7, 7, 2, 2, 836, 837, 5, 114, 58, 2, 837, 838, 7, 8,
-	2, 2, 838, 859, 3, 2, 2, 2, 839, 841, 12, 45, 2, 2, 840, 842, 7, 16, 2,
-	2, 841, 840, 3, 2, 2, 2, 841, 842, 3, 2, 2, 2, 842, 843, 3, 2, 2, 2, 843,
-	845, 7, 19, 2, 2, 844, 846, 7, 31, 2, 2, 845, 844, 3, 2, 2, 2, 845, 846,
-	3, 2, 2, 2, 846, 847, 3, 2, 2, 2, 847, 859, 5, 140, 71, 2, 848, 849, 12,
-	44, 2, 2, 849, 859, 5, 110, 56, 2, 850, 851, 12, 41, 2, 2, 851, 852, 6,
-	59, 31, 2, 852, 859, 7, 20, 2, 2, 853, 854, 12, 40, 2, 2, 854, 855, 6,
-	59, 33, 2, 855, 859, 7, 21, 2, 2, 856, 857, 12, 11, 2, 2, 857, 859, 7,
-	121, 2, 2, 858, 779, 3, 2, 2, 2, 858, 782, 3, 2, 2, 2, 858, 785, 3, 2,
-	2, 2, 858, 788, 3, 2, 2, 2, 858, 791, 3, 2, 2, 2, 858, 794, 3, 2, 2, 2,
-	858, 797, 3, 2, 2, 2, 858, 800, 3, 2, 2, 2, 858, 803, 3, 2, 2, 2, 858,
-	806, 3, 2, 2, 2, 858, 809, 3, 2, 2, 2, 858, 812, 3, 2, 2, 2, 858, 815,
-	3, 2, 2, 2, 858, 818, 3, 2, 2, 2, 858, 821, 3, 2, 2, 2, 858, 827, 3, 2,
-	2, 2, 858, 830, 3, 2, 2, 2, 858, 834, 3, 2, 2, 2, 858, 839, 3, 2, 2, 2,
-	858, 848, 3, 2, 2, 2, 858, 850, 3, 2, 2, 2, 858, 853, 3, 2, 2, 2, 858,
-	856, 3, 2, 2, 2, 859, 862, 3, 2, 2, 2, 860, 858, 3, 2, 2, 2, 860, 861,
-	3, 2, 2, 2, 861, 117, 3, 2, 2, 2, 862, 860, 3, 2, 2, 2, 863, 867, 5, 142,
-	72, 2, 864, 867, 5, 100, 51, 2, 865, 867, 5, 120, 61, 2, 866, 863, 3, 2,
-	2, 2, 866, 864, 3, 2, 2, 2, 866, 865, 3, 2, 2, 2, 867, 119, 3, 2, 2, 2,
-	868, 877, 7, 11, 2, 2, 869, 874, 5, 106, 54, 2, 870, 871, 7, 14, 2, 2,
-	871, 873, 5, 106, 54, 2, 872, 870, 3, 2, 2, 2, 873, 876, 3, 2, 2, 2, 874,
-	872, 3, 2, 2, 2, 874, 875, 3, 2, 2, 2, 875, 878, 3, 2, 2, 2, 876, 874,
-	3, 2, 2, 2, 877, 869, 3, 2, 2, 2, 877, 878, 3, 2, 2, 2, 878, 880, 3, 2,
-	2, 2, 879, 881, 7, 14, 2, 2, 880, 879, 3, 2, 2, 2, 880, 881, 3, 2, 2, 2,
-	881, 882, 3, 2, 2, 2, 882, 883, 7, 12, 2, 2, 883, 121, 3, 2, 2, 2, 884,
-	906, 5, 80, 41, 2, 885, 887, 7, 107, 2, 2, 886, 885, 3, 2, 2, 2, 886, 887,
-	3, 2, 2, 2, 887, 888, 3, 2, 2, 2, 888, 890, 7, 89, 2, 2, 889, 891, 7, 26,
-	2, 2, 890, 889, 3, 2, 2, 2, 890, 891, 3, 2, 2, 2, 891, 892, 3, 2, 2, 2,
-	892, 894, 7, 9, 2, 2, 893, 895, 5, 90, 46, 2, 894, 893, 3, 2, 2, 2, 894,
-	895, 3, 2, 2, 2, 895, 896, 3, 2, 2, 2, 896, 897, 7, 10, 2, 2, 897, 906,
-	5, 96, 49, 2, 898, 900, 7, 107, 2, 2, 899, 898, 3, 2, 2, 2, 899, 900, 3,
-	2, 2, 2, 900, 901, 3, 2, 2, 2, 901, 902, 5, 124, 63, 2, 902, 903, 7, 60,
-	2, 2, 903, 904, 5, 126, 64, 2, 904, 906, 3, 2, 2, 2, 905, 884, 3, 2, 2,
-	2, 905, 886, 3, 2, 2, 2, 905, 899, 3, 2, 2, 2, 906, 123, 3, 2, 2, 2, 907,
-	914, 5, 142, 72, 2, 908, 910, 7, 9, 2, 2, 909, 911, 5, 90, 46, 2, 910,
-	909, 3, 2, 2, 2, 910, 911, 3, 2, 2, 2, 911, 912, 3, 2, 2, 2, 912, 914,
-	7, 10, 2, 2, 913, 907, 3, 2, 2, 2, 913, 908, 3, 2, 2, 2, 914, 125, 3, 2,
-	2, 2, 915, 918, 5, 116, 59, 2, 916, 918, 5, 96, 49, 2, 917, 915, 3, 2,
-	2, 2, 917, 916, 3, 2, 2, 2, 918, 127, 3, 2, 2, 2, 919, 920, 9, 7, 2, 2,
-	920, 129, 3, 2, 2, 2, 921, 929, 7, 61, 2, 2, 922, 929, 7, 62, 2, 2, 923,
-	929, 7, 120, 2, 2, 924, 929, 7, 121, 2, 2, 925, 929, 7, 6, 2, 2, 926, 929,
-	5, 132, 67, 2, 927, 929, 5, 134, 68, 2, 928, 921, 3, 2, 2, 2, 928, 922,
-	3, 2, 2, 2, 928, 923, 3, 2, 2, 2, 928, 924, 3, 2, 2, 2, 928, 925, 3, 2,
-	2, 2, 928, 926, 3, 2, 2, 2, 928, 927, 3, 2, 2, 2, 929, 131, 3, 2, 2, 2,
-	930, 931, 9, 8, 2, 2, 931, 133, 3, 2, 2, 2, 932, 933, 9, 9, 2, 2, 933,
-	135, 3, 2, 2, 2, 934, 935, 6, 69, 35, 2, 935, 936, 5, 142, 72, 2, 936,
-	937, 5, 108, 55, 2, 937, 137, 3, 2, 2, 2, 938, 939, 6, 70, 36, 2, 939,
-	940, 5, 142, 72, 2, 940, 941, 5, 108, 55, 2, 941, 139, 3, 2, 2, 2, 942,
-	945, 5, 142, 72, 2, 943, 945, 5, 144, 73, 2, 944, 942, 3, 2, 2, 2, 944,
-	943, 3, 2, 2, 2, 945, 141, 3, 2, 2, 2, 946, 947, 9, 10, 2, 2, 947, 143,
-	3, 2, 2, 2, 948, 952, 5, 146, 74, 2, 949, 952, 7, 61, 2, 2, 950, 952, 7,
-	62, 2, 2, 951, 948, 3, 2, 2, 2, 951, 949, 3, 2, 2, 2, 951, 950, 3, 2, 2,
-	2, 952, 145, 3, 2, 2, 2, 953, 1000, 7, 72, 2, 2, 954, 1000, 7, 73, 2, 2,
-	955, 1000, 7, 74, 2, 2, 956, 1000, 7, 75, 2, 2, 957, 1000, 7, 76, 2, 2,
-	958, 1000, 7, 77, 2, 2, 959, 1000, 7, 78, 2, 2, 960, 1000, 7, 79, 2, 2,
-	961, 1000, 7, 80, 2, 2, 962, 1000, 7, 81, 2, 2, 963, 1000, 7, 82, 2, 2,
-	964, 1000, 7, 83, 2, 2, 965, 1000, 7, 84, 2, 2, 966, 1000, 7, 85, 2, 2,
-	967, 1000, 7, 86, 2, 2, 968, 1000, 7, 87, 2, 2, 969, 1000, 7, 88, 2, 2,
-	970, 1000, 7, 89, 2, 2, 971, 1000, 7, 90, 2, 2, 972, 1000, 7, 91, 2, 2,
-	973, 1000, 7, 92, 2, 2, 974, 1000, 7, 93, 2, 2, 975, 1000, 7, 94, 2, 2,
-	976, 1000, 7, 95, 2, 2, 977, 1000, 7, 96, 2, 2, 978, 1000, 7, 97, 2, 2,
-	979, 1000, 7, 100, 2, 2, 980, 1000, 7, 101, 2, 2, 981, 1000, 7, 102, 2,
-	2, 982, 1000, 7, 103, 2, 2, 983, 1000, 7, 104, 2, 2, 984, 1000, 7, 105,
-	2, 2, 985, 1000, 7, 106, 2, 2, 986, 1000, 7, 109, 2, 2, 987, 1000, 5, 148,
-	75, 2, 988, 1000, 7, 112, 2, 2, 989, 1000, 7, 113, 2, 2, 990, 1000, 7,
-	114, 2, 2, 991, 1000, 7, 115, 2, 2, 992, 1000, 7, 116, 2, 2, 993, 1000,
-	7, 117, 2, 2, 994, 1000, 7, 118, 2, 2, 995, 1000, 7, 107, 2, 2, 996, 1000,
-	7, 108, 2, 2, 997, 1000, 7, 99, 2, 2, 998, 1000, 7, 98, 2, 2, 999, 953,
-	3, 2, 2, 2, 999, 954, 3, 2, 2, 2, 999, 955, 3, 2, 2, 2, 999, 956, 3, 2,
-	2, 2, 999, 957, 3, 2, 2, 2, 999, 958, 3, 2, 2, 2, 999, 959, 3, 2, 2, 2,
-	999, 960, 3, 2, 2, 2, 999, 961, 3, 2, 2, 2, 999, 962, 3, 2, 2, 2, 999,
-	963, 3, 2, 2, 2, 999, 964, 3, 2, 2, 2, 999, 965, 3, 2, 2, 2, 999, 966,
-	3, 2, 2, 2, 999, 967, 3, 2, 2, 2, 999, 968, 3, 2, 2, 2, 999, 969, 3, 2,
-	2, 2, 999, 970, 3, 2, 2, 2, 999, 971, 3, 2, 2, 2, 999, 972, 3, 2, 2, 2,
-	999, 973, 3, 2, 2, 2, 999, 974, 3, 2, 2, 2, 999, 975, 3, 2, 2, 2, 999,
-	976, 3, 2, 2, 2, 999, 977, 3, 2, 2, 2, 999, 978, 3, 2, 2, 2, 999, 979,
-	3, 2, 2, 2, 999, 980, 3, 2, 2, 2, 999, 981, 3, 2, 2, 2, 999, 982, 3, 2,
-	2, 2, 999, 983, 3, 2, 2, 2, 999, 984, 3, 2, 2, 2, 999, 985, 3, 2, 2, 2,
-	999, 986, 3, 2, 2, 2, 999, 987, 3, 2, 2, 2, 999, 988, 3, 2, 2, 2, 999,
-	989, 3, 2, 2, 2, 999, 990, 3, 2, 2, 2, 999, 991, 3, 2, 2, 2, 999, 992,
-	3, 2, 2, 2, 999, 993, 3, 2, 2, 2, 999, 994, 3, 2, 2, 2, 999, 995, 3, 2,
-	2, 2, 999, 996, 3, 2, 2, 2, 999, 997, 3, 2, 2, 2, 999, 998, 3, 2, 2, 2,
-	1000, 147, 3, 2, 2, 2, 1001, 1002, 9, 11, 2, 2, 1002, 149, 3, 2, 2, 2,
-	1003, 1008, 7, 13, 2, 2, 1004, 1008, 7, 2, 2, 3, 1005, 1008, 6, 76, 37,
-	2, 1006, 1008, 6, 76, 38, 2, 1007, 1003, 3, 2, 2, 2, 1007, 1004, 3, 2,
-	2, 2, 1007, 1005, 3, 2, 2, 2, 1007, 1006, 3, 2, 2, 2, 1008, 151, 3, 2,
-	2, 2, 113, 153, 156, 182, 186, 193, 199, 203, 210, 218, 223, 225, 234,
-	238, 246, 251, 260, 268, 272, 277, 288, 294, 309, 329, 333, 337, 345, 354,
-	359, 367, 372, 377, 384, 391, 398, 416, 420, 422, 429, 435, 440, 455, 458,
-	463, 466, 477, 481, 486, 497, 503, 512, 514, 523, 527, 533, 536, 539, 544,
-	550, 553, 561, 564, 569, 574, 581, 586, 589, 594, 601, 608, 617, 621, 626,
-	631, 637, 641, 656, 659, 664, 681, 684, 693, 701, 705, 707, 712, 716, 723,
-	730, 736, 777, 841, 845, 858, 860, 866, 874, 877, 880, 886, 890, 894, 899,
-	905, 910, 913, 917, 928, 944, 951, 999, 1007,
+	3, 2, 2, 2, 778, 821, 3, 2, 2, 2, 779, 780, 12, 16, 2, 2, 780, 781, 7,
+	29, 2, 2, 781, 820, 5, 116, 59, 16, 782, 783, 12, 15, 2, 2, 783, 784, 9,
+	2, 2, 2, 784, 820, 5, 116, 59, 16, 785, 786, 12, 14, 2, 2, 786, 787, 7,
+	16, 2, 2, 787, 788, 5, 116, 59, 2, 788, 789, 7, 17, 2, 2, 789, 790, 5,
+	116, 59, 15, 790, 820, 3, 2, 2, 2, 791, 792, 12, 13, 2, 2, 792, 793, 5,
+	128, 65, 2, 793, 794, 5, 116, 59, 13, 794, 820, 3, 2, 2, 2, 795, 796, 12,
+	33, 2, 2, 796, 797, 7, 7, 2, 2, 797, 798, 5, 114, 58, 2, 798, 799, 7, 8,
+	2, 2, 799, 820, 3, 2, 2, 2, 800, 802, 12, 32, 2, 2, 801, 803, 7, 16, 2,
+	2, 802, 801, 3, 2, 2, 2, 802, 803, 3, 2, 2, 2, 803, 804, 3, 2, 2, 2, 804,
+	806, 7, 19, 2, 2, 805, 807, 7, 31, 2, 2, 806, 805, 3, 2, 2, 2, 806, 807,
+	3, 2, 2, 2, 807, 808, 3, 2, 2, 2, 808, 820, 5, 140, 71, 2, 809, 810, 12,
+	31, 2, 2, 810, 820, 5, 110, 56, 2, 811, 812, 12, 28, 2, 2, 812, 813, 6,
+	59, 18, 2, 813, 820, 7, 20, 2, 2, 814, 815, 12, 27, 2, 2, 815, 816, 6,
+	59, 20, 2, 816, 820, 7, 21, 2, 2, 817, 818, 12, 11, 2, 2, 818, 820, 7,
+	121, 2, 2, 819, 779, 3, 2, 2, 2, 819, 782, 3, 2, 2, 2, 819, 785, 3, 2,
+	2, 2, 819, 791, 3, 2, 2, 2, 819, 795, 3, 2, 2, 2, 819, 800, 3, 2, 2, 2,
+	819, 809, 3, 2, 2, 2, 819, 811, 3, 2, 2, 2, 819, 814, 3, 2, 2, 2, 819,
+	817, 3, 2, 2, 2, 820, 823, 3, 2, 2, 2, 821, 819, 3, 2, 2, 2, 821, 822,
+	3, 2, 2, 2, 822, 117, 3, 2, 2, 2, 823, 821, 3, 2, 2, 2, 824, 828, 5, 142,
+	72, 2, 825, 828, 5, 100, 51, 2, 826, 828, 5, 120, 61, 2, 827, 824, 3, 2,
+	2, 2, 827, 825, 3, 2, 2, 2, 827, 826, 3, 2, 2, 2, 828, 119, 3, 2, 2, 2,
+	829, 838, 7, 11, 2, 2, 830, 835, 5, 106, 54, 2, 831, 832, 7, 14, 2, 2,
+	832, 834, 5, 106, 54, 2, 833, 831, 3, 2, 2, 2, 834, 837, 3, 2, 2, 2, 835,
+	833, 3, 2, 2, 2, 835, 836, 3, 2, 2, 2, 836, 839, 3, 2, 2, 2, 837, 835,
+	3, 2, 2, 2, 838, 830, 3, 2, 2, 2, 838, 839, 3, 2, 2, 2, 839, 841, 3, 2,
+	2, 2, 840, 842, 7, 14, 2, 2, 841, 840, 3, 2, 2, 2, 841, 842, 3, 2, 2, 2,
+	842, 843, 3, 2, 2, 2, 843, 844, 7, 12, 2, 2, 844, 121, 3, 2, 2, 2, 845,
+	867, 5, 80, 41, 2, 846, 848, 7, 107, 2, 2, 847, 846, 3, 2, 2, 2, 847, 848,
+	3, 2, 2, 2, 848, 849, 3, 2, 2, 2, 849, 851, 7, 89, 2, 2, 850, 852, 7, 26,
+	2, 2, 851, 850, 3, 2, 2, 2, 851, 852, 3, 2, 2, 2, 852, 853, 3, 2, 2, 2,
+	853, 855, 7, 9, 2, 2, 854, 856, 5, 90, 46, 2, 855, 854, 3, 2, 2, 2, 855,
+	856, 3, 2, 2, 2, 856, 857, 3, 2, 2, 2, 857, 858, 7, 10, 2, 2, 858, 867,
+	5, 96, 49, 2, 859, 861, 7, 107, 2, 2, 860, 859, 3, 2, 2, 2, 860, 861, 3,
+	2, 2, 2, 861, 862, 3, 2, 2, 2, 862, 863, 5, 124, 63, 2, 863, 864, 7, 60,
+	2, 2, 864, 865, 5, 126, 64, 2, 865, 867, 3, 2, 2, 2, 866, 845, 3, 2, 2,
+	2, 866, 847, 3, 2, 2, 2, 866, 860, 3, 2, 2, 2, 867, 123, 3, 2, 2, 2, 868,
+	875, 5, 142, 72, 2, 869, 871, 7, 9, 2, 2, 870, 872, 5, 90, 46, 2, 871,
+	870, 3, 2, 2, 2, 871, 872, 3, 2, 2, 2, 872, 873, 3, 2, 2, 2, 873, 875,
+	7, 10, 2, 2, 874, 868, 3, 2, 2, 2, 874, 869, 3, 2, 2, 2, 875, 125, 3, 2,
+	2, 2, 876, 879, 5, 116, 59, 2, 877, 879, 5, 96, 49, 2, 878, 876, 3, 2,
+	2, 2, 878, 877, 3, 2, 2, 2, 879, 127, 3, 2, 2, 2, 880, 881, 9, 3, 2, 2,
+	881, 129, 3, 2, 2, 2, 882, 890, 7, 61, 2, 2, 883, 890, 7, 62, 2, 2, 884,
+	890, 7, 120, 2, 2, 885, 890, 7, 121, 2, 2, 886, 890, 7, 6, 2, 2, 887, 890,
+	5, 132, 67, 2, 888, 890, 5, 134, 68, 2, 889, 882, 3, 2, 2, 2, 889, 883,
+	3, 2, 2, 2, 889, 884, 3, 2, 2, 2, 889, 885, 3, 2, 2, 2, 889, 886, 3, 2,
+	2, 2, 889, 887, 3, 2, 2, 2, 889, 888, 3, 2, 2, 2, 890, 131, 3, 2, 2, 2,
+	891, 892, 9, 4, 2, 2, 892, 133, 3, 2, 2, 2, 893, 894, 9, 5, 2, 2, 894,
+	135, 3, 2, 2, 2, 895, 896, 6, 69, 22, 2, 896, 897, 5, 142, 72, 2, 897,
+	898, 5, 108, 55, 2, 898, 137, 3, 2, 2, 2, 899, 900, 6, 70, 23, 2, 900,
+	901, 5, 142, 72, 2, 901, 902, 5, 108, 55, 2, 902, 139, 3, 2, 2, 2, 903,
+	906, 5, 142, 72, 2, 904, 906, 5, 144, 73, 2, 905, 903, 3, 2, 2, 2, 905,
+	904, 3, 2, 2, 2, 906, 141, 3, 2, 2, 2, 907, 908, 9, 6, 2, 2, 908, 143,
+	3, 2, 2, 2, 909, 913, 5, 146, 74, 2, 910, 913, 7, 61, 2, 2, 911, 913, 7,
+	62, 2, 2, 912, 909, 3, 2, 2, 2, 912, 910, 3, 2, 2, 2, 912, 911, 3, 2, 2,
+	2, 913, 145, 3, 2, 2, 2, 914, 961, 7, 72, 2, 2, 915, 961, 7, 73, 2, 2,
+	916, 961, 7, 74, 2, 2, 917, 961, 7, 75, 2, 2, 918, 961, 7, 76, 2, 2, 919,
+	961, 7, 77, 2, 2, 920, 961, 7, 78, 2, 2, 921, 961, 7, 79, 2, 2, 922, 961,
+	7, 80, 2, 2, 923, 961, 7, 81, 2, 2, 924, 961, 7, 82, 2, 2, 925, 961, 7,
+	83, 2, 2, 926, 961, 7, 84, 2, 2, 927, 961, 7, 85, 2, 2, 928, 961, 7, 86,
+	2, 2, 929, 961, 7, 87, 2, 2, 930, 961, 7, 88, 2, 2, 931, 961, 7, 89, 2,
+	2, 932, 961, 7, 90, 2, 2, 933, 961, 7, 91, 2, 2, 934, 961, 7, 92, 2, 2,
+	935, 961, 7, 93, 2, 2, 936, 961, 7, 94, 2, 2, 937, 961, 7, 95, 2, 2, 938,
+	961, 7, 96, 2, 2, 939, 961, 7, 97, 2, 2, 940, 961, 7, 100, 2, 2, 941, 961,
+	7, 101, 2, 2, 942, 961, 7, 102, 2, 2, 943, 961, 7, 103, 2, 2, 944, 961,
+	7, 104, 2, 2, 945, 961, 7, 105, 2, 2, 946, 961, 7, 106, 2, 2, 947, 961,
+	7, 109, 2, 2, 948, 961, 5, 148, 75, 2, 949, 961, 7, 112, 2, 2, 950, 961,
+	7, 113, 2, 2, 951, 961, 7, 114, 2, 2, 952, 961, 7, 115, 2, 2, 953, 961,
+	7, 116, 2, 2, 954, 961, 7, 117, 2, 2, 955, 961, 7, 118, 2, 2, 956, 961,
+	7, 107, 2, 2, 957, 961, 7, 108, 2, 2, 958, 961, 7, 99, 2, 2, 959, 961,
+	7, 98, 2, 2, 960, 914, 3, 2, 2, 2, 960, 915, 3, 2, 2, 2, 960, 916, 3, 2,
+	2, 2, 960, 917, 3, 2, 2, 2, 960, 918, 3, 2, 2, 2, 960, 919, 3, 2, 2, 2,
+	960, 920, 3, 2, 2, 2, 960, 921, 3, 2, 2, 2, 960, 922, 3, 2, 2, 2, 960,
+	923, 3, 2, 2, 2, 960, 924, 3, 2, 2, 2, 960, 925, 3, 2, 2, 2, 960, 926,
+	3, 2, 2, 2, 960, 927, 3, 2, 2, 2, 960, 928, 3, 2, 2, 2, 960, 929, 3, 2,
+	2, 2, 960, 930, 3, 2, 2, 2, 960, 931, 3, 2, 2, 2, 960, 932, 3, 2, 2, 2,
+	960, 933, 3, 2, 2, 2, 960, 934, 3, 2, 2, 2, 960, 935, 3, 2, 2, 2, 960,
+	936, 3, 2, 2, 2, 960, 937, 3, 2, 2, 2, 960, 938, 3, 2, 2, 2, 960, 939,
+	3, 2, 2, 2, 960, 940, 3, 2, 2, 2, 960, 941, 3, 2, 2, 2, 960, 942, 3, 2,
+	2, 2, 960, 943, 3, 2, 2, 2, 960, 944, 3, 2, 2, 2, 960, 945, 3, 2, 2, 2,
+	960, 946, 3, 2, 2, 2, 960, 947, 3, 2, 2, 2, 960, 948, 3, 2, 2, 2, 960,
+	949, 3, 2, 2, 2, 960, 950, 3, 2, 2, 2, 960, 951, 3, 2, 2, 2, 960, 952,
+	3, 2, 2, 2, 960, 953, 3, 2, 2, 2, 960, 954, 3, 2, 2, 2, 960, 955, 3, 2,
+	2, 2, 960, 956, 3, 2, 2, 2, 960, 957, 3, 2, 2, 2, 960, 958, 3, 2, 2, 2,
+	960, 959, 3, 2, 2, 2, 961, 147, 3, 2, 2, 2, 962, 963, 9, 7, 2, 2, 963,
+	149, 3, 2, 2, 2, 964, 969, 7, 13, 2, 2, 965, 969, 7, 2, 2, 3, 966, 969,
+	6, 76, 24, 2, 967, 969, 6, 76, 25, 2, 968, 964, 3, 2, 2, 2, 968, 965, 3,
+	2, 2, 2, 968, 966, 3, 2, 2, 2, 968, 967, 3, 2, 2, 2, 969, 151, 3, 2, 2,
+	2, 113, 153, 156, 182, 186, 193, 199, 203, 210, 218, 223, 225, 234, 238,
+	246, 251, 260, 268, 272, 277, 288, 294, 309, 329, 333, 337, 345, 354, 359,
+	367, 372, 377, 384, 391, 398, 416, 420, 422, 429, 435, 440, 455, 458, 463,
+	466, 477, 481, 486, 497, 503, 512, 514, 523, 527, 533, 536, 539, 544, 550,
+	553, 561, 564, 569, 574, 581, 586, 589, 594, 601, 608, 617, 621, 626, 631,
+	637, 641, 656, 659, 664, 681, 684, 693, 701, 705, 707, 712, 716, 723, 730,
+	736, 777, 802, 806, 819, 821, 827, 835, 838, 841, 847, 851, 855, 860, 866,
+	871, 874, 878, 889, 905, 912, 960, 968,
 }
 var literalNames = []string{
 	"", "", "", "", "", "'['", "']'", "'('", "')'", "'{'", "'}'", "';'", "','",
@@ -2268,6 +2246,24 @@ type IImportNamespaceContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetStar returns the Star token.
+	GetStar() antlr.Token
+
+	// SetStar sets the Star token.
+	SetStar(antlr.Token)
+
+	// GetIdent returns the Ident rule contexts.
+	GetIdent() IIdentifierNameContext
+
+	// GetAlias returns the Alias rule contexts.
+	GetAlias() IIdentifierNameContext
+
+	// SetIdent sets the Ident rule contexts.
+	SetIdent(IIdentifierNameContext)
+
+	// SetAlias sets the Alias rule contexts.
+	SetAlias(IIdentifierNameContext)
+
 	// IsImportNamespaceContext differentiates from other interfaces.
 	IsImportNamespaceContext()
 }
@@ -2275,6 +2271,9 @@ type IImportNamespaceContext interface {
 type ImportNamespaceContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	Star   antlr.Token
+	Ident  IIdentifierNameContext
+	Alias  IIdentifierNameContext
 }
 
 func NewEmptyImportNamespaceContext() *ImportNamespaceContext {
@@ -2298,6 +2297,18 @@ func NewImportNamespaceContext(parser antlr.Parser, parent antlr.ParserRuleConte
 }
 
 func (s *ImportNamespaceContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ImportNamespaceContext) GetStar() antlr.Token { return s.Star }
+
+func (s *ImportNamespaceContext) SetStar(v antlr.Token) { s.Star = v }
+
+func (s *ImportNamespaceContext) GetIdent() IIdentifierNameContext { return s.Ident }
+
+func (s *ImportNamespaceContext) GetAlias() IIdentifierNameContext { return s.Alias }
+
+func (s *ImportNamespaceContext) SetIdent(v IIdentifierNameContext) { s.Ident = v }
+
+func (s *ImportNamespaceContext) SetAlias(v IIdentifierNameContext) { s.Alias = v }
 
 func (s *ImportNamespaceContext) Multiply() antlr.TerminalNode {
 	return s.GetToken(JavaScriptParserMultiply, 0)
@@ -2377,13 +2388,19 @@ func (p *JavaScriptParser) ImportNamespace() (localctx IImportNamespaceContext) 
 	case JavaScriptParserMultiply:
 		{
 			p.SetState(230)
-			p.Match(JavaScriptParserMultiply)
+
+			var _m = p.Match(JavaScriptParserMultiply)
+
+			localctx.(*ImportNamespaceContext).Star = _m
 		}
 
 	case JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptParserVar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptParserVoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield, JavaScriptParserIdentifier:
 		{
 			p.SetState(231)
-			p.IdentifierName()
+
+			var _x = p.IdentifierName()
+
+			localctx.(*ImportNamespaceContext).Ident = _x
 		}
 
 	default:
@@ -2400,7 +2417,10 @@ func (p *JavaScriptParser) ImportNamespace() (localctx IImportNamespaceContext) 
 		}
 		{
 			p.SetState(235)
-			p.IdentifierName()
+
+			var _x = p.IdentifierName()
+
+			localctx.(*ImportNamespaceContext).Alias = _x
 		}
 
 	}
@@ -10228,6 +10248,9 @@ func (s *TemplateStringExpressionContext) Accept(visitor antlr.ParseTreeVisitor)
 
 type TernaryExpressionContext struct {
 	*SingleExpressionContext
+	Left ISingleExpressionContext
+	ExpT ISingleExpressionContext
+	ExpF ISingleExpressionContext
 }
 
 func NewTernaryExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TernaryExpressionContext {
@@ -10240,8 +10263,28 @@ func NewTernaryExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContex
 	return p
 }
 
+func (s *TernaryExpressionContext) GetLeft() ISingleExpressionContext { return s.Left }
+
+func (s *TernaryExpressionContext) GetExpT() ISingleExpressionContext { return s.ExpT }
+
+func (s *TernaryExpressionContext) GetExpF() ISingleExpressionContext { return s.ExpF }
+
+func (s *TernaryExpressionContext) SetLeft(v ISingleExpressionContext) { s.Left = v }
+
+func (s *TernaryExpressionContext) SetExpT(v ISingleExpressionContext) { s.ExpT = v }
+
+func (s *TernaryExpressionContext) SetExpF(v ISingleExpressionContext) { s.ExpF = v }
+
 func (s *TernaryExpressionContext) GetRuleContext() antlr.RuleContext {
 	return s
+}
+
+func (s *TernaryExpressionContext) QuestionMark() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserQuestionMark, 0)
+}
+
+func (s *TernaryExpressionContext) Colon() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserColon, 0)
 }
 
 func (s *TernaryExpressionContext) AllSingleExpression() []ISingleExpressionContext {
@@ -10267,14 +10310,6 @@ func (s *TernaryExpressionContext) SingleExpression(i int) ISingleExpressionCont
 	return t.(ISingleExpressionContext)
 }
 
-func (s *TernaryExpressionContext) QuestionMark() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserQuestionMark, 0)
-}
-
-func (s *TernaryExpressionContext) Colon() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserColon, 0)
-}
-
 func (s *TernaryExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case JavaScriptParserVisitor:
@@ -10285,63 +10320,11 @@ func (s *TernaryExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interf
 	}
 }
 
-type LogicalAndExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewLogicalAndExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *LogicalAndExpressionContext {
-	var p = new(LogicalAndExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *LogicalAndExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *LogicalAndExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *LogicalAndExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *LogicalAndExpressionContext) And() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserAnd, 0)
-}
-
-func (s *LogicalAndExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitLogicalAndExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
 type PowerExpressionContext struct {
 	*SingleExpressionContext
+	Left  ISingleExpressionContext
+	OP    antlr.Token
+	Right ISingleExpressionContext
 }
 
 func NewPowerExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *PowerExpressionContext {
@@ -10353,6 +10336,18 @@ func NewPowerExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext)
 
 	return p
 }
+
+func (s *PowerExpressionContext) GetOP() antlr.Token { return s.OP }
+
+func (s *PowerExpressionContext) SetOP(v antlr.Token) { s.OP = v }
+
+func (s *PowerExpressionContext) GetLeft() ISingleExpressionContext { return s.Left }
+
+func (s *PowerExpressionContext) GetRight() ISingleExpressionContext { return s.Right }
+
+func (s *PowerExpressionContext) SetLeft(v ISingleExpressionContext) { s.Left = v }
+
+func (s *PowerExpressionContext) SetRight(v ISingleExpressionContext) { s.Right = v }
 
 func (s *PowerExpressionContext) GetRuleContext() antlr.RuleContext {
 	return s
@@ -10515,116 +10510,6 @@ func (s *MetaExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface
 	switch t := visitor.(type) {
 	case JavaScriptParserVisitor:
 		return t.VisitMetaExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type InExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewInExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *InExpressionContext {
-	var p = new(InExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *InExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *InExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *InExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *InExpressionContext) In() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserIn, 0)
-}
-
-func (s *InExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitInExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type LogicalOrExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewLogicalOrExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *LogicalOrExpressionContext {
-	var p = new(LogicalOrExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *LogicalOrExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *LogicalOrExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *LogicalOrExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *LogicalOrExpressionContext) Or() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserOr, 0)
-}
-
-func (s *LogicalOrExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitLogicalOrExpression(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -10919,6 +10804,9 @@ func (s *UnaryMinusExpressionContext) Accept(visitor antlr.ParseTreeVisitor) int
 
 type AssignmentExpressionContext struct {
 	*SingleExpressionContext
+	Left  ISingleExpressionContext
+	OP    IAssignmentOperatorContext
+	Right ISingleExpressionContext
 }
 
 func NewAssignmentExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *AssignmentExpressionContext {
@@ -10930,6 +10818,18 @@ func NewAssignmentExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleCon
 
 	return p
 }
+
+func (s *AssignmentExpressionContext) GetLeft() ISingleExpressionContext { return s.Left }
+
+func (s *AssignmentExpressionContext) GetOP() IAssignmentOperatorContext { return s.OP }
+
+func (s *AssignmentExpressionContext) GetRight() ISingleExpressionContext { return s.Right }
+
+func (s *AssignmentExpressionContext) SetLeft(v ISingleExpressionContext) { s.Left = v }
+
+func (s *AssignmentExpressionContext) SetOP(v IAssignmentOperatorContext) { s.OP = v }
+
+func (s *AssignmentExpressionContext) SetRight(v ISingleExpressionContext) { s.Right = v }
 
 func (s *AssignmentExpressionContext) GetRuleContext() antlr.RuleContext {
 	return s
@@ -10958,8 +10858,14 @@ func (s *AssignmentExpressionContext) SingleExpression(i int) ISingleExpressionC
 	return t.(ISingleExpressionContext)
 }
 
-func (s *AssignmentExpressionContext) Assign() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserAssign, 0)
+func (s *AssignmentExpressionContext) AssignmentOperator() IAssignmentOperatorContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IAssignmentOperatorContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IAssignmentOperatorContext)
 }
 
 func (s *AssignmentExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
@@ -11056,12 +10962,15 @@ func (s *TypeofExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 	}
 }
 
-type InstanceofExpressionContext struct {
+type LeftRightExpressionContext struct {
 	*SingleExpressionContext
+	Left  ISingleExpressionContext
+	OP    antlr.Token
+	right ISingleExpressionContext
 }
 
-func NewInstanceofExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *InstanceofExpressionContext {
-	var p = new(InstanceofExpressionContext)
+func NewLeftRightExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *LeftRightExpressionContext {
+	var p = new(LeftRightExpressionContext)
 
 	p.SingleExpressionContext = NewEmptySingleExpressionContext()
 	p.parser = parser
@@ -11070,11 +10979,23 @@ func NewInstanceofExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleCon
 	return p
 }
 
-func (s *InstanceofExpressionContext) GetRuleContext() antlr.RuleContext {
+func (s *LeftRightExpressionContext) GetOP() antlr.Token { return s.OP }
+
+func (s *LeftRightExpressionContext) SetOP(v antlr.Token) { s.OP = v }
+
+func (s *LeftRightExpressionContext) GetLeft() ISingleExpressionContext { return s.Left }
+
+func (s *LeftRightExpressionContext) GetRight() ISingleExpressionContext { return s.right }
+
+func (s *LeftRightExpressionContext) SetLeft(v ISingleExpressionContext) { s.Left = v }
+
+func (s *LeftRightExpressionContext) SetRight(v ISingleExpressionContext) { s.right = v }
+
+func (s *LeftRightExpressionContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *InstanceofExpressionContext) AllSingleExpression() []ISingleExpressionContext {
+func (s *LeftRightExpressionContext) AllSingleExpression() []ISingleExpressionContext {
 	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
 	var tst = make([]ISingleExpressionContext, len(ts))
 
@@ -11087,7 +11008,7 @@ func (s *InstanceofExpressionContext) AllSingleExpression() []ISingleExpressionC
 	return tst
 }
 
-func (s *InstanceofExpressionContext) SingleExpression(i int) ISingleExpressionContext {
+func (s *LeftRightExpressionContext) SingleExpression(i int) ISingleExpressionContext {
 	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
 
 	if t == nil {
@@ -11097,14 +11018,82 @@ func (s *InstanceofExpressionContext) SingleExpression(i int) ISingleExpressionC
 	return t.(ISingleExpressionContext)
 }
 
-func (s *InstanceofExpressionContext) Instanceof() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserInstanceof, 0)
+func (s *LeftRightExpressionContext) Multiply() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserMultiply, 0)
 }
 
-func (s *InstanceofExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+func (s *LeftRightExpressionContext) Divide() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserDivide, 0)
+}
+
+func (s *LeftRightExpressionContext) Modulus() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserModulus, 0)
+}
+
+func (s *LeftRightExpressionContext) Plus() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserPlus, 0)
+}
+
+func (s *LeftRightExpressionContext) Minus() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserMinus, 0)
+}
+
+func (s *LeftRightExpressionContext) NullCoalesce() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserNullCoalesce, 0)
+}
+
+func (s *LeftRightExpressionContext) LessThan() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserLessThan, 0)
+}
+
+func (s *LeftRightExpressionContext) MoreThan() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserMoreThan, 0)
+}
+
+func (s *LeftRightExpressionContext) LessThanEquals() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserLessThanEquals, 0)
+}
+
+func (s *LeftRightExpressionContext) GreaterThanEquals() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserGreaterThanEquals, 0)
+}
+
+func (s *LeftRightExpressionContext) Equals_() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserEquals_, 0)
+}
+
+func (s *LeftRightExpressionContext) NotEquals() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserNotEquals, 0)
+}
+
+func (s *LeftRightExpressionContext) IdentityEquals() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserIdentityEquals, 0)
+}
+
+func (s *LeftRightExpressionContext) IdentityNotEquals() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserIdentityNotEquals, 0)
+}
+
+func (s *LeftRightExpressionContext) BitXOr() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserBitXOr, 0)
+}
+
+func (s *LeftRightExpressionContext) BitOr() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserBitOr, 0)
+}
+
+func (s *LeftRightExpressionContext) And() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserAnd, 0)
+}
+
+func (s *LeftRightExpressionContext) Or() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserOr, 0)
+}
+
+func (s *LeftRightExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
 	switch t := visitor.(type) {
 	case JavaScriptParserVisitor:
-		return t.VisitInstanceofExpression(s)
+		return t.VisitLeftRightExpression(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -11245,128 +11234,6 @@ func (s *ImportExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 	}
 }
 
-type EqualityExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewEqualityExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *EqualityExpressionContext {
-	var p = new(EqualityExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *EqualityExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *EqualityExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *EqualityExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *EqualityExpressionContext) Equals_() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserEquals_, 0)
-}
-
-func (s *EqualityExpressionContext) NotEquals() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserNotEquals, 0)
-}
-
-func (s *EqualityExpressionContext) IdentityEquals() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserIdentityEquals, 0)
-}
-
-func (s *EqualityExpressionContext) IdentityNotEquals() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserIdentityNotEquals, 0)
-}
-
-func (s *EqualityExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitEqualityExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type BitXOrExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewBitXOrExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *BitXOrExpressionContext {
-	var p = new(BitXOrExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *BitXOrExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *BitXOrExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *BitXOrExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *BitXOrExpressionContext) BitXOr() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserBitXOr, 0)
-}
-
-func (s *BitXOrExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitBitXOrExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
 type SuperExpressionContext struct {
 	*SingleExpressionContext
 }
@@ -11393,132 +11260,6 @@ func (s *SuperExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interfac
 	switch t := visitor.(type) {
 	case JavaScriptParserVisitor:
 		return t.VisitSuperExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type MultiplicativeExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewMultiplicativeExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *MultiplicativeExpressionContext {
-	var p = new(MultiplicativeExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *MultiplicativeExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *MultiplicativeExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *MultiplicativeExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *MultiplicativeExpressionContext) Multiply() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserMultiply, 0)
-}
-
-func (s *MultiplicativeExpressionContext) Divide() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserDivide, 0)
-}
-
-func (s *MultiplicativeExpressionContext) Modulus() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserModulus, 0)
-}
-
-func (s *MultiplicativeExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitMultiplicativeExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type BitShiftExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewBitShiftExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *BitShiftExpressionContext {
-	var p = new(BitShiftExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *BitShiftExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *BitShiftExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *BitShiftExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *BitShiftExpressionContext) LeftShiftArithmetic() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserLeftShiftArithmetic, 0)
-}
-
-func (s *BitShiftExpressionContext) RightShiftArithmetic() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserRightShiftArithmetic, 0)
-}
-
-func (s *BitShiftExpressionContext) RightShiftLogical() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserRightShiftLogical, 0)
-}
-
-func (s *BitShiftExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitBitShiftExpression(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -11565,132 +11306,6 @@ func (s *ParenthesizedExpressionContext) Accept(visitor antlr.ParseTreeVisitor) 
 	switch t := visitor.(type) {
 	case JavaScriptParserVisitor:
 		return t.VisitParenthesizedExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type AdditiveExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewAdditiveExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *AdditiveExpressionContext {
-	var p = new(AdditiveExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *AdditiveExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *AdditiveExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *AdditiveExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *AdditiveExpressionContext) Plus() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserPlus, 0)
-}
-
-func (s *AdditiveExpressionContext) Minus() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserMinus, 0)
-}
-
-func (s *AdditiveExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitAdditiveExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type RelationalExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewRelationalExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *RelationalExpressionContext {
-	var p = new(RelationalExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *RelationalExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *RelationalExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *RelationalExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *RelationalExpressionContext) LessThan() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserLessThan, 0)
-}
-
-func (s *RelationalExpressionContext) MoreThan() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserMoreThan, 0)
-}
-
-func (s *RelationalExpressionContext) LessThanEquals() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserLessThanEquals, 0)
-}
-
-func (s *RelationalExpressionContext) GreaterThanEquals() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserGreaterThanEquals, 0)
-}
-
-func (s *RelationalExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitRelationalExpression(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -12153,177 +11768,6 @@ func (s *IdentifierExpressionContext) Accept(visitor antlr.ParseTreeVisitor) int
 	}
 }
 
-type BitAndExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewBitAndExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *BitAndExpressionContext {
-	var p = new(BitAndExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *BitAndExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *BitAndExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *BitAndExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *BitAndExpressionContext) BitAnd() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserBitAnd, 0)
-}
-
-func (s *BitAndExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitBitAndExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type BitOrExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewBitOrExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *BitOrExpressionContext {
-	var p = new(BitOrExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *BitOrExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *BitOrExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *BitOrExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *BitOrExpressionContext) BitOr() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserBitOr, 0)
-}
-
-func (s *BitOrExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitBitOrExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type AssignmentOperatorExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewAssignmentOperatorExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *AssignmentOperatorExpressionContext {
-	var p = new(AssignmentOperatorExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *AssignmentOperatorExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *AssignmentOperatorExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *AssignmentOperatorExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *AssignmentOperatorExpressionContext) AssignmentOperator() IAssignmentOperatorContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IAssignmentOperatorContext)(nil)).Elem(), 0)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IAssignmentOperatorContext)
-}
-
-func (s *AssignmentOperatorExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitAssignmentOperatorExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
 type VoidExpressionContext struct {
 	*SingleExpressionContext
 }
@@ -12360,61 +11804,6 @@ func (s *VoidExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface
 	switch t := visitor.(type) {
 	case JavaScriptParserVisitor:
 		return t.VisitVoidExpression(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
-type CoalesceExpressionContext struct {
-	*SingleExpressionContext
-}
-
-func NewCoalesceExpressionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *CoalesceExpressionContext {
-	var p = new(CoalesceExpressionContext)
-
-	p.SingleExpressionContext = NewEmptySingleExpressionContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*SingleExpressionContext))
-
-	return p
-}
-
-func (s *CoalesceExpressionContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *CoalesceExpressionContext) AllSingleExpression() []ISingleExpressionContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem())
-	var tst = make([]ISingleExpressionContext, len(ts))
-
-	for i, t := range ts {
-		if t != nil {
-			tst[i] = t.(ISingleExpressionContext)
-		}
-	}
-
-	return tst
-}
-
-func (s *CoalesceExpressionContext) SingleExpression(i int) ISingleExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISingleExpressionContext)(nil)).Elem(), i)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(ISingleExpressionContext)
-}
-
-func (s *CoalesceExpressionContext) NullCoalesce() antlr.TerminalNode {
-	return s.GetToken(JavaScriptParserNullCoalesce, 0)
-}
-
-func (s *CoalesceExpressionContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case JavaScriptParserVisitor:
-		return t.VisitCoalesceExpression(s)
 
 	default:
 		return t.VisitChildren(s)
@@ -12541,7 +11930,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(740)
-			p.singleExpression(37)
+			p.singleExpression(24)
 		}
 
 	case 6:
@@ -12554,7 +11943,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(742)
-			p.singleExpression(36)
+			p.singleExpression(23)
 		}
 
 	case 7:
@@ -12567,7 +11956,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(744)
-			p.singleExpression(35)
+			p.singleExpression(22)
 		}
 
 	case 8:
@@ -12580,7 +11969,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(746)
-			p.singleExpression(34)
+			p.singleExpression(21)
 		}
 
 	case 9:
@@ -12593,7 +11982,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(748)
-			p.singleExpression(33)
+			p.singleExpression(20)
 		}
 
 	case 10:
@@ -12606,7 +11995,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(750)
-			p.singleExpression(32)
+			p.singleExpression(19)
 		}
 
 	case 11:
@@ -12619,7 +12008,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(752)
-			p.singleExpression(31)
+			p.singleExpression(18)
 		}
 
 	case 12:
@@ -12632,7 +12021,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(754)
-			p.singleExpression(30)
+			p.singleExpression(17)
 		}
 
 	case 13:
@@ -12645,7 +12034,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(756)
-			p.singleExpression(29)
+			p.singleExpression(16)
 		}
 
 	case 14:
@@ -12658,7 +12047,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 		}
 		{
 			p.SetState(758)
-			p.singleExpression(28)
+			p.singleExpression(15)
 		}
 
 	case 15:
@@ -12764,7 +12153,7 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(858)
+	p.SetState(819)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 93, p.GetParserRuleContext())
 
@@ -12774,40 +12163,57 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 				p.TriggerExitRuleEvent()
 			}
 			_prevctx = localctx
-			p.SetState(856)
+			p.SetState(817)
 			p.GetErrorHandler().Sync(p)
 			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 92, p.GetParserRuleContext()) {
 			case 1:
 				localctx = NewPowerExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
+				localctx.(*PowerExpressionContext).Left = _prevctx
+
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
 				p.SetState(777)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 27)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 27)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 14)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 14)", ""))
 				}
 				{
 					p.SetState(778)
-					p.Match(JavaScriptParserPower)
+
+					var _m = p.Match(JavaScriptParserPower)
+
+					localctx.(*PowerExpressionContext).OP = _m
 				}
 				{
 					p.SetState(779)
-					p.singleExpression(27)
+
+					var _x = p.singleExpression(14)
+
+					localctx.(*PowerExpressionContext).Right = _x
 				}
 
 			case 2:
-				localctx = NewMultiplicativeExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
+				localctx = NewLeftRightExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
+				localctx.(*LeftRightExpressionContext).Left = _prevctx
+
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
 				p.SetState(780)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 26)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 26)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 13)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 13)", ""))
 				}
 				{
 					p.SetState(781)
+
+					var _lt = p.GetTokenStream().LT(1)
+
+					localctx.(*LeftRightExpressionContext).OP = _lt
+
 					_la = p.GetTokenStream().LA(1)
 
-					if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserMultiply)|(1<<JavaScriptParserDivide)|(1<<JavaScriptParserModulus))) != 0) {
-						p.GetErrorHandler().RecoverInline(p)
+					if !(((_la-20)&-(0x1f+1)) == 0 && ((1<<uint((_la-20)))&((1<<(JavaScriptParserPlus-20))|(1<<(JavaScriptParserMinus-20))|(1<<(JavaScriptParserMultiply-20))|(1<<(JavaScriptParserDivide-20))|(1<<(JavaScriptParserModulus-20))|(1<<(JavaScriptParserNullCoalesce-20))|(1<<(JavaScriptParserLessThan-20))|(1<<(JavaScriptParserMoreThan-20))|(1<<(JavaScriptParserLessThanEquals-20))|(1<<(JavaScriptParserGreaterThanEquals-20))|(1<<(JavaScriptParserEquals_-20))|(1<<(JavaScriptParserNotEquals-20))|(1<<(JavaScriptParserIdentityEquals-20))|(1<<(JavaScriptParserIdentityNotEquals-20))|(1<<(JavaScriptParserBitXOr-20))|(1<<(JavaScriptParserBitOr-20))|(1<<(JavaScriptParserAnd-20))|(1<<(JavaScriptParserOr-20)))) != 0) {
+						var _ri = p.GetErrorHandler().RecoverInline(p)
+
+						localctx.(*LeftRightExpressionContext).OP = _ri
 					} else {
 						p.GetErrorHandler().ReportMatch(p)
 						p.Consume()
@@ -12815,426 +12221,196 @@ func (p *JavaScriptParser) singleExpression(_p int) (localctx ISingleExpressionC
 				}
 				{
 					p.SetState(782)
-					p.singleExpression(27)
+
+					var _x = p.singleExpression(14)
+
+					localctx.(*LeftRightExpressionContext).right = _x
 				}
 
 			case 3:
-				localctx = NewAdditiveExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
+				localctx = NewTernaryExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
+				localctx.(*TernaryExpressionContext).Left = _prevctx
+
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
 				p.SetState(783)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 25)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 25)", ""))
-				}
-				{
-					p.SetState(784)
-					_la = p.GetTokenStream().LA(1)
-
-					if !(_la == JavaScriptParserPlus || _la == JavaScriptParserMinus) {
-						p.GetErrorHandler().RecoverInline(p)
-					} else {
-						p.GetErrorHandler().ReportMatch(p)
-						p.Consume()
-					}
-				}
-				{
-					p.SetState(785)
-					p.singleExpression(26)
-				}
-
-			case 4:
-				localctx = NewCoalesceExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(786)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 24)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 24)", ""))
-				}
-				{
-					p.SetState(787)
-					p.Match(JavaScriptParserNullCoalesce)
-				}
-				{
-					p.SetState(788)
-					p.singleExpression(25)
-				}
-
-			case 5:
-				localctx = NewBitShiftExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(789)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 23)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 23)", ""))
-				}
-				{
-					p.SetState(790)
-					_la = p.GetTokenStream().LA(1)
-
-					if !(((_la-30)&-(0x1f+1)) == 0 && ((1<<uint((_la-30)))&((1<<(JavaScriptParserRightShiftArithmetic-30))|(1<<(JavaScriptParserLeftShiftArithmetic-30))|(1<<(JavaScriptParserRightShiftLogical-30)))) != 0) {
-						p.GetErrorHandler().RecoverInline(p)
-					} else {
-						p.GetErrorHandler().ReportMatch(p)
-						p.Consume()
-					}
-				}
-				{
-					p.SetState(791)
-					p.singleExpression(24)
-				}
-
-			case 6:
-				localctx = NewRelationalExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(792)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 22)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 22)", ""))
-				}
-				{
-					p.SetState(793)
-					_la = p.GetTokenStream().LA(1)
-
-					if !(((_la-33)&-(0x1f+1)) == 0 && ((1<<uint((_la-33)))&((1<<(JavaScriptParserLessThan-33))|(1<<(JavaScriptParserMoreThan-33))|(1<<(JavaScriptParserLessThanEquals-33))|(1<<(JavaScriptParserGreaterThanEquals-33)))) != 0) {
-						p.GetErrorHandler().RecoverInline(p)
-					} else {
-						p.GetErrorHandler().ReportMatch(p)
-						p.Consume()
-					}
-				}
-				{
-					p.SetState(794)
-					p.singleExpression(23)
-				}
-
-			case 7:
-				localctx = NewInstanceofExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(795)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 21)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 21)", ""))
-				}
-				{
-					p.SetState(796)
-					p.Match(JavaScriptParserInstanceof)
-				}
-				{
-					p.SetState(797)
-					p.singleExpression(22)
-				}
-
-			case 8:
-				localctx = NewInExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(798)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 20)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 20)", ""))
-				}
-				{
-					p.SetState(799)
-					p.Match(JavaScriptParserIn)
-				}
-				{
-					p.SetState(800)
-					p.singleExpression(21)
-				}
-
-			case 9:
-				localctx = NewEqualityExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(801)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 19)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 19)", ""))
-				}
-				{
-					p.SetState(802)
-					_la = p.GetTokenStream().LA(1)
-
-					if !(((_la-37)&-(0x1f+1)) == 0 && ((1<<uint((_la-37)))&((1<<(JavaScriptParserEquals_-37))|(1<<(JavaScriptParserNotEquals-37))|(1<<(JavaScriptParserIdentityEquals-37))|(1<<(JavaScriptParserIdentityNotEquals-37)))) != 0) {
-						p.GetErrorHandler().RecoverInline(p)
-					} else {
-						p.GetErrorHandler().ReportMatch(p)
-						p.Consume()
-					}
-				}
-				{
-					p.SetState(803)
-					p.singleExpression(20)
-				}
-
-			case 10:
-				localctx = NewBitAndExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(804)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 18)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 18)", ""))
-				}
-				{
-					p.SetState(805)
-					p.Match(JavaScriptParserBitAnd)
-				}
-				{
-					p.SetState(806)
-					p.singleExpression(19)
-				}
-
-			case 11:
-				localctx = NewBitXOrExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(807)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 17)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 17)", ""))
-				}
-				{
-					p.SetState(808)
-					p.Match(JavaScriptParserBitXOr)
-				}
-				{
-					p.SetState(809)
-					p.singleExpression(18)
-				}
-
-			case 12:
-				localctx = NewBitOrExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(810)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 16)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 16)", ""))
-				}
-				{
-					p.SetState(811)
-					p.Match(JavaScriptParserBitOr)
-				}
-				{
-					p.SetState(812)
-					p.singleExpression(17)
-				}
-
-			case 13:
-				localctx = NewLogicalAndExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(813)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 15)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 15)", ""))
-				}
-				{
-					p.SetState(814)
-					p.Match(JavaScriptParserAnd)
-				}
-				{
-					p.SetState(815)
-					p.singleExpression(16)
-				}
-
-			case 14:
-				localctx = NewLogicalOrExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(816)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 14)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 14)", ""))
-				}
-				{
-					p.SetState(817)
-					p.Match(JavaScriptParserOr)
-				}
-				{
-					p.SetState(818)
-					p.singleExpression(15)
-				}
-
-			case 15:
-				localctx = NewTernaryExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(819)
-
-				if !(p.Precpred(p.GetParserRuleContext(), 13)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 13)", ""))
-				}
-				{
-					p.SetState(820)
-					p.Match(JavaScriptParserQuestionMark)
-				}
-				{
-					p.SetState(821)
-					p.singleExpression(0)
-				}
-				{
-					p.SetState(822)
-					p.Match(JavaScriptParserColon)
-				}
-				{
-					p.SetState(823)
-					p.singleExpression(14)
-				}
-
-			case 16:
-				localctx = NewAssignmentExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
-				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(825)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 12)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 12)", ""))
 				}
 				{
-					p.SetState(826)
-					p.Match(JavaScriptParserAssign)
+					p.SetState(784)
+					p.Match(JavaScriptParserQuestionMark)
 				}
 				{
-					p.SetState(827)
-					p.singleExpression(12)
+					p.SetState(785)
+
+					var _x = p.singleExpression(0)
+
+					localctx.(*TernaryExpressionContext).ExpT = _x
+				}
+				{
+					p.SetState(786)
+					p.Match(JavaScriptParserColon)
+				}
+				{
+					p.SetState(787)
+
+					var _x = p.singleExpression(13)
+
+					localctx.(*TernaryExpressionContext).ExpF = _x
 				}
 
-			case 17:
-				localctx = NewAssignmentOperatorExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
+			case 4:
+				localctx = NewAssignmentExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
+				localctx.(*AssignmentExpressionContext).Left = _prevctx
+
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(828)
+				p.SetState(789)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 11)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 11)", ""))
 				}
 				{
-					p.SetState(829)
-					p.AssignmentOperator()
+					p.SetState(790)
+
+					var _x = p.AssignmentOperator()
+
+					localctx.(*AssignmentExpressionContext).OP = _x
 				}
 				{
-					p.SetState(830)
-					p.singleExpression(11)
+					p.SetState(791)
+
+					var _x = p.singleExpression(11)
+
+					localctx.(*AssignmentExpressionContext).Right = _x
 				}
 
-			case 18:
+			case 5:
 				localctx = NewMemberIndexExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(832)
+				p.SetState(793)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 44)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 44)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 31)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 31)", ""))
 				}
 				{
-					p.SetState(833)
+					p.SetState(794)
 					p.Match(JavaScriptParserOpenBracket)
 				}
 				{
-					p.SetState(834)
+					p.SetState(795)
 					p.ExpressionSequence()
 				}
 				{
-					p.SetState(835)
+					p.SetState(796)
 					p.Match(JavaScriptParserCloseBracket)
 				}
 
-			case 19:
+			case 6:
 				localctx = NewMemberDotExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(837)
+				p.SetState(798)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 43)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 43)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 30)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 30)", ""))
 				}
-				p.SetState(839)
+				p.SetState(800)
 				p.GetErrorHandler().Sync(p)
 				_la = p.GetTokenStream().LA(1)
 
 				if _la == JavaScriptParserQuestionMark {
 					{
-						p.SetState(838)
+						p.SetState(799)
 						p.Match(JavaScriptParserQuestionMark)
 					}
 
 				}
 				{
-					p.SetState(841)
+					p.SetState(802)
 					p.Match(JavaScriptParserDot)
 				}
-				p.SetState(843)
+				p.SetState(804)
 				p.GetErrorHandler().Sync(p)
 				_la = p.GetTokenStream().LA(1)
 
 				if _la == JavaScriptParserHashtag {
 					{
-						p.SetState(842)
+						p.SetState(803)
 						p.Match(JavaScriptParserHashtag)
 					}
 
 				}
 				{
-					p.SetState(845)
+					p.SetState(806)
 					p.IdentifierName()
 				}
 
-			case 20:
+			case 7:
 				localctx = NewArgumentsExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(846)
+				p.SetState(807)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 42)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 42)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 29)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 29)", ""))
 				}
 				{
-					p.SetState(847)
+					p.SetState(808)
 					p.Arguments()
 				}
 
-			case 21:
+			case 8:
 				localctx = NewPostIncrementExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(848)
+				p.SetState(809)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 39)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 39)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 26)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 26)", ""))
 				}
-				p.SetState(849)
+				p.SetState(810)
 
 				if !(p.notLineTerminator()) {
 					panic(antlr.NewFailedPredicateException(p, "p.notLineTerminator()", ""))
 				}
 				{
-					p.SetState(850)
+					p.SetState(811)
 					p.Match(JavaScriptParserPlusPlus)
 				}
 
-			case 22:
+			case 9:
 				localctx = NewPostDecreaseExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(851)
+				p.SetState(812)
 
-				if !(p.Precpred(p.GetParserRuleContext(), 38)) {
-					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 38)", ""))
+				if !(p.Precpred(p.GetParserRuleContext(), 25)) {
+					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 25)", ""))
 				}
-				p.SetState(852)
+				p.SetState(813)
 
 				if !(p.notLineTerminator()) {
 					panic(antlr.NewFailedPredicateException(p, "p.notLineTerminator()", ""))
 				}
 				{
-					p.SetState(853)
+					p.SetState(814)
 					p.Match(JavaScriptParserMinusMinus)
 				}
 
-			case 23:
+			case 10:
 				localctx = NewTemplateStringExpressionContext(p, NewSingleExpressionContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, JavaScriptParserRULE_singleExpression)
-				p.SetState(854)
+				p.SetState(815)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 9)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 9)", ""))
 				}
 				{
-					p.SetState(855)
+					p.SetState(816)
 					p.Match(JavaScriptParserTemplateStringLiteral)
 				}
 
 			}
 
 		}
-		p.SetState(860)
+		p.SetState(821)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 93, p.GetParserRuleContext())
 	}
@@ -13348,28 +12524,28 @@ func (p *JavaScriptParser) Assignable() (localctx IAssignableContext) {
 		}
 	}()
 
-	p.SetState(864)
+	p.SetState(825)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case JavaScriptParserAsync, JavaScriptParserNonStrictLet, JavaScriptParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(861)
+			p.SetState(822)
 			p.Identifier()
 		}
 
 	case JavaScriptParserOpenBracket:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(862)
+			p.SetState(823)
 			p.ArrayLiteral()
 		}
 
 	case JavaScriptParserOpenBrace:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(863)
+			p.SetState(824)
 			p.ObjectLiteral()
 		}
 
@@ -13500,52 +12676,52 @@ func (p *JavaScriptParser) ObjectLiteral() (localctx IObjectLiteralContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(866)
+		p.SetState(827)
 		p.Match(JavaScriptParserOpenBrace)
 	}
-	p.SetState(875)
+	p.SetState(836)
 	p.GetErrorHandler().Sync(p)
 
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 96, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(867)
+			p.SetState(828)
 			p.PropertyAssignment()
 		}
-		p.SetState(872)
+		p.SetState(833)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 95, p.GetParserRuleContext())
 
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
-					p.SetState(868)
+					p.SetState(829)
 					p.Match(JavaScriptParserComma)
 				}
 				{
-					p.SetState(869)
+					p.SetState(830)
 					p.PropertyAssignment()
 				}
 
 			}
-			p.SetState(874)
+			p.SetState(835)
 			p.GetErrorHandler().Sync(p)
 			_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 95, p.GetParserRuleContext())
 		}
 
 	}
-	p.SetState(878)
+	p.SetState(839)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == JavaScriptParserComma {
 		{
-			p.SetState(877)
+			p.SetState(838)
 			p.Match(JavaScriptParserComma)
 		}
 
 	}
 	{
-		p.SetState(880)
+		p.SetState(841)
 		p.Match(JavaScriptParserCloseBrace)
 	}
 
@@ -13785,93 +12961,93 @@ func (p *JavaScriptParser) AnoymousFunction() (localctx IAnoymousFunctionContext
 		}
 	}()
 
-	p.SetState(903)
+	p.SetState(864)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 102, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewFunctionDeclContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(882)
+			p.SetState(843)
 			p.FunctionDeclaration()
 		}
 
 	case 2:
 		localctx = NewAnoymousFunctionDeclContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
-		p.SetState(884)
+		p.SetState(845)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == JavaScriptParserAsync {
 			{
-				p.SetState(883)
+				p.SetState(844)
 				p.Match(JavaScriptParserAsync)
 			}
 
 		}
 		{
-			p.SetState(886)
+			p.SetState(847)
 			p.Match(JavaScriptParserFunction)
 		}
-		p.SetState(888)
+		p.SetState(849)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if _la == JavaScriptParserMultiply {
 			{
-				p.SetState(887)
+				p.SetState(848)
 				p.Match(JavaScriptParserMultiply)
 			}
 
 		}
 		{
-			p.SetState(890)
+			p.SetState(851)
 			p.Match(JavaScriptParserOpenParen)
 		}
-		p.SetState(892)
+		p.SetState(853)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserEllipsis))) != 0) || (((_la-105)&-(0x1f+1)) == 0 && ((1<<uint((_la-105)))&((1<<(JavaScriptParserAsync-105))|(1<<(JavaScriptParserNonStrictLet-105))|(1<<(JavaScriptParserIdentifier-105)))) != 0) {
 			{
-				p.SetState(891)
+				p.SetState(852)
 				p.FormalParameterList()
 			}
 
 		}
 		{
-			p.SetState(894)
+			p.SetState(855)
 			p.Match(JavaScriptParserCloseParen)
 		}
 		{
-			p.SetState(895)
+			p.SetState(856)
 			p.FunctionBody()
 		}
 
 	case 3:
 		localctx = NewArrowFunctionContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
-		p.SetState(897)
+		p.SetState(858)
 		p.GetErrorHandler().Sync(p)
 
 		if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 101, p.GetParserRuleContext()) == 1 {
 			{
-				p.SetState(896)
+				p.SetState(857)
 				p.Match(JavaScriptParserAsync)
 			}
 
 		}
 		{
-			p.SetState(899)
+			p.SetState(860)
 			p.ArrowFunctionParameters()
 		}
 		{
-			p.SetState(900)
+			p.SetState(861)
 			p.Match(JavaScriptParserARROW)
 		}
 		{
-			p.SetState(901)
+			p.SetState(862)
 			p.ArrowFunctionBody()
 		}
 
@@ -13985,36 +13161,36 @@ func (p *JavaScriptParser) ArrowFunctionParameters() (localctx IArrowFunctionPar
 		}
 	}()
 
-	p.SetState(911)
+	p.SetState(872)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case JavaScriptParserAsync, JavaScriptParserNonStrictLet, JavaScriptParserIdentifier:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(905)
+			p.SetState(866)
 			p.Identifier()
 		}
 
 	case JavaScriptParserOpenParen:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(906)
+			p.SetState(867)
 			p.Match(JavaScriptParserOpenParen)
 		}
-		p.SetState(908)
+		p.SetState(869)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
 		if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserEllipsis))) != 0) || (((_la-105)&-(0x1f+1)) == 0 && ((1<<uint((_la-105)))&((1<<(JavaScriptParserAsync-105))|(1<<(JavaScriptParserNonStrictLet-105))|(1<<(JavaScriptParserIdentifier-105)))) != 0) {
 			{
-				p.SetState(907)
+				p.SetState(868)
 				p.FormalParameterList()
 			}
 
 		}
 		{
-			p.SetState(910)
+			p.SetState(871)
 			p.Match(JavaScriptParserCloseParen)
 		}
 
@@ -14121,20 +13297,20 @@ func (p *JavaScriptParser) ArrowFunctionBody() (localctx IArrowFunctionBodyConte
 		}
 	}()
 
-	p.SetState(915)
+	p.SetState(876)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 105, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(913)
+			p.SetState(874)
 			p.singleExpression(0)
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(914)
+			p.SetState(875)
 			p.FunctionBody()
 		}
 
@@ -14180,6 +13356,10 @@ func NewAssignmentOperatorContext(parser antlr.Parser, parent antlr.ParserRuleCo
 }
 
 func (s *AssignmentOperatorContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *AssignmentOperatorContext) Assign() antlr.TerminalNode {
+	return s.GetToken(JavaScriptParserAssign, 0)
+}
 
 func (s *AssignmentOperatorContext) MultiplyAssign() antlr.TerminalNode {
 	return s.GetToken(JavaScriptParserMultiplyAssign, 0)
@@ -14270,10 +13450,10 @@ func (p *JavaScriptParser) AssignmentOperator() (localctx IAssignmentOperatorCon
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(917)
+		p.SetState(878)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la-46)&-(0x1f+1)) == 0 && ((1<<uint((_la-46)))&((1<<(JavaScriptParserMultiplyAssign-46))|(1<<(JavaScriptParserDivideAssign-46))|(1<<(JavaScriptParserModulusAssign-46))|(1<<(JavaScriptParserPlusAssign-46))|(1<<(JavaScriptParserMinusAssign-46))|(1<<(JavaScriptParserLeftShiftArithmeticAssign-46))|(1<<(JavaScriptParserRightShiftArithmeticAssign-46))|(1<<(JavaScriptParserRightShiftLogicalAssign-46))|(1<<(JavaScriptParserBitAndAssign-46))|(1<<(JavaScriptParserBitXorAssign-46))|(1<<(JavaScriptParserBitOrAssign-46))|(1<<(JavaScriptParserPowerAssign-46)))) != 0) {
+		if !(_la == JavaScriptParserAssign || (((_la-46)&-(0x1f+1)) == 0 && ((1<<uint((_la-46)))&((1<<(JavaScriptParserMultiplyAssign-46))|(1<<(JavaScriptParserDivideAssign-46))|(1<<(JavaScriptParserModulusAssign-46))|(1<<(JavaScriptParserPlusAssign-46))|(1<<(JavaScriptParserMinusAssign-46))|(1<<(JavaScriptParserLeftShiftArithmeticAssign-46))|(1<<(JavaScriptParserRightShiftArithmeticAssign-46))|(1<<(JavaScriptParserRightShiftLogicalAssign-46))|(1<<(JavaScriptParserBitAndAssign-46))|(1<<(JavaScriptParserBitXorAssign-46))|(1<<(JavaScriptParserBitOrAssign-46))|(1<<(JavaScriptParserPowerAssign-46)))) != 0)) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -14400,56 +13580,56 @@ func (p *JavaScriptParser) Literal() (localctx ILiteralContext) {
 		}
 	}()
 
-	p.SetState(926)
+	p.SetState(887)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case JavaScriptParserNullLiteral:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(919)
+			p.SetState(880)
 			p.Match(JavaScriptParserNullLiteral)
 		}
 
 	case JavaScriptParserBooleanLiteral:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(920)
+			p.SetState(881)
 			p.Match(JavaScriptParserBooleanLiteral)
 		}
 
 	case JavaScriptParserStringLiteral:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(921)
+			p.SetState(882)
 			p.Match(JavaScriptParserStringLiteral)
 		}
 
 	case JavaScriptParserTemplateStringLiteral:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(922)
+			p.SetState(883)
 			p.Match(JavaScriptParserTemplateStringLiteral)
 		}
 
 	case JavaScriptParserRegularExpressionLiteral:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(923)
+			p.SetState(884)
 			p.Match(JavaScriptParserRegularExpressionLiteral)
 		}
 
 	case JavaScriptParserDecimalLiteral, JavaScriptParserHexIntegerLiteral, JavaScriptParserOctalIntegerLiteral, JavaScriptParserOctalIntegerLiteral2, JavaScriptParserBinaryIntegerLiteral:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(924)
+			p.SetState(885)
 			p.NumericLiteral()
 		}
 
 	case JavaScriptParserBigHexIntegerLiteral, JavaScriptParserBigOctalIntegerLiteral, JavaScriptParserBigBinaryIntegerLiteral, JavaScriptParserBigDecimalIntegerLiteral:
 		p.EnterOuterAlt(localctx, 7)
 		{
-			p.SetState(925)
+			p.SetState(886)
 			p.BigintLiteral()
 		}
 
@@ -14559,7 +13739,7 @@ func (p *JavaScriptParser) NumericLiteral() (localctx INumericLiteralContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(928)
+		p.SetState(889)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la-61)&-(0x1f+1)) == 0 && ((1<<uint((_la-61)))&((1<<(JavaScriptParserDecimalLiteral-61))|(1<<(JavaScriptParserHexIntegerLiteral-61))|(1<<(JavaScriptParserOctalIntegerLiteral-61))|(1<<(JavaScriptParserOctalIntegerLiteral2-61))|(1<<(JavaScriptParserBinaryIntegerLiteral-61)))) != 0) {
@@ -14668,7 +13848,7 @@ func (p *JavaScriptParser) BigintLiteral() (localctx IBigintLiteralContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(930)
+		p.SetState(891)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la-66)&-(0x1f+1)) == 0 && ((1<<uint((_la-66)))&((1<<(JavaScriptParserBigHexIntegerLiteral-66))|(1<<(JavaScriptParserBigOctalIntegerLiteral-66))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-66))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-66)))) != 0) {
@@ -14779,17 +13959,17 @@ func (p *JavaScriptParser) Getter() (localctx IGetterContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(932)
+	p.SetState(893)
 
 	if !(p.n("get")) {
 		panic(antlr.NewFailedPredicateException(p, "p.n(\"get\")", ""))
 	}
 	{
-		p.SetState(933)
+		p.SetState(894)
 		p.Identifier()
 	}
 	{
-		p.SetState(934)
+		p.SetState(895)
 		p.PropertyName()
 	}
 
@@ -14893,17 +14073,17 @@ func (p *JavaScriptParser) Setter() (localctx ISetterContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(936)
+	p.SetState(897)
 
 	if !(p.n("set")) {
 		panic(antlr.NewFailedPredicateException(p, "p.n(\"set\")", ""))
 	}
 	{
-		p.SetState(937)
+		p.SetState(898)
 		p.Identifier()
 	}
 	{
-		p.SetState(938)
+		p.SetState(899)
 		p.PropertyName()
 	}
 
@@ -15006,20 +14186,20 @@ func (p *JavaScriptParser) IdentifierName() (localctx IIdentifierNameContext) {
 		}
 	}()
 
-	p.SetState(942)
+	p.SetState(903)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 107, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(940)
+			p.SetState(901)
 			p.Identifier()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(941)
+			p.SetState(902)
 			p.ReservedWord()
 		}
 
@@ -15119,7 +14299,7 @@ func (p *JavaScriptParser) Identifier() (localctx IIdentifierContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(944)
+		p.SetState(905)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la-105)&-(0x1f+1)) == 0 && ((1<<uint((_la-105)))&((1<<(JavaScriptParserAsync-105))|(1<<(JavaScriptParserNonStrictLet-105))|(1<<(JavaScriptParserIdentifier-105)))) != 0) {
@@ -15227,28 +14407,28 @@ func (p *JavaScriptParser) ReservedWord() (localctx IReservedWordContext) {
 		}
 	}()
 
-	p.SetState(949)
+	p.SetState(910)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case JavaScriptParserBreak, JavaScriptParserDo, JavaScriptParserInstanceof, JavaScriptParserTypeof, JavaScriptParserCase, JavaScriptParserElse, JavaScriptParserNew, JavaScriptParserVar, JavaScriptParserCatch, JavaScriptParserFinally, JavaScriptParserReturn, JavaScriptParserVoid, JavaScriptParserContinue, JavaScriptParserFor, JavaScriptParserSwitch, JavaScriptParserWhile, JavaScriptParserDebugger, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserWith, JavaScriptParserDefault, JavaScriptParserIf, JavaScriptParserThrow, JavaScriptParserDelete, JavaScriptParserIn, JavaScriptParserTry, JavaScriptParserAs, JavaScriptParserFrom, JavaScriptParserClass, JavaScriptParserEnum, JavaScriptParserExtends, JavaScriptParserSuper, JavaScriptParserConst, JavaScriptParserExport, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserImplements, JavaScriptParserStrictLet, JavaScriptParserNonStrictLet, JavaScriptParserPrivate, JavaScriptParserPublic, JavaScriptParserInterface, JavaScriptParserPackage, JavaScriptParserProtected, JavaScriptParserStatic, JavaScriptParserYield:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(946)
+			p.SetState(907)
 			p.Keyword()
 		}
 
 	case JavaScriptParserNullLiteral:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(947)
+			p.SetState(908)
 			p.Match(JavaScriptParserNullLiteral)
 		}
 
 	case JavaScriptParserBooleanLiteral:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(948)
+			p.SetState(909)
 			p.Match(JavaScriptParserBooleanLiteral)
 		}
 
@@ -15525,329 +14705,329 @@ func (p *JavaScriptParser) Keyword() (localctx IKeywordContext) {
 		}
 	}()
 
-	p.SetState(997)
+	p.SetState(958)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case JavaScriptParserBreak:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(951)
+			p.SetState(912)
 			p.Match(JavaScriptParserBreak)
 		}
 
 	case JavaScriptParserDo:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(952)
+			p.SetState(913)
 			p.Match(JavaScriptParserDo)
 		}
 
 	case JavaScriptParserInstanceof:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(953)
+			p.SetState(914)
 			p.Match(JavaScriptParserInstanceof)
 		}
 
 	case JavaScriptParserTypeof:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(954)
+			p.SetState(915)
 			p.Match(JavaScriptParserTypeof)
 		}
 
 	case JavaScriptParserCase:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(955)
+			p.SetState(916)
 			p.Match(JavaScriptParserCase)
 		}
 
 	case JavaScriptParserElse:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(956)
+			p.SetState(917)
 			p.Match(JavaScriptParserElse)
 		}
 
 	case JavaScriptParserNew:
 		p.EnterOuterAlt(localctx, 7)
 		{
-			p.SetState(957)
+			p.SetState(918)
 			p.Match(JavaScriptParserNew)
 		}
 
 	case JavaScriptParserVar:
 		p.EnterOuterAlt(localctx, 8)
 		{
-			p.SetState(958)
+			p.SetState(919)
 			p.Match(JavaScriptParserVar)
 		}
 
 	case JavaScriptParserCatch:
 		p.EnterOuterAlt(localctx, 9)
 		{
-			p.SetState(959)
+			p.SetState(920)
 			p.Match(JavaScriptParserCatch)
 		}
 
 	case JavaScriptParserFinally:
 		p.EnterOuterAlt(localctx, 10)
 		{
-			p.SetState(960)
+			p.SetState(921)
 			p.Match(JavaScriptParserFinally)
 		}
 
 	case JavaScriptParserReturn:
 		p.EnterOuterAlt(localctx, 11)
 		{
-			p.SetState(961)
+			p.SetState(922)
 			p.Match(JavaScriptParserReturn)
 		}
 
 	case JavaScriptParserVoid:
 		p.EnterOuterAlt(localctx, 12)
 		{
-			p.SetState(962)
+			p.SetState(923)
 			p.Match(JavaScriptParserVoid)
 		}
 
 	case JavaScriptParserContinue:
 		p.EnterOuterAlt(localctx, 13)
 		{
-			p.SetState(963)
+			p.SetState(924)
 			p.Match(JavaScriptParserContinue)
 		}
 
 	case JavaScriptParserFor:
 		p.EnterOuterAlt(localctx, 14)
 		{
-			p.SetState(964)
+			p.SetState(925)
 			p.Match(JavaScriptParserFor)
 		}
 
 	case JavaScriptParserSwitch:
 		p.EnterOuterAlt(localctx, 15)
 		{
-			p.SetState(965)
+			p.SetState(926)
 			p.Match(JavaScriptParserSwitch)
 		}
 
 	case JavaScriptParserWhile:
 		p.EnterOuterAlt(localctx, 16)
 		{
-			p.SetState(966)
+			p.SetState(927)
 			p.Match(JavaScriptParserWhile)
 		}
 
 	case JavaScriptParserDebugger:
 		p.EnterOuterAlt(localctx, 17)
 		{
-			p.SetState(967)
+			p.SetState(928)
 			p.Match(JavaScriptParserDebugger)
 		}
 
 	case JavaScriptParserFunction:
 		p.EnterOuterAlt(localctx, 18)
 		{
-			p.SetState(968)
+			p.SetState(929)
 			p.Match(JavaScriptParserFunction)
 		}
 
 	case JavaScriptParserThis:
 		p.EnterOuterAlt(localctx, 19)
 		{
-			p.SetState(969)
+			p.SetState(930)
 			p.Match(JavaScriptParserThis)
 		}
 
 	case JavaScriptParserWith:
 		p.EnterOuterAlt(localctx, 20)
 		{
-			p.SetState(970)
+			p.SetState(931)
 			p.Match(JavaScriptParserWith)
 		}
 
 	case JavaScriptParserDefault:
 		p.EnterOuterAlt(localctx, 21)
 		{
-			p.SetState(971)
+			p.SetState(932)
 			p.Match(JavaScriptParserDefault)
 		}
 
 	case JavaScriptParserIf:
 		p.EnterOuterAlt(localctx, 22)
 		{
-			p.SetState(972)
+			p.SetState(933)
 			p.Match(JavaScriptParserIf)
 		}
 
 	case JavaScriptParserThrow:
 		p.EnterOuterAlt(localctx, 23)
 		{
-			p.SetState(973)
+			p.SetState(934)
 			p.Match(JavaScriptParserThrow)
 		}
 
 	case JavaScriptParserDelete:
 		p.EnterOuterAlt(localctx, 24)
 		{
-			p.SetState(974)
+			p.SetState(935)
 			p.Match(JavaScriptParserDelete)
 		}
 
 	case JavaScriptParserIn:
 		p.EnterOuterAlt(localctx, 25)
 		{
-			p.SetState(975)
+			p.SetState(936)
 			p.Match(JavaScriptParserIn)
 		}
 
 	case JavaScriptParserTry:
 		p.EnterOuterAlt(localctx, 26)
 		{
-			p.SetState(976)
+			p.SetState(937)
 			p.Match(JavaScriptParserTry)
 		}
 
 	case JavaScriptParserClass:
 		p.EnterOuterAlt(localctx, 27)
 		{
-			p.SetState(977)
+			p.SetState(938)
 			p.Match(JavaScriptParserClass)
 		}
 
 	case JavaScriptParserEnum:
 		p.EnterOuterAlt(localctx, 28)
 		{
-			p.SetState(978)
+			p.SetState(939)
 			p.Match(JavaScriptParserEnum)
 		}
 
 	case JavaScriptParserExtends:
 		p.EnterOuterAlt(localctx, 29)
 		{
-			p.SetState(979)
+			p.SetState(940)
 			p.Match(JavaScriptParserExtends)
 		}
 
 	case JavaScriptParserSuper:
 		p.EnterOuterAlt(localctx, 30)
 		{
-			p.SetState(980)
+			p.SetState(941)
 			p.Match(JavaScriptParserSuper)
 		}
 
 	case JavaScriptParserConst:
 		p.EnterOuterAlt(localctx, 31)
 		{
-			p.SetState(981)
+			p.SetState(942)
 			p.Match(JavaScriptParserConst)
 		}
 
 	case JavaScriptParserExport:
 		p.EnterOuterAlt(localctx, 32)
 		{
-			p.SetState(982)
+			p.SetState(943)
 			p.Match(JavaScriptParserExport)
 		}
 
 	case JavaScriptParserImport:
 		p.EnterOuterAlt(localctx, 33)
 		{
-			p.SetState(983)
+			p.SetState(944)
 			p.Match(JavaScriptParserImport)
 		}
 
 	case JavaScriptParserImplements:
 		p.EnterOuterAlt(localctx, 34)
 		{
-			p.SetState(984)
+			p.SetState(945)
 			p.Match(JavaScriptParserImplements)
 		}
 
 	case JavaScriptParserStrictLet, JavaScriptParserNonStrictLet:
 		p.EnterOuterAlt(localctx, 35)
 		{
-			p.SetState(985)
+			p.SetState(946)
 			p.Let_()
 		}
 
 	case JavaScriptParserPrivate:
 		p.EnterOuterAlt(localctx, 36)
 		{
-			p.SetState(986)
+			p.SetState(947)
 			p.Match(JavaScriptParserPrivate)
 		}
 
 	case JavaScriptParserPublic:
 		p.EnterOuterAlt(localctx, 37)
 		{
-			p.SetState(987)
+			p.SetState(948)
 			p.Match(JavaScriptParserPublic)
 		}
 
 	case JavaScriptParserInterface:
 		p.EnterOuterAlt(localctx, 38)
 		{
-			p.SetState(988)
+			p.SetState(949)
 			p.Match(JavaScriptParserInterface)
 		}
 
 	case JavaScriptParserPackage:
 		p.EnterOuterAlt(localctx, 39)
 		{
-			p.SetState(989)
+			p.SetState(950)
 			p.Match(JavaScriptParserPackage)
 		}
 
 	case JavaScriptParserProtected:
 		p.EnterOuterAlt(localctx, 40)
 		{
-			p.SetState(990)
+			p.SetState(951)
 			p.Match(JavaScriptParserProtected)
 		}
 
 	case JavaScriptParserStatic:
 		p.EnterOuterAlt(localctx, 41)
 		{
-			p.SetState(991)
+			p.SetState(952)
 			p.Match(JavaScriptParserStatic)
 		}
 
 	case JavaScriptParserYield:
 		p.EnterOuterAlt(localctx, 42)
 		{
-			p.SetState(992)
+			p.SetState(953)
 			p.Match(JavaScriptParserYield)
 		}
 
 	case JavaScriptParserAsync:
 		p.EnterOuterAlt(localctx, 43)
 		{
-			p.SetState(993)
+			p.SetState(954)
 			p.Match(JavaScriptParserAsync)
 		}
 
 	case JavaScriptParserAwait:
 		p.EnterOuterAlt(localctx, 44)
 		{
-			p.SetState(994)
+			p.SetState(955)
 			p.Match(JavaScriptParserAwait)
 		}
 
 	case JavaScriptParserFrom:
 		p.EnterOuterAlt(localctx, 45)
 		{
-			p.SetState(995)
+			p.SetState(956)
 			p.Match(JavaScriptParserFrom)
 		}
 
 	case JavaScriptParserAs:
 		p.EnterOuterAlt(localctx, 46)
 		{
-			p.SetState(996)
+			p.SetState(957)
 			p.Match(JavaScriptParserAs)
 		}
 
@@ -15945,7 +15125,7 @@ func (p *JavaScriptParser) Let_() (localctx ILet_Context) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(999)
+		p.SetState(960)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == JavaScriptParserStrictLet || _la == JavaScriptParserNonStrictLet) {
@@ -16043,26 +15223,26 @@ func (p *JavaScriptParser) Eos() (localctx IEosContext) {
 		}
 	}()
 
-	p.SetState(1005)
+	p.SetState(966)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 110, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(1001)
+			p.SetState(962)
 			p.Match(JavaScriptParserSemiColon)
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(1002)
+			p.SetState(963)
 			p.Match(JavaScriptParserEOF)
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
-		p.SetState(1003)
+		p.SetState(964)
 
 		if !(p.lineTerminatorAhead()) {
 			panic(antlr.NewFailedPredicateException(p, "p.lineTerminatorAhead()", ""))
@@ -16070,7 +15250,7 @@ func (p *JavaScriptParser) Eos() (localctx IEosContext) {
 
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
-		p.SetState(1004)
+		p.SetState(965)
 
 		if !(p.closeBrace()) {
 			panic(antlr.NewFailedPredicateException(p, "p.closeBrace()", ""))
@@ -16255,78 +15435,39 @@ func (p *JavaScriptParser) ClassElement_Sempred(localctx antlr.RuleContext, pred
 func (p *JavaScriptParser) SingleExpression_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
 	case 8:
-		return p.Precpred(p.GetParserRuleContext(), 27)
-
-	case 9:
-		return p.Precpred(p.GetParserRuleContext(), 26)
-
-	case 10:
-		return p.Precpred(p.GetParserRuleContext(), 25)
-
-	case 11:
-		return p.Precpred(p.GetParserRuleContext(), 24)
-
-	case 12:
-		return p.Precpred(p.GetParserRuleContext(), 23)
-
-	case 13:
-		return p.Precpred(p.GetParserRuleContext(), 22)
-
-	case 14:
-		return p.Precpred(p.GetParserRuleContext(), 21)
-
-	case 15:
-		return p.Precpred(p.GetParserRuleContext(), 20)
-
-	case 16:
-		return p.Precpred(p.GetParserRuleContext(), 19)
-
-	case 17:
-		return p.Precpred(p.GetParserRuleContext(), 18)
-
-	case 18:
-		return p.Precpred(p.GetParserRuleContext(), 17)
-
-	case 19:
-		return p.Precpred(p.GetParserRuleContext(), 16)
-
-	case 20:
-		return p.Precpred(p.GetParserRuleContext(), 15)
-
-	case 21:
 		return p.Precpred(p.GetParserRuleContext(), 14)
 
-	case 22:
+	case 9:
 		return p.Precpred(p.GetParserRuleContext(), 13)
 
-	case 23:
+	case 10:
 		return p.Precpred(p.GetParserRuleContext(), 12)
 
-	case 24:
+	case 11:
 		return p.Precpred(p.GetParserRuleContext(), 11)
 
-	case 25:
-		return p.Precpred(p.GetParserRuleContext(), 44)
+	case 12:
+		return p.Precpred(p.GetParserRuleContext(), 31)
 
-	case 26:
-		return p.Precpred(p.GetParserRuleContext(), 43)
+	case 13:
+		return p.Precpred(p.GetParserRuleContext(), 30)
 
-	case 27:
-		return p.Precpred(p.GetParserRuleContext(), 42)
+	case 14:
+		return p.Precpred(p.GetParserRuleContext(), 29)
 
-	case 28:
-		return p.Precpred(p.GetParserRuleContext(), 39)
+	case 15:
+		return p.Precpred(p.GetParserRuleContext(), 26)
 
-	case 29:
+	case 16:
 		return p.notLineTerminator()
 
-	case 30:
-		return p.Precpred(p.GetParserRuleContext(), 38)
+	case 17:
+		return p.Precpred(p.GetParserRuleContext(), 25)
 
-	case 31:
+	case 18:
 		return p.notLineTerminator()
 
-	case 32:
+	case 19:
 		return p.Precpred(p.GetParserRuleContext(), 9)
 
 	default:
@@ -16336,7 +15477,7 @@ func (p *JavaScriptParser) SingleExpression_Sempred(localctx antlr.RuleContext, 
 
 func (p *JavaScriptParser) Getter_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
-	case 33:
+	case 20:
 		return p.n("get")
 
 	default:
@@ -16346,7 +15487,7 @@ func (p *JavaScriptParser) Getter_Sempred(localctx antlr.RuleContext, predIndex 
 
 func (p *JavaScriptParser) Setter_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
-	case 34:
+	case 21:
 		return p.n("set")
 
 	default:
@@ -16356,10 +15497,10 @@ func (p *JavaScriptParser) Setter_Sempred(localctx antlr.RuleContext, predIndex 
 
 func (p *JavaScriptParser) Eos_Sempred(localctx antlr.RuleContext, predIndex int) bool {
 	switch predIndex {
-	case 35:
+	case 22:
 		return p.lineTerminatorAhead()
 
-	case 36:
+	case 23:
 		return p.closeBrace()
 
 	default:

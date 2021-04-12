@@ -34,10 +34,12 @@ type visitor struct {
 	// any visitor methods we don't add are called on BaseJavaScriptParserVisitor which are no-ops essentially -> nil
 	parser.BaseJavaScriptParserVisitor
 	// todo:  syntax errors with line/col ...
-	errors  []string
-	nodes   []VNode
+	errors []string
+	// all nodes
+	Nodes []VNode
+	// maybe split into just interesting types.
 	Imports []VNode
-	Expr    []VNode
+	Expr    []*Expression
 }
 
 func (v *visitor) VisitIdentifier(ctx *parser.IdentifierContext) interface{} {
@@ -116,9 +118,20 @@ func (v *visitor) shouldVisitNextChild(node antlr.RuleNode, currentResult interf
 	return true
 }
 
+// ugly but dealign with interfcaes all over
 func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
-	// probably much better way...
+	var result interface{}
+	switch node.(type) {
+	case *parser.ExpressionSequenceContext:
+		result = []*Expression{}
+	case *parser.ImportStatementContext:
+		result = []*ImportDeclaration{}
+	default:
+		result = []VNode{}
+
+	}
+
 	for _, ch := range node.GetChildren() {
 		// todo: handle this EOF/;
 		if ef, ok := ch.(*parser.EosContext); ok {
@@ -126,23 +139,23 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 			_ = ef
 			continue
 		}
-		switch rr := ch.(antlr.ParseTree).Accept(v).(type) {
-
-		case *parser.EosContext:
-			log.Println(rr.GetText())
+		res := ch.(antlr.ParseTree).Accept(v)
+		switch rr := res.(type) {
 		case *Expression:
-			v.Expr = append(v.Expr, rr)
-		// store full import nodes
+			result = append(result.([]*Expression), rr)
 		case *ImportDeclaration:
-			v.Imports = append(v.Imports, rr)
+			result = append(result.([]*ImportDeclaration), rr)
 		case VNode:
-			// could add all parts...
+			result = append(result.([]VNode), rr)
+
+			// default:
+			// 	log.Println(rr)
 
 		}
 
 	}
 
-	return nil
+	return result
 
 }
 
