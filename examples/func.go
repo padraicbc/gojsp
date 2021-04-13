@@ -2,6 +2,14 @@ package main
 
 import "github.com/padraicbc/gojsp/parser"
 
+// interface Function <: Node {
+//     id: Identifier | null;
+//     params: [ Pattern ];
+//     body: FunctionBody;
+// }
+type Function struct {
+}
+
 func (v *visitor) VisitArrowFunction(ctx *parser.ArrowFunctionContext) interface{} {
 
 	return v.VisitChildren(ctx)

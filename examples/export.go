@@ -1,21 +1,124 @@
 package main
 
-import "github.com/padraicbc/gojsp/parser"
+import (
+	"log"
 
-func (v *visitor) VisitExportDeclaration(ctx *parser.ExportDeclarationContext) interface{} {
-	// v.nodes = append(v.nodes, getSourceInfo(*ctx.BaseParserRuleContext))
+	"github.com/padraicbc/gojsp/parser"
+)
 
-	// log.Println("VisitExportDeclaration", ctx.GetText())
-	return v.VisitChildren(ctx)
+// declaration
+//     : variableStatement
+//     | classDeclaration
+//     | functionDeclaration
+//     ;
+type Declaration struct {
+	*SourceInfo
+	// always one of 3 above
+	Children []VNode
+}
+
+var _ VNode = (*Declaration)(nil)
+
+func (i *Declaration) Type() string {
+	return "Declaration"
+}
+func (i *Declaration) Code() string {
+	return CodeDef(i)
+}
+func (i *Declaration) GetChildren() []VNode {
+	return i.Children
 }
 
 func (v *visitor) VisitExportDefaultDeclaration(ctx *parser.ExportDefaultDeclarationContext) interface{} {
-	// v.nodes = append(v.nodes, getSourceInfo(ctx))
 	// log.Println("VisitExportDefaultDeclaration", ctx.GetText())
-	return v.VisitChildren(ctx)
+
+	return &Declaration{
+		Children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 }
 
+type ExportFromBlock struct {
+	*SourceInfo
+	Children []VNode
+	// todo: use thse or children?
+	// one of thse 2
+	ImportNamespace *ImportNamespace
+	ModulesItems    *ModulesItems
+	// always with ImportNamespace optional wirh moduleitems
+	ImportFrom *ImportFrom
+	// always this
+	Path *ImportFrom
+}
+
+var _ VNode = (*ExportFromBlock)(nil)
+
+func (i *ExportFromBlock) Type() string {
+	return "ExportFromBlock"
+}
+func (i *ExportFromBlock) Code() string {
+	return CodeDef(i)
+}
+func (i *ExportFromBlock) GetChildren() []VNode {
+	return nil
+}
+
+// exportFromBlock
+//     : importNamespace importFrom eos
+//     | moduleItems importFrom? eos
+//     ;
 func (v *visitor) VisitExportFromBlock(ctx *parser.ExportFromBlockContext) interface{} {
-	// log.Println("VisitExportFromBlock", ctx.GetText())
-	return v.VisitChildren(ctx)
+	log.Println("VisitExportFromBlock", ctx.GetText())
+	ef := &ExportFromBlock{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		switch rr := ch.(type) {
+
+		case *ImportNamespace:
+			ef.ImportNamespace = rr
+		case *ModulesItems:
+			ef.ModulesItems = rr
+		case *ImportFrom:
+			ef.Path = rr
+		}
+	}
+
+	return ef
+}
+
+type ExportStatement struct {
+	*SourceInfo
+	Children []VNode
+	Export   string
+
+	// todo: use thse or children?
+	// ExportFromBlock  *ExportFromBlock
+	// Declaration      *Declaration
+	// ModulesItems     *ModulesItems
+	// Default          string
+	// SingleExpression string
+}
+
+var _ VNode = (*ExportStatement)(nil)
+
+func (i *ExportStatement) Type() string {
+	return "ExportStatement"
+}
+func (i *ExportStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *ExportStatement) GetChildren() []VNode {
+	return i.Children
+}
+
+// exportStatement
+//     : Export (exportFromBlock | declaration) eos    # ExportDeclaration
+//     | Export Default singleExpression eos           # ExportDefaultDeclaration
+//     ;
+func (v *visitor) VisitExportDeclaration(ctx *parser.ExportDeclarationContext) interface{} {
+
+	return &ExportStatement{
+		Children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
 }

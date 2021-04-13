@@ -12,7 +12,7 @@ package main
 
 // type listener struct {
 // 	gojsp.BaseJavaScriptParserListener
-// 	imports map[string]*ImportDeclaration
+// 	imports map[string]*ImportFromBlock
 // }
 
 // func show(fname, text string) {

@@ -10,7 +10,7 @@ import (
 
 type ExpressionSequence struct {
 	typeOf   string
-	Children []*Expression
+	Children []*ExpressionStatement
 	VNode
 }
 
@@ -25,7 +25,18 @@ func (e *ExpressionSequence) Code() string {
 	return str.String()
 }
 
-type Expression struct {
+type ThisExpression struct {
+	typeOf string
+}
+
+// interface ExpressionStatement <: Statement {
+//     type: "ExpressionStatement";
+//     expression: Expression;
+// }
+
+// An expression statement, i.e., a statement consisting of a single expression.
+
+type ExpressionStatement struct {
 	*SourceInfo
 	OP          string
 	Left, Right string
@@ -33,13 +44,13 @@ type Expression struct {
 	VNode
 }
 
-func (e *Expression) GetInfo() *SourceInfo {
+func (e *ExpressionStatement) GetInfo() *SourceInfo {
 	return e.SourceInfo
 }
-func (e *Expression) Type() string {
+func (e *ExpressionStatement) Type() string {
 	return e.typeOf
 }
-func (i *Expression) Code() string {
+func (i *ExpressionStatement) Code() string {
 	if i == nil {
 		return ""
 	}
@@ -74,7 +85,7 @@ func (v *visitor) VisitLeftRightExpression(ctx *parser.LeftRightExpressionContex
 		panic(ctx.OP.GetText())
 
 	}
-	return &Expression{
+	return &ExpressionStatement{
 		OP:         ctx.OP.GetText(),
 		Left:       ctx.Left.GetText(),
 		Right:      ctx.SingleExpression(1).GetText(),
@@ -83,19 +94,19 @@ func (v *visitor) VisitLeftRightExpression(ctx *parser.LeftRightExpressionContex
 }
 
 func (v *visitor) VisitExpressionSequence(ctx *parser.ExpressionSequenceContext) interface{} {
-	log.Println("VisitExpressionSequence", ctx.GetText())
-	v.Nodes = append(v.Nodes, &ExpressionSequence{typeOf: "ExpressionSequence", Children: v.VisitChildren(ctx).([]*Expression)})
-	return nil
+	// log.Println("VisitExpressionSequence", ctx.GetText())
+	return v.VisitChildren(ctx)
 
 }
 func (v *visitor) VisitAssignmentExpression(ctx *parser.AssignmentExpressionContext) interface{} {
 	log.Println("VisitAssignmentExpression", ctx.OP.GetText())
 
-	return &Expression{
+	return &ExpressionStatement{
 		OP:         ctx.OP.GetText(),
 		Left:       ctx.Left.GetText(),
 		Right:      ctx.SingleExpression(1).GetText(),
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext), typeOf: "AssignmentExpression"}
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+		typeOf:     "AssignmentExpression"}
 
 }
 func (v *visitor) VisitIdentifierExpression(ctx *parser.IdentifierExpressionContext) interface{} {

@@ -8,25 +8,6 @@ import (
 	"github.com/padraicbc/gojsp/parser"
 )
 
-// maybe better just having maybe a "GetNode" and return that, forgetting all other methods...
-type VNode interface {
-	Code() string
-	GetInfo() *SourceInfo
-	Type() string
-	// maybe just store children and forget child type fields...
-	// Children() []VNode
-}
-
-type SourceInfo struct {
-	Start, End, Line int
-	Source           string
-	Children         []VNode
-}
-
-func (s *SourceInfo) GetInfo() *SourceInfo {
-	return s
-}
-
 // need pointer receiver for methods...
 type visitor struct {
 	// any methods not implemented to satisfy JavaScriptParserVisitor checks in Accept...
@@ -34,12 +15,9 @@ type visitor struct {
 	// any visitor methods we don't add are called on BaseJavaScriptParserVisitor which are no-ops essentially -> nil
 	parser.BaseJavaScriptParserVisitor
 	// todo:  syntax errors with line/col ...
-	errors []string
-	// all nodes
-	Nodes []VNode
-	// maybe split into just interesting types.
-	Imports []VNode
-	Expr    []*Expression
+	// errors []string
+
+	ParseTree *PTree
 }
 
 func (v *visitor) VisitIdentifier(ctx *parser.IdentifierContext) interface{} {
@@ -65,36 +43,6 @@ func (v *visitor) aggregateResult(aggregate interface{}, nextResult interface{})
 	return nextResult
 }
 
-func (v *visitor) VisitProgram(ctx *parser.ProgramContext) interface{} {
-
-	// sourceElements as called when .Program() is used...
-	return ctx.GetChild(0).(antlr.ParserRuleContext).Accept(v)
-
-}
-
-// Visit(tree ParseTree) interface{}
-// VisitChildren(node RuleNode) interface{}
-// VisitTerminal(node TerminalNode) interface{}
-// VisitErrorNode(node ErrorNode) interface{}
-func (v *visitor) VisitSourceElement(ctx *parser.SourceElementContext) interface{} {
-	// log.Println("VisitSourceElement", ctx.GetText(), ctx.GetChildCount())
-	return v.VisitChildren(ctx)
-
-}
-func (v *visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
-	// log.Println("VisitStatement", ctx.GetText())
-	return v.VisitChildren(ctx)
-}
-
-func (v *visitor) VisitStatementList(ctx *parser.StatementListContext) interface{} {
-	log.Println("VisitStatementList", ctx)
-	return v.VisitChildren(ctx)
-}
-func (v *visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
-	log.Println("VisitBlock", ctx)
-	return v.VisitChildren(ctx)
-}
-
 // public T visit(ParseTree tree)
 // Visit a parse tree, and return a user-defined result of the operation.
 // The default implementation calls ParseTree.accept(org.antlr.v4.runtime.tree.ParseTreeVisitor<? extends T>) on the specified tree.
@@ -118,35 +66,30 @@ func (v *visitor) shouldVisitNextChild(node antlr.RuleNode, currentResult interf
 	return true
 }
 
-// ugly but dealign with interfcaes all over
+// todo: forget this and implement method to return []VNode specifically
 func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
-	var result interface{}
-	switch node.(type) {
-	case *parser.ExpressionSequenceContext:
-		result = []*Expression{}
-	case *parser.ImportStatementContext:
-		result = []*ImportDeclaration{}
-	default:
-		result = []VNode{}
-
-	}
+	var result []VNode
 
 	for _, ch := range node.GetChildren() {
 		// todo: handle this EOF/;
 		if ef, ok := ch.(*parser.EosContext); ok {
 			// log.Println(ef)
 			_ = ef
-			continue
+			// result.Eos = ef.GetText()
+			break
 		}
+
 		res := ch.(antlr.ParseTree).Accept(v)
 		switch rr := res.(type) {
-		case *Expression:
-			result = append(result.([]*Expression), rr)
-		case *ImportDeclaration:
-			result = append(result.([]*ImportDeclaration), rr)
+		// case *Expression:
+		// 	result = append(result.([]*Expression), rr)
+		// case *ImportFromBlock:
+		// 	result = append(result.([]*ImportFromBlock), rr)
 		case VNode:
-			result = append(result.([]VNode), rr)
+
+			result = append(result, rr)
+			// v.ParseTree.LastChild.Children = append(v.ParseTree.LastChild.Children, rr)
 
 			// default:
 			// 	log.Println(rr)
