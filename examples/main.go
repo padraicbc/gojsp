@@ -217,7 +217,9 @@ func visitChildren(v VNode) {
 		case "ImportFromBlock":
 			log.Printf("%+v\n", nn.(*ImportFromBlock).ImportFrom.Path)
 		case "ExportFromBlock":
-			log.Printf("%+v\n", nn.(*ExportFromBlock).ModulesItems.Children[0])
+			for _, c := range nn.(*ExportFromBlock).ModulesItems.AliasNames {
+				log.Println(c.IdentifierName)
+			}
 		default:
 			// log.Printf("%+v\n", nn.Type())
 		}

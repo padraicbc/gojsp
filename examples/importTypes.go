@@ -2,14 +2,14 @@ package main
 
 // ** Not sure if pointer receivers are better or not. Means checkign for nil a lot more
 // but does allow easily manipulating struct values...**
-// ImportFromBlock
 
 // importStatement
 //     : Import importFromBlock
 //     ;
 type ImportStatement struct {
 	*SourceInfo
-
+	// one child *ImportFromBlock
+	ImportFromBlock *ImportFromBlock
 	// one child *ImportFromBlock
 	Children []VNode //
 }
@@ -116,7 +116,7 @@ func (i *AliasName) Type() string {
 	return "AliasName"
 }
 func (i *AliasName) GetChildren() []VNode {
-	return i.Children
+	return nil
 }
 
 // moduleItems
@@ -124,7 +124,8 @@ func (i *AliasName) GetChildren() []VNode {
 //     ;
 type ModulesItems struct {
 	*SourceInfo
-
+	AliasNames []*AliasName
+	// always AliasName(s)
 	Children []VNode //
 }
 

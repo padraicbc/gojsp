@@ -82,8 +82,8 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 		res := ch.(antlr.ParseTree).Accept(v)
 		switch rr := res.(type) {
-		// case *Expression:
-		// 	result = append(result.([]*Expression), rr)
+		// case *AliasName:
+		// 	log.Println(rr)
 		// case *ImportFromBlock:
 		// 	result = append(result.([]*ImportFromBlock), rr)
 		case VNode:

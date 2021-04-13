@@ -6,10 +6,12 @@ import (
 
 func (v *visitor) VisitImportStatement(ctx *parser.ImportStatementContext) interface{} {
 
-	return &ImportStatement{
+	im := &ImportStatement{
 		Children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
+	im.ImportFromBlock = im.Children[0].(*ImportFromBlock)
+	return im
 
 }
 
@@ -51,9 +53,14 @@ func (v *visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) int
 func (v *visitor) VisitModuleItems(ctx *parser.ModuleItemsContext) interface{} {
 
 	// . ctx.OpenBrace().GetText() ctx.CloseBrace().GetText()?
-	return &ModulesItems{
+	m := &ModulesItems{
 		Children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
+	for _, ch := range m.Children {
+		m.AliasNames = append(m.AliasNames, ch.(*AliasName))
+	}
+	return m
 }
 func (v *visitor) VisitImportDefault(ctx *parser.ImportDefaultContext) interface{} {
 
@@ -95,10 +102,10 @@ func (v *visitor) VisitImportFrom(ctx *parser.ImportFromContext) interface{} {
 //     : identifierName (As identifierName)?
 //     ;
 func (v *visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
-	// log.Println("VisitAliasName", ctx.GetChildCount(), ctx.GetText())
+
 	a := &AliasName{
-		Children:   v.VisitChildren(ctx).([]VNode),
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+		IdentifierName: ctx.IdentifierName(0).GetText(),
+		SourceInfo:     getSourceInfo(*ctx.BaseParserRuleContext)}
 	if as := ctx.As(); as != nil {
 		a.Alias = ctx.IdentifierName(1).GetText()
 		a.IdentifierName = ctx.IdentifierName(0).GetText()

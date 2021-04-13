@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	antlr "github.com/padraicbc/antlr4"
 	"github.com/padraicbc/gojsp/parser"
 )
 
@@ -77,6 +78,7 @@ func (v *visitor) VisitExportFromBlock(ctx *parser.ExportFromBlockContext) inter
 		case *ImportNamespace:
 			ef.ImportNamespace = rr
 		case *ModulesItems:
+
 			ef.ModulesItems = rr
 		case *ImportFrom:
 			ef.Path = rr
@@ -92,11 +94,11 @@ type ExportStatement struct {
 	Export   string
 
 	// todo: use thse or children?
-	// ExportFromBlock  *ExportFromBlock
-	// Declaration      *Declaration
-	// ModulesItems     *ModulesItems
-	// Default          string
-	// SingleExpression string
+	ExportFromBlock  *ExportFromBlock
+	Declaration      *Declaration
+	ModulesItems     *ModulesItems
+	Default          string
+	SingleExpression string
 }
 
 var _ VNode = (*ExportStatement)(nil)
@@ -117,8 +119,26 @@ func (i *ExportStatement) GetChildren() []VNode {
 //     ;
 func (v *visitor) VisitExportDeclaration(ctx *parser.ExportDeclarationContext) interface{} {
 
-	return &ExportStatement{
+	es := &ExportStatement{
+		Export:     ctx.GetChild(0).(*antlr.TerminalNodeImpl).GetText(),
 		Children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	if se, ok := ctx.GetChild(1).(*antlr.TerminalNodeImpl); ok {
+		es.SingleExpression = se.GetText()
+	}
+
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		switch rr := ch.(type) {
+
+		case *ExportFromBlock:
+			es.ExportFromBlock = rr
+		case *Declaration:
+			es.Declaration = rr
+		case *ModulesItems:
+			es.ModulesItems = rr
+
+		}
+	}
+	return es
 
 }
