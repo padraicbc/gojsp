@@ -18,12 +18,10 @@ type visitor struct {
 	// errors []string
 
 	ParseTree *PTree
+	lexer     *parser.JavaScriptLexer
+	parser    *parser.JavaScriptParser
 }
 
-func (v *visitor) VisitIdentifier(ctx *parser.IdentifierContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
 func (v *visitor) VisitAssignable(ctx *parser.AssignableContext) interface{} {
 	// log.Println("VisitAssignable", ctx.GetText())
 
@@ -72,27 +70,25 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 	var result []VNode
 
 	for _, ch := range node.GetChildren() {
-		// todo: handle this EOF/;
-		if ef, ok := ch.(*parser.EosContext); ok {
-			// log.Println(ef)
-			_ = ef
-			// result.Eos = ef.GetText()
-			break
-		}
 
 		res := ch.(antlr.ParseTree).Accept(v)
 		switch rr := res.(type) {
-		// case *AliasName:
-		// 	log.Println(rr)
-		// case *ImportFromBlock:
-		// 	result = append(result.([]*ImportFromBlock), rr)
+
+		case *LToken:
+			rr.rn = v.parser.GetRuleNames()[node.GetRuleContext().GetRuleIndex()]
+			result = append(result, rr)
 		case VNode:
 
 			result = append(result, rr)
-			// v.ParseTree.LastChild.Children = append(v.ParseTree.LastChild.Children, rr)
+		case []VNode:
+			result = append(result, rr...)
 
-			// default:
-			// 	log.Println(rr)
+		case nil:
+			panic(rr)
+
+		default:
+			// SourceElement
+			// log.Println(reflect.TypeOf(rr), rr)
 
 		}
 
@@ -102,10 +98,6 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 }
 
-// not a token
-func (v *visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
-	return node.GetText()
-}
 func (v *visitor) VisitErrorNode(node antlr.ErrorNode) interface{} {
 	log.Println(node)
 	return nil
@@ -122,7 +114,7 @@ func (v *visitor) VisitVariableStatement(ctx *parser.VariableStatementContext) i
 
 // special case for $: ... todo: a type
 func (v *visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) interface{} {
-	log.Println("VisitLabelledStatement", ctx.GetText())
+	// log.Println("VisitLabelledStatement", ctx.GetText())
 
 	if ctx.Identifier().GetText() == "$" {
 		log.Println("Reactive?")
@@ -229,11 +221,6 @@ func (v *visitor) VisitFunctionExpression(ctx *parser.FunctionExpressionContext)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitIdentifierName(ctx *parser.IdentifierNameContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
 func (v *visitor) VisitParenthesizedExpression(ctx *parser.ParenthesizedExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
@@ -261,12 +248,21 @@ func (v *visitor) VisitAwaitExpression(ctx *parser.AwaitExpressionContext) inter
 
 	return v.VisitChildren(ctx)
 }
-func (v *visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContext) interface{} {
 
+// variableDeclaration
+//     : assignable ('=' singleExpression)? // ECMAScript 6: Array & Object Matching
+//     ;
+func (v *visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContext) interface{} {
+	// log.Println(ctx.SingleExpression().GetText(), ctx.Assignable().GetText())
 	return v.VisitChildren(ctx)
 }
-func (v *visitor) VisitLet_(ctx *parser.Let_Context) interface{} {
-	return v.VisitChildren(ctx)
+
+// variableDeclarationList
+//     : varModifier variableDeclaration (',' variableDeclaration)*
+//     ;
+
+type VariableDeclarationList struct {
+	VarModifier *Token // var, let, const
 }
 
 func (v *visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationListContext) interface{} {
@@ -277,3 +273,34 @@ func (v *visitor) VisitVarModifier(ctx *parser.VarModifierContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
+
+// not a token
+func (v *visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
+
+	return ident(v, node.GetSymbol())
+
+}
+
+func ident(v *visitor, token antlr.Token) *LToken {
+
+	start, end := token.GetStart(), token.GetStop()+1
+	return &LToken{
+		sn:    v.lexer.SymbolicNames[token.GetTokenType()],
+		value: token.GetText(),
+		SourceInfo: &SourceInfo{
+			Line:   token.GetLine(),
+			Column: token.GetColumn(),
+			Start:  start,
+			End:    end,
+			Source: token.GetInputStream().GetTextFromInterval(
+				&antlr.Interval{
+					Start: start,
+					Stop:  end,
+				}),
+		},
+	}
+}
+
+// func (v *BaseJavaScriptParserVisitor) VisitAssignmentOperator(ctx *AssignmentOperatorContext) interface{} {
+// 	return v.VisitChildren(ctx)
+// }

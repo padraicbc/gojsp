@@ -1,23 +1,62 @@
 package main
 
-// interface Identifier <: Expression, Pattern {
-//     type: "Identifier";
-//     name: string;
-// }
+import (
+	"github.com/padraicbc/gojsp/parser"
+)
 
-// An identifier. Note that an identifier may be an expression or a destructuring pattern.
-type Identifier struct {
-	Expression
+// identifierName
+//     : identifier
+//     | reservedWord
+//     ;
+
+func (v *visitor) VisitIdentifierName(ctx *parser.IdentifierNameContext) interface{} {
+	// log.Println("VisitIdentifierName", ctx.GetText())
+	//
+	// Maybe just return &IdentifierName ctx.Identifier()...
+	return v.VisitChildren(ctx)
+
 }
 
-// Any expression node.
-// Since the left-hand side of an assignment may be any expression in general, an expression can also be a pattern.
-type Expression struct {
+// token has line/col info and the actual value.
+// Parent will have type
+type Token interface {
 	VNode
-}
-type Literal struct {
-	typeOf string
-	Value  interface{} //string | boolean | null | number | RegExp;
+	RName() string
+	SymbolName() string
 }
 
-// A literal token. Note that a literal can be an expression.
+func (v *visitor) VisitKeyword(ctx *parser.KeywordContext) interface{} {
+	return v.VisitChildren(ctx)
+
+}
+
+// reservedWord
+//     : keyword
+//     | NullLiteral
+//     | BooleanLiteral
+//     ;
+func (v *visitor) VisitReservedWord(ctx *parser.ReservedWordContext) interface{} {
+	// log.Println("VisitReservedWord", ctx.Keyword().GetText())
+
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitEos(ctx *parser.EosContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+
+func (v *visitor) VisitIdentifierExpression(ctx *parser.IdentifierExpressionContext) interface{} {
+	// log.Println("VisitIdentifierExpression", ctx.GetText())
+	return v.VisitChildren(ctx)
+}
+
+// identifier
+//     : Identifier
+//     | Async
+//     ;
+func (v *visitor) VisitIdentifier(ctx *parser.IdentifierContext) interface{} {
+	// log.Println("VisitIdentifier", ctx.GetText(), ctx.GetChildCount())
+	// VisitChildren would return the same inside a list but we don't need it
+	return v.VisitChildren(ctx)
+}

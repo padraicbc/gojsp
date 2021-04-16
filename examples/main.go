@@ -146,15 +146,18 @@ func labeledStatementRecurLoop() {
 }
 func impexp() {
 	stream := antlr.NewInputStream(`
+	import foo as name from "star-module-name";
 	import defaultExport from "default-module-name";
-import * as name from "star-module-name";
-import { export1 } from "exp1-module-name";
-export { name1, name2, nameN };
-$: {
+	import { export1 , export2 as alias} from "module-name";
+// import * as name from "star-module-name";
+// import { export1 } from "exp1-module-name";
+// export { name1, name2, nameN };
+// let a = 123;
+// $: {
 	
-	let foo = 123;
+// 	let foo = 123;
 		
-}
+// }
 // import { export1 as alias1 } from "module-name";
 // import { export1 , export2 } from "module-name";
 // import { foo , bar } from "module-name/path/to/specific/un-exported/file";
@@ -190,41 +193,29 @@ $: {
 
 	p := parser.NewJavaScriptParser(tokenStream)
 	// all
-	tree := p.Program()
+	tree := p.ImportStatement()
 
 	v := new(visitor)
-	visit(tree, v)
-	for sn := range v.ParseTree.NextNodes() {
-
-		// log.Println(n.Code())
-
-		for _, nn := range sn.Children {
-
-			visitChildren(nn)
-
-		}
-	}
-
-	// log.Println(n.Code())
+	v.BaseJavaScriptParserVisitor.VisitChildren = v.VisitChildren
+	v.lexer = lexer
+	v.parser = p
+	log.Println(visit(tree, v).([]VNode)[0].(Token).RName())
+	log.Println(v)
 
 }
 func visitChildren(v VNode) {
 	if v == nil {
 		return
 	}
+
 	for _, nn := range v.GetChildren() {
-		switch nn.Type() {
-		case "ImportFromBlock":
-			log.Printf("%+v\n", nn.(*ImportFromBlock).ImportFrom.Path)
-		case "ExportFromBlock":
-			for _, c := range nn.(*ExportFromBlock).ModulesItems.AliasNames {
-				log.Println(c.IdentifierName)
-			}
-		default:
-			// log.Printf("%+v\n", nn.Type())
-		}
-		log.Println(nn.Type(), nn.GetChildren())
-		visitChildren(nn)
+		log.Println(nn.Type())
+		// if nn.Type() == "ImportFromBlock" {
+		// 	for _, nn := range nn.GetChildren() {
+		// 		log.Printf("% s%+v\n", nn.Type(), nn)
+		// 	}
+
+		// }
 
 	}
 }

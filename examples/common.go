@@ -8,10 +8,11 @@ import (
 
 // just pulls original source code info
 func getSourceInfo(ctx antlr.BaseParserRuleContext) *SourceInfo {
-
-	return &SourceInfo{Line: ctx.GetStart().GetLine(), Start: ctx.GetStart().GetStart(), End: ctx.GetStop().GetStart(),
+	start, end := ctx.GetStart().GetStart(), ctx.GetStop().GetStop()+1
+	return &SourceInfo{Line: ctx.GetStart().GetLine(), Start: start, End: end,
+		Column: ctx.GetStart().GetColumn(),
 		Source: ctx.GetStart().GetInputStream().GetTextFromInterval(&antlr.Interval{
-			Start: ctx.GetStart().GetStart(), Stop: ctx.GetStop().GetStop() + 1})}
+			Start: start, Stop: end})}
 
 }
 
@@ -33,7 +34,7 @@ func (i *BaseDefaultVNode) Type() string {
 	return "BaseDefaultVNode"
 }
 func (i *BaseDefaultVNode) Code() string {
-	return ""
+	return CodeDef(i)
 }
 func (i *BaseDefaultVNode) GetInfo() *SourceInfo {
 	return nil
@@ -58,8 +59,8 @@ func CodeDef(t VNode) string {
 }
 
 type SourceInfo struct {
-	Start, End, Line int
-	Source           string
+	Start, End, Line, Column int
+	Source                   string
 }
 
 func (s *SourceInfo) GetInfo() *SourceInfo {
@@ -73,9 +74,13 @@ type PTree struct {
 
 func (p *PTree) NextNodes() chan *SourceElement {
 
+	if p == nil {
+		panic("p cannot be nil")
+
+	}
 	nodes := make(chan *SourceElement)
-	next := p.Root
 	go func() {
+		next := p.Root
 		for next != nil {
 			nodes <- next
 			next = next.Next
@@ -90,4 +95,44 @@ type SourceElement struct {
 	// VNodes have their own next/prev. Can visit all children from here
 	Children   []VNode
 	Prev, Next *SourceElement
+	FirstChild VNode
+}
+
+// An identifier. Note that an identifier may be an expression or a destructuring pattern.
+
+type LToken struct {
+	value string
+	*SourceInfo
+	// From, StringLiteral...
+	sn string
+	// reservedWord...
+	rn string
+
+	// SymbolName string
+}
+
+var _ Token = (*LToken)(nil)
+
+func (i *LToken) Value() string {
+	return i.value
+}
+func (i *LToken) SymbolName() string {
+	return i.sn
+}
+func (i *LToken) Code() string {
+	return i.value
+}
+func (i *LToken) RName() string {
+	return i.rn
+}
+
+// keyword, reservedword, identifier
+func (i *LToken) Type() string {
+	return "Token"
+}
+func (i *LToken) GetInfo() *SourceInfo {
+	return i.SourceInfo
+}
+func (i *LToken) GetChildren() []VNode {
+	return nil
 }

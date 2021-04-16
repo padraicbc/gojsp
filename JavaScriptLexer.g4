@@ -168,17 +168,18 @@ Await:                          'await';
 
 /// The following tokens are also considered to be FutureReservedWords
 /// when parsing strict mode
+// I removed  {l.IsStrictMode()}?. Just presume all is strict mode...s
 
-Implements:                     'implements' {l.IsStrictMode()}?;
-StrictLet:                      'let' {l.IsStrictMode()}?;
-NonStrictLet:                   'let' {!l.IsStrictMode()}?;
-Private:                        'private' {l.IsStrictMode()}?;
-Public:                         'public' {l.IsStrictMode()}?;
-Interface:                      'interface' {l.IsStrictMode()}?;
-Package:                        'package' {l.IsStrictMode()}?;
-Protected:                      'protected' {l.IsStrictMode()}?;
-Static:                         'static' {l.IsStrictMode()}?;
-Yield:                          'yield' {l.IsStrictMode()}?;
+Implements:                     'implements';
+Let:                      'let';
+
+Private:                        'private';
+Public:                         'public';
+Interface:                      'interface';
+Package:                        'package';
+Protected:                      'protected';
+Static:                         'static';
+Yield:                          'yield';
 
 /// Identifier Names and Identifiers
 

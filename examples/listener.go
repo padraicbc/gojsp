@@ -28,7 +28,7 @@ package main
 // }
 
 // // VisitTerminal is called when a terminal node is visited.
-// func (s *listener) VisitTerminal(node antlr.TerminalNode) {
+// func (s *listener) VisitTerminal(node antlr.Identifier) {
 // 	// log.Println(node)
 // }
 

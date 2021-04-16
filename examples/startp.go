@@ -14,7 +14,7 @@ func (v *visitor) VisitProgram(ctx *parser.ProgramContext) interface{} {
 
 // Visit(tree ParseTree) interface{}
 // VisitChildren(node RuleNode) interface{}
-// VisitTerminal(node TerminalNode) interface{}
+// VisitTerminal(node Identifier) interface{}
 // VisitErrorNode(node ErrorNode) interface{}
 func (v *visitor) VisitSourceElement(ctx *parser.SourceElementContext) interface{} {
 	// log.Println("VisitSourceElement", ctx.GetText(), ctx.GetChildCount())
@@ -22,7 +22,7 @@ func (v *visitor) VisitSourceElement(ctx *parser.SourceElementContext) interface
 		Children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
-
+	s.FirstChild = s.Children[0]
 	if v.ParseTree != nil {
 		lst := v.ParseTree.LastChild
 		lst.Next = s

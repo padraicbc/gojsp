@@ -140,7 +140,7 @@ expressionStatement
     ;
 
 ifStatement
-    : If '(' expressionSequence ')' statement (Else statement)?
+    : If '(' Test=expressionSequence ')' Consequent=statement (Else Alternate=statement)?
     ;
 
 
@@ -155,7 +155,7 @@ iterationStatement
 
 varModifier  // let, const - ECMAScript 6
     : Var
-    | let_
+    | Let
     | Const
     ;
 
@@ -426,7 +426,6 @@ identifierName
 
 identifier
     : Identifier
-    | NonStrictLet
     | Async
     ;
 
@@ -472,7 +471,7 @@ keyword
     | Export
     | Import
     | Implements
-    | let_
+    | Let
     | Private
     | Public
     | Interface
@@ -486,10 +485,6 @@ keyword
     | As
     ;
 
-let_
-    : NonStrictLet
-    | StrictLet
-    ;
 
 eos
     : SemiColon

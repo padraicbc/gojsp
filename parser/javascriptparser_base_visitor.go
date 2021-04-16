@@ -6,6 +6,7 @@ import antlr "github.com/padraicbc/antlr4"
 
 type BaseJavaScriptParserVisitor struct {
 	*antlr.BaseParseTreeVisitor
+	VisitChildren func(antlr.RuleNode) interface{}
 }
 
 func (v *BaseJavaScriptParserVisitor) VisitProgram(ctx *ProgramContext) interface{} {
@@ -473,10 +474,6 @@ func (v *BaseJavaScriptParserVisitor) VisitReservedWord(ctx *ReservedWordContext
 }
 
 func (v *BaseJavaScriptParserVisitor) VisitKeyword(ctx *KeywordContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitLet_(ctx *Let_Context) interface{} {
 	return v.VisitChildren(ctx)
 }
 

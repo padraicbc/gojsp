@@ -359,9 +359,6 @@ type JavaScriptParserVisitor interface {
 	// Visit a parse tree produced by JavaScriptParser#keyword.
 	VisitKeyword(ctx *KeywordContext) interface{}
 
-	// Visit a parse tree produced by JavaScriptParser#let_.
-	VisitLet_(ctx *Let_Context) interface{}
-
 	// Visit a parse tree produced by JavaScriptParser#eos.
 	VisitEos(ctx *EosContext) interface{}
 }
