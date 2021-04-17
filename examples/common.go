@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"runtime"
 	"strings"
 
 	antlr "github.com/padraicbc/antlr4"
@@ -16,12 +18,19 @@ func getSourceInfo(ctx antlr.BaseParserRuleContext) *SourceInfo {
 
 }
 
-// maybe better just having maybe a "GetNode" and return that, forgetting all other methods...
+// maybe SourceInfo should just be on "Tokens" as each token has it's own positioning?
 type VNode interface {
 	Code() string
 	GetInfo() *SourceInfo
 	Type() string
 	GetChildren() []VNode
+}
+
+func debug(v VNode) {
+	_, file, line, ok := runtime.Caller(1)
+	if ok {
+		fmt.Printf("%s:%d %s %+v\n", file, line, v.Type(), v)
+	}
 }
 
 // just to make life easier for implementing.
@@ -44,17 +53,20 @@ func (i *BaseDefaultVNode) GetChildren() []VNode {
 }
 
 func CodeDef(t VNode) string {
+
 	if t == nil {
 		return ""
 	}
+
 	var c []string
 	for _, n := range t.GetChildren() {
-
-		c = append(c, n.Code())
+		if n != nil {
+			c = append(c, n.Code())
+		}
 
 	}
 
-	return strings.Join(c, " ")
+	return strings.Join(c, "")
 
 }
 
@@ -99,6 +111,13 @@ type SourceElement struct {
 }
 
 // An identifier. Note that an identifier may be an expression or a destructuring pattern.
+// token has line/col info and the actual value.
+// Parent will have type
+type Token interface {
+	VNode
+	RName() string
+	SymbolName() string
+}
 
 type LToken struct {
 	value string
@@ -112,6 +131,7 @@ type LToken struct {
 }
 
 var _ Token = (*LToken)(nil)
+var _ VNode = (*LToken)(nil)
 
 func (i *LToken) Value() string {
 	return i.value
@@ -125,14 +145,14 @@ func (i *LToken) Code() string {
 func (i *LToken) RName() string {
 	return i.rn
 }
+func (i *LToken) GetChildren() []VNode {
+	return nil
+}
 
 // keyword, reservedword, identifier
 func (i *LToken) Type() string {
-	return "Token"
+	return "LToken"
 }
 func (i *LToken) GetInfo() *SourceInfo {
 	return i.SourceInfo
-}
-func (i *LToken) GetChildren() []VNode {
-	return nil
 }

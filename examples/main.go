@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	antlr "github.com/padraicbc/antlr4"
@@ -146,18 +147,21 @@ func labeledStatementRecurLoop() {
 }
 func impexp() {
 	stream := antlr.NewInputStream(`
-	import foo as name from "star-module-name";
+// 	// import foo as name from "star-module-name";
 	import defaultExport from "default-module-name";
-	import { export1 , export2 as alias} from "module-name";
+	import defaultname, { export1 , export2 as alias} from "module-name";
+// 	import "module-name";
+
+// var promise = import("module-name");
 // import * as name from "star-module-name";
 // import { export1 } from "exp1-module-name";
 // export { name1, name2, nameN };
 // let a = 123;
-// $: {
+$: {
 	
-// 	let foo = 123;
+	let foo = 123;
 		
-// }
+}
 // import { export1 as alias1 } from "module-name";
 // import { export1 , export2 } from "module-name";
 // import { foo , bar } from "module-name/path/to/specific/un-exported/file";
@@ -193,29 +197,23 @@ func impexp() {
 
 	p := parser.NewJavaScriptParser(tokenStream)
 	// all
-	tree := p.ImportStatement()
+	tree := p.SourceElements()
 
 	v := new(visitor)
 	v.BaseJavaScriptParserVisitor.VisitChildren = v.VisitChildren
 	v.lexer = lexer
 	v.parser = p
-	log.Println(visit(tree, v).([]VNode)[0].(Token).RName())
-	log.Println(v)
+	log.Println(visit(tree, v))
+	// sourceElement
+	// : statement
+	// ;
+	// each  -> statement
+	for se := range v.ParseTree.NextNodes() {
+		for _, st := range se.Children {
+			fmt.Println(st.(*Statement).Children[0].Type())
+			fmt.Println(st.(*Statement).Children[0].GetInfo().Source)
 
-}
-func visitChildren(v VNode) {
-	if v == nil {
-		return
+		}
 	}
 
-	for _, nn := range v.GetChildren() {
-		log.Println(nn.Type())
-		// if nn.Type() == "ImportFromBlock" {
-		// 	for _, nn := range nn.GetChildren() {
-		// 		log.Printf("% s%+v\n", nn.Type(), nn)
-		// 	}
-
-		// }
-
-	}
 }

@@ -4,6 +4,28 @@ import (
 	"github.com/padraicbc/gojsp/parser"
 )
 
+type IdentifierName struct {
+	*SourceInfo
+	Identifier Token
+}
+
+var _ VNode = (*IdentifierName)(nil)
+
+func (i *IdentifierName) Code() string {
+	return CodeDef(i)
+}
+
+func (i *IdentifierName) Type() string {
+	return "IdentifierName"
+}
+
+func (i *IdentifierName) GetChildren() []VNode {
+	if i == nil {
+		return nil
+	}
+	return []VNode{i.Identifier}
+}
+
 // identifierName
 //     : identifier
 //     | reservedWord
@@ -12,17 +34,10 @@ import (
 func (v *visitor) VisitIdentifierName(ctx *parser.IdentifierNameContext) interface{} {
 	// log.Println("VisitIdentifierName", ctx.GetText())
 	//
-	// Maybe just return &IdentifierName ctx.Identifier()...
+
 	return v.VisitChildren(ctx)
+	// Maybe just return &IdentifierName ctx.Identifier()...
 
-}
-
-// token has line/col info and the actual value.
-// Parent will have type
-type Token interface {
-	VNode
-	RName() string
-	SymbolName() string
 }
 
 func (v *visitor) VisitKeyword(ctx *parser.KeywordContext) interface{} {
@@ -42,10 +57,11 @@ func (v *visitor) VisitReservedWord(ctx *parser.ReservedWordContext) interface{}
 }
 
 func (v *visitor) VisitEos(ctx *parser.EosContext) interface{} {
-
+	if ctx.GetChildCount() == 0 {
+		return nil
+	}
 	return v.VisitChildren(ctx)
 }
-
 func (v *visitor) VisitIdentifierExpression(ctx *parser.IdentifierExpressionContext) interface{} {
 	// log.Println("VisitIdentifierExpression", ctx.GetText())
 	return v.VisitChildren(ctx)

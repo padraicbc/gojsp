@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"reflect"
 
 	antlr "github.com/padraicbc/antlr4"
 
@@ -78,17 +79,16 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 			rr.rn = v.parser.GetRuleNames()[node.GetRuleContext().GetRuleIndex()]
 			result = append(result, rr)
 		case VNode:
-
 			result = append(result, rr)
 		case []VNode:
 			result = append(result, rr...)
-
 		case nil:
 			panic(rr)
+		case *SourceElement:
 
 		default:
-			// SourceElement
-			// log.Println(reflect.TypeOf(rr), rr)
+
+			panic(reflect.TypeOf(rr))
 
 		}
 
@@ -109,17 +109,6 @@ func (v *visitor) VisitDeclaration(ctx *parser.DeclarationContext) interface{} {
 
 func (v *visitor) VisitVariableStatement(ctx *parser.VariableStatementContext) interface{} {
 	// log.Println("VisitVariableStatement", ctx.GetText())
-	return v.VisitChildren(ctx)
-}
-
-// special case for $: ... todo: a type
-func (v *visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) interface{} {
-	// log.Println("VisitLabelledStatement", ctx.GetText())
-
-	if ctx.Identifier().GetText() == "$" {
-		log.Println("Reactive?")
-
-	}
 	return v.VisitChildren(ctx)
 }
 
