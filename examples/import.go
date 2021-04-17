@@ -131,8 +131,9 @@ func (i *ImportExpression) GetChildren() []VNode {
 //     ;
 type ModuleItems struct {
 	*SourceInfo
-	// always AliasName(s)
+	// always AliasName(s) not sure of any nice way dynamically add so 1-n so juyst using a slice of them
 	AliasNames []*AliasName
+	Commas     []Token
 	OpenBrace  Token
 	CloseBrace Token
 }
@@ -152,7 +153,15 @@ func (m *ModuleItems) GetChildren() []VNode {
 	if m == nil {
 		return nil
 	}
-	return []VNode{m.OpenBrace, m.CloseBrace}
+	nd := []VNode{m.OpenBrace}
+	for i, al := range m.AliasNames {
+		nd = append(nd, al)
+		if i > 0 {
+			nd = append(nd, m.Commas[i-1])
+		}
+
+	}
+	return append(nd, m.CloseBrace)
 }
 
 // importNamespace
@@ -200,9 +209,9 @@ func (i *ImportDefault) Code() string {
 	return CodeDef(i)
 }
 func (i *ImportDefault) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+	// if i == nil {
+	// 	return nil
+	// }
 	return []VNode{i.Default, i.Comma}
 }
 
@@ -271,9 +280,9 @@ func (v *visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) int
 }
 
 func (v *visitor) VisitModuleItems(ctx *parser.ModuleItemsContext) interface{} {
+
 	mit := &ModuleItems{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		// log.Println(ch.Type(), ch.Code())
 		switch ch.Type() {
 		case "AliasName":
 			mit.AliasNames = append(mit.AliasNames, ch.(*AliasName))
@@ -285,7 +294,13 @@ func (v *visitor) VisitModuleItems(ctx *parser.ModuleItemsContext) interface{} {
 			}
 			if t.SymbolName() == "CloseBrace" {
 				mit.CloseBrace = t
+				continue
 			}
+			if t.SymbolName() == "Comma" {
+				mit.Commas = append(mit.Commas, t)
+				continue
+			}
+			panic(t.SymbolName())
 
 		default:
 
@@ -363,6 +378,7 @@ type AliasName struct {
 	IdentifierName Token
 	Alias          Token
 	As             Token
+	Comma          Token
 }
 
 var _ VNode = (*AliasName)(nil)
@@ -383,6 +399,7 @@ func (i *AliasName) GetChildren() []VNode {
 
 func (v *visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
 	al := &AliasName{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
 	for i, ch := range v.VisitChildren(ctx).([]VNode) {
 		t := ch.(Token)
 		switch t.SymbolName() {

@@ -210,7 +210,7 @@ $: {
 	// each  -> statement
 	for se := range v.ParseTree.NextNodes() {
 		for _, st := range se.Children {
-			fmt.Println(st.(*Statement).Children[0].Type())
+			fmt.Println(st.(*Statement).Children[0].Code())
 			fmt.Println(st.(*Statement).Children[0].GetInfo().Source)
 
 		}

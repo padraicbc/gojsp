@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"runtime"
 	"strings"
 
@@ -60,7 +61,8 @@ func CodeDef(t VNode) string {
 
 	var c []string
 	for _, n := range t.GetChildren() {
-		if n != nil {
+		// ugly but zero value is not nil, this will change or be remove completely
+		if reflect.ValueOf(n).Kind() == reflect.Ptr && !reflect.ValueOf(n).IsNil() {
 			c = append(c, n.Code())
 		}
 
