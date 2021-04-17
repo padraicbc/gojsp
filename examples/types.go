@@ -20,9 +20,7 @@ func (i *IdentifierName) Type() string {
 }
 
 func (i *IdentifierName) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+
 	return []VNode{i.Identifier}
 }
 
@@ -57,7 +55,7 @@ func (v *visitor) VisitReservedWord(ctx *parser.ReservedWordContext) interface{}
 }
 
 func (v *visitor) VisitEos(ctx *parser.EosContext) interface{} {
-	if ctx.GetChildCount() == 0 {
+	if ctx.GetChildCount() == 0 || ctx.EOF() != nil {
 		return nil
 	}
 	return v.VisitChildren(ctx)

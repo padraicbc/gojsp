@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/padraicbc/gojsp/parser"
 )
 
@@ -13,7 +11,7 @@ import (
 //     ;
 
 func (v *visitor) VisitExportDefaultDeclaration(ctx *parser.ExportDefaultDeclarationContext) interface{} {
-	log.Println("VisitExportDefaultDeclaration", ctx.GetText())
+	// log.Println("VisitExportDefaultDeclaration", ctx.GetText())
 
 	return v.VisitChildren(ctx)
 }

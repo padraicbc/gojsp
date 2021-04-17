@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/padraicbc/gojsp/parser"
 )
@@ -30,9 +29,7 @@ func (i *ImportStatement) Code() string {
 }
 
 func (i *ImportStatement) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+
 	return []VNode{i.Import, i.ImportFromBlock}
 }
 
@@ -60,9 +57,7 @@ func (i *ImportFromBlock) Code() string {
 }
 
 func (i *ImportFromBlock) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+
 	return []VNode{
 		i.Default,
 		i.ModuleItems,
@@ -94,9 +89,7 @@ func (i *ImportFrom) Code() string {
 }
 
 func (i *ImportFrom) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+
 	return []VNode{i.From, i.Path}
 }
 
@@ -120,9 +113,7 @@ func (i *ImportExpression) Type() string {
 }
 
 func (i *ImportExpression) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+
 	return []VNode{i.Import, i.OpenParen, i.Module, i.CloseParen}
 }
 
@@ -185,9 +176,7 @@ func (i *ImportNamespace) Type() string {
 }
 
 func (i *ImportNamespace) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+
 	return []VNode{i.Star, i.IdentifierName, i.AliasName, i.As}
 }
 
@@ -257,7 +246,7 @@ func (v *visitor) VisitImportFromBlock(ctx *parser.ImportFromBlockContext) inter
 
 //  Import '(' singleExpression ')' || Import "whatever"
 func (v *visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) interface{} {
-	log.Println("VisitImportExpression", ctx.GetText())
+	// log.Println("VisitImportExpression", ctx.GetText())
 	ime := &ImportExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	// alwyas tokens
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
@@ -341,6 +330,8 @@ func (v *visitor) VisitImportNamespace(ctx *parser.ImportNamespaceContext) inter
 			}
 		case "As":
 			imn.As = t
+		case "Multiply":
+			imn.Star = t
 
 		default:
 			panic(fmt.Sprintf("%+v\n", ch))
@@ -391,9 +382,7 @@ func (i *AliasName) Type() string {
 }
 
 func (i *AliasName) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+
 	return []VNode{i.IdentifierName, i.As, i.Alias}
 }
 

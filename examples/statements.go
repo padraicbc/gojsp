@@ -73,9 +73,7 @@ func (i *LabeledStatement) Code() string {
 	return CodeDef(i)
 }
 func (i *LabeledStatement) GetChildren() []VNode {
-	if i == nil {
-		return nil
-	}
+
 	return []VNode{i.Label, i.Colon, i.Statement}
 }
 

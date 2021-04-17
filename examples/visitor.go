@@ -23,12 +23,6 @@ type visitor struct {
 	parser    *parser.JavaScriptParser
 }
 
-func (v *visitor) VisitAssignable(ctx *parser.AssignableContext) interface{} {
-	// log.Println("VisitAssignable", ctx.GetText())
-
-	return v.VisitChildren(ctx)
-}
-
 func (v *visitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 
 	return v.VisitChildren(ctx)
@@ -83,7 +77,7 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 		case []VNode:
 			result = append(result, rr...)
 		case nil:
-			panic(rr)
+			// panic(rr)
 		case *SourceElement:
 
 		default:
@@ -103,8 +97,11 @@ func (v *visitor) VisitErrorNode(node antlr.ErrorNode) interface{} {
 	return nil
 }
 
-func (v *visitor) VisitDeclaration(ctx *parser.DeclarationContext) interface{} {
-	return v.VisitChildren(ctx)
+// variableStatement
+//     : variableDeclarationList eos
+//     ;
+type VariableStatement struct {
+	*SourceInfo
 }
 
 func (v *visitor) VisitVariableStatement(ctx *parser.VariableStatementContext) interface{} {
@@ -112,21 +109,35 @@ func (v *visitor) VisitVariableStatement(ctx *parser.VariableStatementContext) i
 	return v.VisitChildren(ctx)
 }
 
+// functionDeclaration
+//     : Async? Function '*'? identifier '(' formalParameterList? ')' functionBody
+//     ;
 func (v *visitor) VisitFunctionDeclaration(ctx *parser.FunctionDeclarationContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
+// classDeclaration
+//     : Class identifier classTail
+//     ;
 func (v *visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
+// classTail
+//     : (Extends singleExpression)? '{' classElement* '}'
+//     ;
 func (v *visitor) VisitClassTail(ctx *parser.ClassTailContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
+// classElement
+//     : (Static | {p.n("static")}? identifier | Async)* (methodDefinition | assignable '=' objectLiteral ';')
+//     | emptyStatement_
+//     | '#'? propertyName '=' singleExpression
+//     ;
 func (v *visitor) VisitClassElement(ctx *parser.ClassElementContext) interface{} {
 
 	return v.VisitChildren(ctx)
@@ -153,21 +164,6 @@ func (v *visitor) VisitLastFormalParameterArg(ctx *parser.LastFormalParameterArg
 }
 
 func (v *visitor) VisitFunctionBody(ctx *parser.FunctionBodyContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *visitor) VisitArrayLiteral(ctx *parser.ArrayLiteralContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *visitor) VisitElementList(ctx *parser.ElementListContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *visitor) VisitArrayElement(ctx *parser.ArrayElementContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
@@ -238,31 +234,6 @@ func (v *visitor) VisitAwaitExpression(ctx *parser.AwaitExpressionContext) inter
 	return v.VisitChildren(ctx)
 }
 
-// variableDeclaration
-//     : assignable ('=' singleExpression)? // ECMAScript 6: Array & Object Matching
-//     ;
-func (v *visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContext) interface{} {
-	// log.Println(ctx.SingleExpression().GetText(), ctx.Assignable().GetText())
-	return v.VisitChildren(ctx)
-}
-
-// variableDeclarationList
-//     : varModifier variableDeclaration (',' variableDeclaration)*
-//     ;
-
-type VariableDeclarationList struct {
-	VarModifier *Token // var, let, const
-}
-
-func (v *visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationListContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-func (v *visitor) VisitVarModifier(ctx *parser.VarModifierContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
 // not a token
 func (v *visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
 
@@ -273,6 +244,7 @@ func (v *visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
 func ident(v *visitor, token antlr.Token) *LToken {
 
 	start, end := token.GetStart(), token.GetStop()+1
+
 	return &LToken{
 		sn:    v.lexer.SymbolicNames[token.GetTokenType()],
 		value: token.GetText(),
