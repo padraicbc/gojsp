@@ -46,7 +46,7 @@ package main
 // 	line, start := impf.GetStart().GetLine(), ctx.GetStart().GetStart()
 
 // 	if impf != nil {
-// 		for _, ch := range impf.GetChildren() {
+// 		for _, ch := range impf.Children() {
 // 			switch vv := ch.(type) {
 // 			case *parser.ImportDefaultContext:
 // 				fmt.Println("\tImportDefaultContext", vv.GetText())

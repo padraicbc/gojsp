@@ -10,7 +10,7 @@ import (
 //     | functionDeclaration
 //     ;
 
-func (v *visitor) VisitExportDefaultDeclaration(ctx *parser.ExportDefaultDeclarationContext) interface{} {
+func (v *Visitor) VisitExportDefaultDeclaration(ctx *parser.ExportDefaultDeclarationContext) interface{} {
 	// log.Println("VisitExportDefaultDeclaration", ctx.GetText())
 
 	return v.VisitChildren(ctx)
@@ -20,7 +20,7 @@ func (v *visitor) VisitExportDefaultDeclaration(ctx *parser.ExportDefaultDeclara
 //     : importNamespace importFrom eos
 //     | moduleItems importFrom? eos
 //     ;
-func (v *visitor) VisitExportFromBlock(ctx *parser.ExportFromBlockContext) interface{} {
+func (v *Visitor) VisitExportFromBlock(ctx *parser.ExportFromBlockContext) interface{} {
 	// log.Println("VisitExportFromBlock", ctx.GetText())
 
 	return v.VisitChildren(ctx)
@@ -30,7 +30,7 @@ func (v *visitor) VisitExportFromBlock(ctx *parser.ExportFromBlockContext) inter
 //     : Export (exportFromBlock | declaration) eos    # ExportDeclaration
 //     | Export Default singleExpression eos           # ExportDefaultDeclaration
 //     ;
-func (v *visitor) VisitExportDeclaration(ctx *parser.ExportDeclarationContext) interface{} {
+func (v *Visitor) VisitExportDeclaration(ctx *parser.ExportDeclarationContext) interface{} {
 
 	return v.VisitChildren(ctx)
 

@@ -7,10 +7,25 @@ import (
 type IdentifierName struct {
 	*SourceInfo
 	Identifier Token
+	prev, next VNode
 }
 
 var _ VNode = (*IdentifierName)(nil)
 
+func (i *IdentifierName) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *IdentifierName) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *IdentifierName) Code() string {
 	return CodeDef(i)
 }
@@ -19,7 +34,7 @@ func (i *IdentifierName) Type() string {
 	return "IdentifierName"
 }
 
-func (i *IdentifierName) GetChildren() []VNode {
+func (i *IdentifierName) Children() []VNode {
 
 	return []VNode{i.Identifier}
 }
@@ -29,7 +44,7 @@ func (i *IdentifierName) GetChildren() []VNode {
 //     | reservedWord
 //     ;
 
-func (v *visitor) VisitIdentifierName(ctx *parser.IdentifierNameContext) interface{} {
+func (v *Visitor) VisitIdentifierName(ctx *parser.IdentifierNameContext) interface{} {
 	// log.Println("VisitIdentifierName", ctx.GetText())
 	//
 
@@ -38,7 +53,7 @@ func (v *visitor) VisitIdentifierName(ctx *parser.IdentifierNameContext) interfa
 
 }
 
-func (v *visitor) VisitKeyword(ctx *parser.KeywordContext) interface{} {
+func (v *Visitor) VisitKeyword(ctx *parser.KeywordContext) interface{} {
 	return v.VisitChildren(ctx)
 
 }
@@ -48,19 +63,19 @@ func (v *visitor) VisitKeyword(ctx *parser.KeywordContext) interface{} {
 //     | NullLiteral
 //     | BooleanLiteral
 //     ;
-func (v *visitor) VisitReservedWord(ctx *parser.ReservedWordContext) interface{} {
+func (v *Visitor) VisitReservedWord(ctx *parser.ReservedWordContext) interface{} {
 	// log.Println("VisitReservedWord", ctx.Keyword().GetText())
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitEos(ctx *parser.EosContext) interface{} {
+func (v *Visitor) VisitEos(ctx *parser.EosContext) interface{} {
 	if ctx.GetChildCount() == 0 || ctx.EOF() != nil {
 		return nil
 	}
 	return v.VisitChildren(ctx)
 }
-func (v *visitor) VisitIdentifierExpression(ctx *parser.IdentifierExpressionContext) interface{} {
+func (v *Visitor) VisitIdentifierExpression(ctx *parser.IdentifierExpressionContext) interface{} {
 	// log.Println("VisitIdentifierExpression", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
@@ -69,7 +84,7 @@ func (v *visitor) VisitIdentifierExpression(ctx *parser.IdentifierExpressionCont
 //     : Identifier
 //     | Async
 //     ;
-func (v *visitor) VisitIdentifier(ctx *parser.IdentifierContext) interface{} {
+func (v *Visitor) VisitIdentifier(ctx *parser.IdentifierContext) interface{} {
 	// log.Println("VisitIdentifier", ctx.GetText(), ctx.GetChildCount())
 	// VisitChildren would return the same inside a list but we don't need it
 	return v.VisitChildren(ctx)

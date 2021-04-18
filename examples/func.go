@@ -10,27 +10,27 @@ import "github.com/padraicbc/gojsp/parser"
 type Function struct {
 }
 
-func (v *visitor) VisitArrowFunction(ctx *parser.ArrowFunctionContext) interface{} {
+func (v *Visitor) VisitArrowFunction(ctx *parser.ArrowFunctionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitArrowFunctionParameters(ctx *parser.ArrowFunctionParametersContext) interface{} {
+func (v *Visitor) VisitArrowFunctionParameters(ctx *parser.ArrowFunctionParametersContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitArrowFunctionBody(ctx *parser.ArrowFunctionBodyContext) interface{} {
+func (v *Visitor) VisitArrowFunctionBody(ctx *parser.ArrowFunctionBodyContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFunctionDecl(ctx *parser.FunctionDeclContext) interface{} {
+func (v *Visitor) VisitFunctionDecl(ctx *parser.FunctionDeclContext) interface{} {
 	// log.Println(ctx)
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitAnoymousFunctionDecl(ctx *parser.AnoymousFunctionDeclContext) interface{} {
+func (v *Visitor) VisitAnoymousFunctionDecl(ctx *parser.AnoymousFunctionDeclContext) interface{} {
 	// log.Println("VisitAnoymousFunctionDecl", ctx.FunctionBody().GetText())
 	return v.VisitChildren(ctx)
 }

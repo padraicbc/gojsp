@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	antlr "github.com/padraicbc/antlr4"
@@ -18,11 +17,6 @@ func main() {
 func antv() {
 
 	impexp()
-	// multAddExp()
-	// singleExp()
-	// seqExp()
-	// labeledStatementOK()
-	// labeledStatementRecurLoop()
 
 }
 
@@ -31,123 +25,15 @@ func antv() {
 // 	pr.Walk(&listener{}, tree)
 
 // }
-func visit(tree antlr.ParseTree, v *visitor) interface{} {
+func visit(tree antlr.ParseTree, v *Visitor) interface{} {
 
 	return v.Visit(tree)
 
 }
-func singleExp() {
 
-	// single exp
-	stream := antlr.NewInputStream(`i + j;`)
-	lexer := parser.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := parser.NewJavaScriptParser(tokenStream)
-
-	tree := p.ExpressionStatement()
-	v := new(visitor)
-	v.Visit(tree)
-	// visit(tree, v)
-
-	// exp := v.Nodes[0].(*ExpressionSequence).Children[0]
-
-	// log.Println("Single -> ", exp.Left, exp.OP, exp.Right)
-}
-func seqExp() {
-
-	// single exp
-	stream := antlr.NewInputStream(`i + j, h + o;`)
-	lexer := parser.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := parser.NewJavaScriptParser(tokenStream)
-
-	tree := p.ExpressionStatement()
-	v := new(visitor)
-
-	visit(tree, v)
-	// for _, exp := range v.Expr {
-	// 	log.Println("Sequence -> ", exp.Left, exp.OP, exp.Right, exp.Source)
-	// }
-}
-func multAddExp() {
-
-	stream := antlr.NewInputStream(`4 / 8
-4 % 8
-4 -8
-4 =8
-4 * 8`)
-	// Create the js L exer
-	lexer := parser.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := parser.NewJavaScriptParser(tokenStream)
-	// all
-	tree := p.Program()
-
-	v := new(visitor)
-	visit(tree, v)
-
-	// for _, v := range v.Expr {
-	// 	log.Println(v.Type())
-	// 	log.Println(v.GetInfo().Source)
-	// 	log.Println(v.Code())
-	// 	v.Left = "100"
-	// 	log.Println(v.Code())
-
-	// }
-
-}
-func labeledStatementOK() {
-	stream := antlr.NewInputStream(`
-	export let title;
-
-
-	$: document.title = title;
-
-	$: {
-		console.log("multiple statements can be combined");
-		console.log("the current title is ${title}"");
-	}
-	`)
-	// Create the js L exer
-	lexer := parser.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := parser.NewJavaScriptParser(tokenStream)
-	// all
-	v := new(visitor)
-	tree := p.Program()
-	visit(tree, v)
-}
-
-// {} blows the stack. Think it came from mixing listeners and visitors... maybe ..
-func labeledStatementRecurLoop() {
-
-	stream := antlr.NewInputStream(`
-	$: {
-		
-	 }
-	`)
-	// Create the js L exer
-	lexer := parser.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := parser.NewJavaScriptParser(tokenStream)
-	// all
-	v := new(visitor)
-	tree := p.Program()
-	visit(tree, v)
-}
 func impexp() {
 	stream := antlr.NewInputStream(`
-// 	// import foo as name from "star-module-name";
+   import foo as name from "star-module-name";
 	import defaultExport from "default-module-name";
 	import defaultname, { export1 , export2 as alias} from "module-name";
 // 	import "module-name";
@@ -197,23 +83,40 @@ export default function () { } // also class, function*
 
 	p := parser.NewJavaScriptParser(tokenStream)
 	// all
-	tree := p.SourceElements()
+	tree := p.Program()
 
-	v := new(visitor)
-	v.BaseJavaScriptParserVisitor.VisitChildren = v.VisitChildren
+	v := NewVisitor(lexer, p)
 	v.lexer = lexer
 	v.parser = p
-	log.Println(visit(tree, v))
+	for _, ch := range visit(tree, v).(*Program).Children() {
+		_ = ch
+		// log.Println(ch.Type())
+	}
 	// sourceElement
 	// : statement
 	// ;
 	// each  -> statement
 	for se := range v.ParseTree.NextNodes() {
-		for _, st := range se.Children {
-			fmt.Println(st.(*Statement).Children[0].Code(), st.(*Statement).Children[0].Type())
-			fmt.Println(st.(*Statement).Children[0].GetInfo().Source)
+		// Statements at top
+		for _, st := range se.Children() {
+			log.Println(st.Type())
+			vch(st)
+			log.Println()
 
 		}
 	}
 
+}
+
+func vch(v VNode) {
+
+	for _, ch := range v.Children() {
+		if ch == nil {
+			return
+		}
+
+		log.Println(ch.Type(), ch.Code(), ch.GetInfo().Start, ch.GetInfo().End)
+		vch(ch)
+
+	}
 }

@@ -6,52 +6,52 @@ import (
 	"github.com/padraicbc/gojsp/parser"
 )
 
-func (v *visitor) VisitPropertyExpressionAssignment(ctx *parser.PropertyExpressionAssignmentContext) interface{} {
+func (v *Visitor) VisitPropertyExpressionAssignment(ctx *parser.PropertyExpressionAssignmentContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitComputedPropertyExpressionAssignment(ctx *parser.ComputedPropertyExpressionAssignmentContext) interface{} {
+func (v *Visitor) VisitComputedPropertyExpressionAssignment(ctx *parser.ComputedPropertyExpressionAssignmentContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitExpressionStatement(ctx *parser.ExpressionStatementContext) interface{} {
+func (v *Visitor) VisitExpressionStatement(ctx *parser.ExpressionStatementContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitLeftRightExpression(ctx *parser.LeftRightExpressionContext) interface{} {
+func (v *Visitor) VisitLeftRightExpression(ctx *parser.LeftRightExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 
 }
 
-func (v *visitor) VisitExpressionSequence(ctx *parser.ExpressionSequenceContext) interface{} {
+func (v *Visitor) VisitExpressionSequence(ctx *parser.ExpressionSequenceContext) interface{} {
 	// log.Println("VisitExpressionSequence", ctx.GetText())
 	return v.VisitChildren(ctx)
 
 }
-func (v *visitor) VisitAssignmentExpression(ctx *parser.AssignmentExpressionContext) interface{} {
+func (v *Visitor) VisitAssignmentExpression(ctx *parser.AssignmentExpressionContext) interface{} {
 	log.Println("VisitAssignmentExpression", ctx.OP.GetText())
 
 	return v.VisitChildren(ctx)
 
 }
 
-func (v *visitor) VisitArgumentsExpression(ctx *parser.ArgumentsExpressionContext) interface{} {
+func (v *Visitor) VisitArgumentsExpression(ctx *parser.ArgumentsExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitLiteralExpression(ctx *parser.LiteralExpressionContext) interface{} {
+func (v *Visitor) VisitLiteralExpression(ctx *parser.LiteralExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitTernaryExpression(ctx *parser.TernaryExpressionContext) interface{} {
+func (v *Visitor) VisitTernaryExpression(ctx *parser.TernaryExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPowerExpression(ctx *parser.PowerExpressionContext) interface{} {
+func (v *Visitor) VisitPowerExpression(ctx *parser.PowerExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }

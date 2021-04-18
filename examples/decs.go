@@ -9,11 +9,27 @@ import "github.com/padraicbc/gojsp/parser"
 //     ;
 type Declaration struct {
 	*SourceInfo
-	Node VNode
+	Node       VNode
+	children   []VNode
+	prev, next VNode
 }
 
 var _ VNode = (*Declaration)(nil)
 
+func (i *Declaration) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *Declaration) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *Declaration) Type() string {
 	return "Declaration"
 }
@@ -21,14 +37,15 @@ func (i *Declaration) Code() string {
 	return CodeDef(i)
 }
 
-func (i *Declaration) GetChildren() []VNode {
-	return []VNode{
-		i.Node,
-	}
+func (i *Declaration) Children() []VNode {
+	return i.children
 }
-func (v *visitor) VisitDeclaration(ctx *parser.DeclarationContext) interface{} {
-	return &Declaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-		Node: v.VisitChildren(ctx).([]VNode)[0]}
+func (v *Visitor) VisitDeclaration(ctx *parser.DeclarationContext) interface{} {
+	d := &Declaration{
+		children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	d.Node = d.children[0]
+	return d
 
 }
 
@@ -40,10 +57,26 @@ type VariableDeclaration struct {
 	Assignable VNode
 	Equals     Token
 	Expression VNode
+	children   []VNode
+	next, prev VNode
 }
 
 var _ VNode = (*VariableDeclaration)(nil)
 
+func (i *VariableDeclaration) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *VariableDeclaration) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *VariableDeclaration) Type() string {
 	return "VariableDeclaration"
 }
@@ -51,20 +84,17 @@ func (i *VariableDeclaration) Code() string {
 	return CodeDef(i)
 }
 
-func (i *VariableDeclaration) GetChildren() []VNode {
-	return []VNode{
-		i.Assignable,
-		i.Equals,
-		i.Expression,
-	}
+func (i *VariableDeclaration) Children() []VNode {
+	return i.children
 }
-func (v *visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContext) interface{} {
+func (v *Visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContext) interface{} {
 	// log.Println(ctx.SingleExpression().GetText(), ctx.Assignable().GetText())
 
 	d := &VariableDeclaration{
+		children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+	for _, ch := range d.children {
 
 		switch ch.(type) {
 		case *ArrayLiteral: // todo ObjectLiteral":
@@ -94,10 +124,26 @@ type VariableDeclarationList struct {
 	VarModifier          Token // var, let, const
 	VariableDeclarations []*VariableDeclaration
 	Commas               []Token
+	children             []VNode
+	prev, next           VNode
 }
 
 var _ VNode = (*VariableDeclarationList)(nil)
 
+func (i *VariableDeclarationList) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *VariableDeclarationList) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *VariableDeclarationList) Type() string {
 	return "VariableDeclarationList"
 }
@@ -105,14 +151,11 @@ func (i *VariableDeclarationList) Code() string {
 	return CodeDef(i)
 }
 
-func (i *VariableDeclarationList) GetChildren() []VNode {
-	return []VNode{
-		i.VarModifier,
-		// i.Commas,
-	}
+func (i *VariableDeclarationList) Children() []VNode {
+	return i.children
 }
 
-func (v *visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationListContext) interface{} {
+func (v *Visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationListContext) interface{} {
 	vdl := &VariableDeclarationList{}
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 
@@ -135,7 +178,7 @@ func (v *visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationLi
 
 	return v.VisitChildren(ctx)
 }
-func (v *visitor) VisitVarModifier(ctx *parser.VarModifierContext) interface{} {
+func (v *Visitor) VisitVarModifier(ctx *parser.VarModifierContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
@@ -147,10 +190,12 @@ func (v *visitor) VisitVarModifier(ctx *parser.VarModifierContext) interface{} {
 //     ;
 type Assignable struct {
 	*SourceInfo
-	Node VNode
+	Node       VNode
+	children   []VNode
+	prev, next VNode
 }
 
-var _ VNode = (*ArrayElement)(nil)
+var _ VNode = (*Assignable)(nil)
 
 func (i *Assignable) Type() string {
 	return "Assignable"
@@ -158,15 +203,27 @@ func (i *Assignable) Type() string {
 func (i *Assignable) Code() string {
 	return CodeDef(i)
 }
-
-func (i *Assignable) GetChildren() []VNode {
-	return []VNode{
-		i.Node,
+func (i *Assignable) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
 	}
+	return i.next
+}
+func (i *Assignable) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
+
+func (i *Assignable) Children() []VNode {
+	return i.children
 }
 
 // Maybe just retrun children as it is not a concrete type and let others check what it is...
-func (v *visitor) VisitAssignable(ctx *parser.AssignableContext) interface{} {
+func (v *Visitor) VisitAssignable(ctx *parser.AssignableContext) interface{} {
 	// log.Println("VisitAssignable", ctx.GetText())
 	return v.VisitChildren(ctx)
 }

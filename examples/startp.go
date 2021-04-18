@@ -5,10 +5,50 @@ import (
 	"github.com/padraicbc/gojsp/parser"
 )
 
-func (v *visitor) VisitProgram(ctx *parser.ProgramContext) interface{} {
+type Program struct {
+	prev, next VNode
+	tree       PTree
+	children   []VNode
+}
 
+var _ VNode = (*Program)(nil)
+
+func (i *Program) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *Program) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
+func (i *Program) Code() string {
+	return CodeDef(i)
+}
+
+func (i *Program) Type() string {
+	return "Program"
+}
+
+func (i *Program) GetInfo() *SourceInfo {
+
+	return nil
+}
+func (i *Program) Children() []VNode {
+
+	return i.children
+}
+
+func (v *Visitor) VisitProgram(ctx *parser.ProgramContext) interface{} {
 	// sourceElements as called when .Program() is used...
-	return ctx.GetChild(0).(antlr.ParserRuleContext).Accept(v)
+	children := ctx.GetChild(0).(antlr.ParserRuleContext).Accept(v).([]VNode)
+
+	return &Program{children: children}
 
 }
 
@@ -16,23 +56,55 @@ func (v *visitor) VisitProgram(ctx *parser.ProgramContext) interface{} {
 // VisitChildren(node RuleNode) interface{}
 // VisitTerminal(node Identifier) interface{}
 // VisitErrorNode(node ErrorNode) interface{}
-func (v *visitor) VisitSourceElement(ctx *parser.SourceElementContext) interface{} {
+type SourceElement struct {
+	*SourceInfo
+	// VNodes have their own next/prev. Can visit all children from here
+	children []VNode
+
+	prev, next VNode
+}
+
+var _ VNode = (*SourceElement)(nil)
+
+func (i *SourceElement) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *SourceElement) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
+func (i *SourceElement) Code() string {
+	return CodeDef(i)
+}
+
+func (i *SourceElement) Type() string {
+	return "SourceElement"
+}
+
+func (i *SourceElement) Children() []VNode {
+
+	return i.children
+}
+
+func (v *Visitor) VisitSourceElement(ctx *parser.SourceElementContext) interface{} {
 	// log.Println("VisitSourceElement", ctx.GetText(), ctx.GetChildCount())
 	s := &SourceElement{
-		Children:   v.VisitChildren(ctx).([]VNode),
+		children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
-	s.FirstChild = s.Children[0]
-	if v.ParseTree != nil {
-		lst := v.ParseTree.LastChild
-		lst.Next = s
-		s.Prev = lst
-		v.ParseTree.LastChild = s
-		return s
-	}
-	v.ParseTree = new(PTree)
 
-	v.ParseTree = &PTree{Root: s, LastChild: s}
+	if v.ParseTree.Root == nil {
+		v.ParseTree.Root = s
+
+	}
+	v.ParseTree.LastChild = s
 
 	return s
 

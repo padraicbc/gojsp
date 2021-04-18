@@ -10,7 +10,7 @@ import (
 )
 
 // need pointer receiver for methods...
-type visitor struct {
+type Visitor struct {
 	// any methods not implemented to satisfy JavaScriptParserVisitor checks in Accept...
 	// JavaScriptParserVisitor embeds antlr.ParseTreeVisitor so we are also a "antlr.ParseTreeVisitor"
 	// any visitor methods we don't add are called on BaseJavaScriptParserVisitor which are no-ops essentially -> nil
@@ -23,16 +23,20 @@ type visitor struct {
 	parser    *parser.JavaScriptParser
 }
 
-func (v *visitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
+func NewVisitor(lexer *parser.JavaScriptLexer, parser *parser.JavaScriptParser) *Visitor {
+	return &Visitor{lexer: lexer, parser: parser, ParseTree: &PTree{}}
+}
+
+func (v *Visitor) VisitArgument(ctx *parser.ArgumentContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
 // as per the docs but not sure if they will be used
-func (v *visitor) defaultResult() interface{} {
+func (v *Visitor) defaultResult() interface{} {
 	return nil
 }
-func (v *visitor) aggregateResult(aggregate interface{}, nextResult interface{}) interface{} {
+func (v *Visitor) aggregateResult(aggregate interface{}, nextResult interface{}) interface{} {
 	return nextResult
 }
 
@@ -46,40 +50,61 @@ func (v *visitor) aggregateResult(aggregate interface{}, nextResult interface{})
 // tree - The ParseTree to visit.
 // Returns:
 //     the result of visiting the parse tree.
-func (v *visitor) Visit(tree antlr.ParseTree) interface{} {
+func (v *Visitor) Visit(tree antlr.ParseTree) interface{} {
 	return tree.Accept(v)
 }
 
 // VisitSourceElements is called when production sourceElements is entered.
-func (v *visitor) VisitSourceElements(ctx *parser.SourceElementsContext) interface{} {
+func (v *Visitor) VisitSourceElements(ctx *parser.SourceElementsContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) shouldVisitNextChild(node antlr.RuleNode, currentResult interface{}) bool {
+func (v *Visitor) shouldVisitNextChild(node antlr.RuleNode, currentResult interface{}) bool {
 	return true
 }
 
-// todo: forget this and implement method to return []VNode specifically
-func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
+func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 	var result []VNode
-
+	prev := v.ParseTree.LastChild
 	for _, ch := range node.GetChildren() {
 
 		res := ch.(antlr.ParseTree).Accept(v)
+
+		// first node
 		switch rr := res.(type) {
 
 		case *LToken:
+
 			rr.rn = v.parser.GetRuleNames()[node.GetRuleContext().GetRuleIndex()]
 			result = append(result, rr)
+			if prev != nil {
+				prev.Next(rr)
+				rr.Prev(prev)
+			}
+			prev = rr
+			v.ParseTree.LastChild = rr
 		case VNode:
 			result = append(result, rr)
+			v.ParseTree.LastChild = rr
+			if prev != nil {
+				prev.Next(rr)
+				rr.Prev(prev)
+			}
+			prev = rr
 		case []VNode:
 			result = append(result, rr...)
+			rrr := rr[len(rr)-1]
+			v.ParseTree.LastChild = rrr
+			if prev != nil {
+				prev.Next(rrr)
+				rrr.Prev(prev)
+			}
+			prev.Next(rrr)
+			rrr.Prev(prev)
+			prev = rrr
 		case nil:
 			// panic(rr)
-		case *SourceElement:
-
 		default:
 
 			panic(reflect.TypeOf(rr))
@@ -92,7 +117,7 @@ func (v *visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 }
 
-func (v *visitor) VisitErrorNode(node antlr.ErrorNode) interface{} {
+func (v *Visitor) VisitErrorNode(node antlr.ErrorNode) interface{} {
 	log.Println(node)
 	return nil
 }
@@ -104,7 +129,7 @@ type VariableStatement struct {
 	*SourceInfo
 }
 
-func (v *visitor) VisitVariableStatement(ctx *parser.VariableStatementContext) interface{} {
+func (v *Visitor) VisitVariableStatement(ctx *parser.VariableStatementContext) interface{} {
 	// log.Println("VisitVariableStatement", ctx.GetText())
 	return v.VisitChildren(ctx)
 }
@@ -112,7 +137,7 @@ func (v *visitor) VisitVariableStatement(ctx *parser.VariableStatementContext) i
 // functionDeclaration
 //     : Async? Function '*'? identifier '(' formalParameterList? ')' functionBody
 //     ;
-func (v *visitor) VisitFunctionDeclaration(ctx *parser.FunctionDeclarationContext) interface{} {
+func (v *Visitor) VisitFunctionDeclaration(ctx *parser.FunctionDeclarationContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
@@ -120,7 +145,7 @@ func (v *visitor) VisitFunctionDeclaration(ctx *parser.FunctionDeclarationContex
 // classDeclaration
 //     : Class identifier classTail
 //     ;
-func (v *visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) interface{} {
+func (v *Visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
@@ -128,7 +153,7 @@ func (v *visitor) VisitClassDeclaration(ctx *parser.ClassDeclarationContext) int
 // classTail
 //     : (Extends singleExpression)? '{' classElement* '}'
 //     ;
-func (v *visitor) VisitClassTail(ctx *parser.ClassTailContext) interface{} {
+func (v *Visitor) VisitClassTail(ctx *parser.ClassTailContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
@@ -138,110 +163,110 @@ func (v *visitor) VisitClassTail(ctx *parser.ClassTailContext) interface{} {
 //     | emptyStatement_
 //     | '#'? propertyName '=' singleExpression
 //     ;
-func (v *visitor) VisitClassElement(ctx *parser.ClassElementContext) interface{} {
+func (v *Visitor) VisitClassElement(ctx *parser.ClassElementContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitMethodDefinition(ctx *parser.MethodDefinitionContext) interface{} {
+func (v *Visitor) VisitMethodDefinition(ctx *parser.MethodDefinitionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFormalParameterList(ctx *parser.FormalParameterListContext) interface{} {
+func (v *Visitor) VisitFormalParameterList(ctx *parser.FormalParameterListContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFormalParameterArg(ctx *parser.FormalParameterArgContext) interface{} {
+func (v *Visitor) VisitFormalParameterArg(ctx *parser.FormalParameterArgContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitLastFormalParameterArg(ctx *parser.LastFormalParameterArgContext) interface{} {
+func (v *Visitor) VisitLastFormalParameterArg(ctx *parser.LastFormalParameterArgContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFunctionBody(ctx *parser.FunctionBodyContext) interface{} {
+func (v *Visitor) VisitFunctionBody(ctx *parser.FunctionBodyContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitFunctionProperty(ctx *parser.FunctionPropertyContext) interface{} {
+func (v *Visitor) VisitFunctionProperty(ctx *parser.FunctionPropertyContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertyGetter(ctx *parser.PropertyGetterContext) interface{} {
+func (v *Visitor) VisitPropertyGetter(ctx *parser.PropertyGetterContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertySetter(ctx *parser.PropertySetterContext) interface{} {
+func (v *Visitor) VisitPropertySetter(ctx *parser.PropertySetterContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertyShorthand(ctx *parser.PropertyShorthandContext) interface{} {
+func (v *Visitor) VisitPropertyShorthand(ctx *parser.PropertyShorthandContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitPropertyName(ctx *parser.PropertyNameContext) interface{} {
+func (v *Visitor) VisitPropertyName(ctx *parser.PropertyNameContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitArguments(ctx *parser.ArgumentsContext) interface{} {
+func (v *Visitor) VisitArguments(ctx *parser.ArgumentsContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
-func (v *visitor) VisitMemberDotExpression(ctx *parser.MemberDotExpressionContext) interface{} {
+func (v *Visitor) VisitMemberDotExpression(ctx *parser.MemberDotExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
-func (v *visitor) VisitFunctionExpression(ctx *parser.FunctionExpressionContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *visitor) VisitParenthesizedExpression(ctx *parser.ParenthesizedExpressionContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-func (v *visitor) VisitLiteral(ctx *parser.LiteralContext) interface{} {
+func (v *Visitor) VisitFunctionExpression(ctx *parser.FunctionExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitNumericLiteral(ctx *parser.NumericLiteralContext) interface{} {
+func (v *Visitor) VisitParenthesizedExpression(ctx *parser.ParenthesizedExpressionContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *Visitor) VisitLiteral(ctx *parser.LiteralContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitObjectLiteralExpression(ctx *parser.ObjectLiteralExpressionContext) interface{} {
+func (v *Visitor) VisitNumericLiteral(ctx *parser.NumericLiteralContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-func (v *visitor) VisitObjectLiteral(ctx *parser.ObjectLiteralContext) interface{} {
+func (v *Visitor) VisitObjectLiteralExpression(ctx *parser.ObjectLiteralExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
-func (v *visitor) VisitAwaitExpression(ctx *parser.AwaitExpressionContext) interface{} {
+
+func (v *Visitor) VisitObjectLiteral(ctx *parser.ObjectLiteralContext) interface{} {
+
+	return v.VisitChildren(ctx)
+}
+func (v *Visitor) VisitAwaitExpression(ctx *parser.AwaitExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
 // not a token
-func (v *visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
+func (v *Visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
 
 	return ident(v, node.GetSymbol())
 
 }
 
-func ident(v *visitor, token antlr.Token) *LToken {
+func ident(v *Visitor, token antlr.Token) *LToken {
 
 	start, end := token.GetStart(), token.GetStop()+1
 

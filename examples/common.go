@@ -24,7 +24,9 @@ type VNode interface {
 	Code() string
 	GetInfo() *SourceInfo
 	Type() string
-	GetChildren() []VNode
+	Children() []VNode
+	Prev(VNode) VNode
+	Next(VNode) VNode
 }
 
 func debug(v VNode) {
@@ -36,7 +38,9 @@ func debug(v VNode) {
 
 // just to make life easier for implementing.
 // will be the default return from VisitChildren
-type BaseDefaultVNode struct{}
+type BaseDefaultVNode struct {
+	prev, next VNode
+}
 
 var _ VNode = &BaseDefaultVNode{}
 
@@ -49,8 +53,23 @@ func (i *BaseDefaultVNode) Code() string {
 func (i *BaseDefaultVNode) GetInfo() *SourceInfo {
 	return nil
 }
-func (i *BaseDefaultVNode) GetChildren() []VNode {
+func (i *BaseDefaultVNode) Children() []VNode {
 	return nil
+}
+
+func (i *BaseDefaultVNode) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *BaseDefaultVNode) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
 }
 
 func CodeDef(t VNode) string {
@@ -60,7 +79,7 @@ func CodeDef(t VNode) string {
 	}
 
 	var c []string
-	for _, n := range t.GetChildren() {
+	for _, n := range t.Children() {
 		// ugly but zero value is not nil, this will change or be remove completely
 		if reflect.ValueOf(n).Kind() == reflect.Ptr && !reflect.ValueOf(n).IsNil() {
 			c = append(c, n.Code())
@@ -82,34 +101,26 @@ func (s *SourceInfo) GetInfo() *SourceInfo {
 }
 
 type PTree struct {
-	Root      *SourceElement
-	LastChild *SourceElement
+	Root      VNode
+	LastChild VNode
 }
 
-func (p *PTree) NextNodes() chan *SourceElement {
+func (p *PTree) NextNodes() chan VNode {
 
 	if p == nil {
 		panic("p cannot be nil")
 
 	}
-	nodes := make(chan *SourceElement)
+	nodes := make(chan VNode)
 	go func() {
 		next := p.Root
 		for next != nil {
 			nodes <- next
-			next = next.Next
+			next = next.Next(nil)
 		}
 		close(nodes)
 	}()
 	return nodes
-}
-
-type SourceElement struct {
-	*SourceInfo
-	// VNodes have their own next/prev. Can visit all children from here
-	Children   []VNode
-	Prev, Next *SourceElement
-	FirstChild VNode
 }
 
 // An identifier. Note that an identifier may be an expression or a destructuring pattern.
@@ -127,7 +138,8 @@ type LToken struct {
 	// From, StringLiteral...
 	sn string
 	// reservedWord...
-	rn string
+	rn         string
+	prev, next VNode
 
 	// SymbolName string
 }
@@ -147,8 +159,22 @@ func (i *LToken) Code() string {
 func (i *LToken) RName() string {
 	return i.rn
 }
-func (i *LToken) GetChildren() []VNode {
+func (i *LToken) Children() []VNode {
 	return nil
+}
+func (i *LToken) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *LToken) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
 }
 
 // keyword, reservedword, identifier

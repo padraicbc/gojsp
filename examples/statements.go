@@ -10,10 +10,26 @@ import (
 type StatementList struct {
 	*SourceInfo
 	// *Statements
-	Children []VNode
+	children   []VNode
+	prev, next VNode
 }
 
 var _ VNode = (*StatementList)(nil)
+
+func (i *StatementList) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *StatementList) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 
 func (i *StatementList) Type() string {
 	return "StatementList"
@@ -21,23 +37,38 @@ func (i *StatementList) Type() string {
 func (i *StatementList) Code() string {
 	return CodeDef(i)
 }
-func (i *StatementList) GetChildren() []VNode {
+func (i *StatementList) Children() []VNode {
 
-	return i.Children
+	return i.children
 }
-func (v *visitor) VisitStatementList(ctx *parser.StatementListContext) interface{} {
+func (v *Visitor) VisitStatementList(ctx *parser.StatementListContext) interface{} {
 	// log.Println("VisitStatementList", ctx.GetText())
-	return &StatementList{Children: v.VisitChildren(ctx).([]VNode)}
+	return &StatementList{children: v.VisitChildren(ctx).([]VNode), SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 }
 
 type Statement struct {
 	*SourceInfo
-	From     string
-	Children []VNode //
+	From       string
+	children   []VNode
+	prev, next VNode //
 }
 
 var _ VNode = (*Statement)(nil)
 
+func (i *Statement) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *Statement) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *Statement) Type() string {
 	return "Statement"
 }
@@ -45,13 +76,15 @@ func (i *Statement) Type() string {
 func (i *Statement) Code() string {
 	return CodeDef(i)
 }
-func (i *Statement) GetChildren() []VNode {
-	return i.Children
+func (i *Statement) Children() []VNode {
+	return i.children
 }
 
-func (v *visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
+func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 	// log.Println("VisitStatement", ctx.GetText())
-	return &Statement{Children: v.VisitChildren(ctx).([]VNode)}
+	return &Statement{
+		children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 }
 
 // labelledStatement
@@ -59,34 +92,52 @@ func (v *visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 //     ;
 type LabeledStatement struct {
 	*SourceInfo
-	Statement *Statement
-	Label     Token
-	Colon     Token
+	Statement  *Statement
+	Label      Token
+	Colon      Token
+	children   []VNode
+	prev, next VNode
 }
 
 var _ VNode = (*LabeledStatement)(nil)
 
+func (i *LabeledStatement) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *LabeledStatement) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *LabeledStatement) Type() string {
 	return "LabeledStatement"
 }
 func (i *LabeledStatement) Code() string {
 	return CodeDef(i)
 }
-func (i *LabeledStatement) GetChildren() []VNode {
+func (i *LabeledStatement) Children() []VNode {
 
-	return []VNode{i.Label, i.Colon, i.Statement}
+	return i.children
 }
 
 // special case for $: ... todo: a type
-func (v *visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) interface{} {
+func (v *Visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) interface{} {
 	// log.Println("VisitLabelledStatement", ctx.GetText())
 
 	if ctx.Identifier().GetText() == "$" {
 		// log.Println("Reactive?")
 
 	}
-	lst := &LabeledStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+	lst := &LabeledStatement{
+		children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	for _, ch := range lst.children {
 		switch ch.Type() {
 		case "LToken":
 			t := ch.(Token)
@@ -112,9 +163,25 @@ type Block struct {
 	*SourceInfo
 	// *StatementList
 	StatementList []VNode
+	prev, next    VNode
 }
 
 var _ VNode = (*Block)(nil)
+
+func (i *Block) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *Block) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 
 func (i *Block) Type() string {
 	return "Block"
@@ -122,10 +189,12 @@ func (i *Block) Type() string {
 func (i *Block) Code() string {
 	return CodeDef(i)
 }
-func (i *Block) GetChildren() []VNode {
+func (i *Block) Children() []VNode {
 	return i.StatementList
 }
-func (v *visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
+func (v *Visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
 	// log.Println("VisitBlock", ctx.GetText())
-	return &Block{StatementList: v.VisitChildren(ctx).([]VNode), SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	return &Block{
+		StatementList: v.VisitChildren(ctx).([]VNode),
+		SourceInfo:    getSourceInfo(*ctx.BaseParserRuleContext)}
 }

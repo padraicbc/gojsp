@@ -17,6 +17,8 @@ type ImportStatement struct {
 	Import Token
 	// one child *ImportFromBlock
 	ImportFromBlock *ImportFromBlock
+	children        []VNode
+	prev, next      VNode
 }
 
 var _ VNode = (*ImportStatement)(nil)
@@ -27,10 +29,24 @@ func (i *ImportStatement) Type() string {
 func (i *ImportStatement) Code() string {
 	return CodeDef(i)
 }
+func (i *ImportStatement) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *ImportStatement) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 
-func (i *ImportStatement) GetChildren() []VNode {
+func (i *ImportStatement) Children() []VNode {
 
-	return []VNode{i.Import, i.ImportFromBlock}
+	return i.children
 }
 
 // importFromBlock
@@ -45,10 +61,26 @@ type ImportFromBlock struct {
 	StringLiteral   Token
 	ImportFrom      *ImportFrom
 	Eos             Token
+	children        []VNode
+	prev, next      VNode
 }
 
 var _ VNode = (*ImportFromBlock)(nil)
 
+func (i *ImportFromBlock) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *ImportFromBlock) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *ImportFromBlock) Type() string {
 	return "ImportFromBlock"
 }
@@ -56,20 +88,15 @@ func (i *ImportFromBlock) Code() string {
 	return CodeDef(i)
 }
 
-func (i *ImportFromBlock) GetChildren() []VNode {
+func (i *ImportFromBlock) Children() []VNode {
 
-	return []VNode{
-		i.Default,
-		i.ModuleItems,
-		i.ImportNamespace,
-		i.StringLiteral,
-		i.ImportFrom,
-		i.Eos,
-	}
+	return i.children
 }
 
 type ImportFrom struct {
 	*SourceInfo
+	children   []VNode
+	prev, next VNode
 
 	From Token
 	Path Token
@@ -77,8 +104,19 @@ type ImportFrom struct {
 
 var _ VNode = (*ImportFrom)(nil)
 
-func f(v VNode) {
-
+func (i *ImportFrom) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *ImportFrom) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
 }
 func (i *ImportFrom) Type() string {
 	return "ImportFrom"
@@ -88,9 +126,9 @@ func (i *ImportFrom) Code() string {
 	return CodeDef(i)
 }
 
-func (i *ImportFrom) GetChildren() []VNode {
+func (i *ImportFrom) Children() []VNode {
 
-	return []VNode{i.From, i.Path}
+	return i.children
 }
 
 // import '(' singleExpression ')'                                       # ImportExpression
@@ -100,10 +138,26 @@ type ImportExpression struct {
 	Module     Token
 	OpenParen  Token
 	CloseParen Token
+	children   []VNode
+	prev, next VNode
 }
 
 var _ VNode = (*ImportExpression)(nil)
 
+func (i *ImportExpression) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *ImportExpression) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *ImportExpression) Code() string {
 	return CodeDef(i)
 }
@@ -112,9 +166,9 @@ func (i *ImportExpression) Type() string {
 	return "ImportExpression"
 }
 
-func (i *ImportExpression) GetChildren() []VNode {
+func (i *ImportExpression) Children() []VNode {
 
-	return []VNode{i.Import, i.OpenParen, i.Module, i.CloseParen}
+	return i.children
 }
 
 // moduleItems
@@ -127,10 +181,26 @@ type ModuleItems struct {
 	Commas     []Token
 	OpenBrace  Token
 	CloseBrace Token
+	children   []VNode
+	prev, next VNode
 }
 
 var _ VNode = (*ModuleItems)(nil)
 
+func (i *ModuleItems) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *ModuleItems) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (m *ModuleItems) Code() string {
 
 	return CodeDef(m)
@@ -140,19 +210,9 @@ func (m *ModuleItems) Type() string {
 }
 
 /// todo: AliasNames
-func (m *ModuleItems) GetChildren() []VNode {
-	if m == nil {
-		return nil
-	}
-	nd := []VNode{m.OpenBrace}
-	for i, al := range m.AliasNames {
-		nd = append(nd, al)
-		if i > 0 {
-			nd = append(nd, m.Commas[i-1])
-		}
+func (m *ModuleItems) Children() []VNode {
 
-	}
-	return append(nd, m.CloseBrace)
+	return m.children
 }
 
 // importNamespace
@@ -164,9 +224,26 @@ type ImportNamespace struct {
 	IdentifierName Token
 	AliasName      Token
 	As             Token
+	children       []VNode
+	prev, next     VNode
 }
 
 var _ VNode = (*ImportNamespace)(nil)
+
+func (i *ImportNamespace) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *ImportNamespace) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 
 func (in *ImportNamespace) Code() string {
 	return CodeDef(in)
@@ -175,21 +252,37 @@ func (i *ImportNamespace) Type() string {
 	return "ImportNamespace"
 }
 
-func (i *ImportNamespace) GetChildren() []VNode {
+func (i *ImportNamespace) Children() []VNode {
 
-	return []VNode{i.Star, i.IdentifierName, i.AliasName, i.As}
+	return i.children
 }
 
 // importDefault
 // : aliasName ','
 type ImportDefault struct {
 	*SourceInfo
-	Default *AliasName
-	Comma   Token
+	Default    *AliasName
+	Comma      Token
+	children   []VNode
+	prev, next VNode
 }
 
 var _ VNode = (*ImportDefault)(nil)
 
+func (i *ImportDefault) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *ImportDefault) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (i *ImportDefault) Type() string {
 	return "ImportDefault"
 }
@@ -197,29 +290,26 @@ func (i *ImportDefault) Type() string {
 func (i *ImportDefault) Code() string {
 	return CodeDef(i)
 }
-func (i *ImportDefault) GetChildren() []VNode {
-	// if i == nil {
-	// 	return nil
-	// }
-	return []VNode{i.Default, i.Comma}
+func (i *ImportDefault) Children() []VNode {
+
+	return i.children
 }
 
-func (v *visitor) VisitImportStatement(ctx *parser.ImportStatementContext) interface{} {
+func (v *Visitor) VisitImportStatement(ctx *parser.ImportStatementContext) interface{} {
 	// log.Println("VisitImportStatement", ctx.GetText())
 	// could vists and switch check but this is the same thing.
 	im := &ImportStatement{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-		Import:     ident(v, ctx.Import().GetSymbol()),
-		ImportFromBlock: v.VisitImportFromBlock(
-			ctx.ImportFromBlock().(*parser.ImportFromBlockContext)).(*ImportFromBlock)}
+		children:   v.VisitChildren(ctx).([]VNode)}
 	return im
 
 }
 
-func (v *visitor) VisitImportFromBlock(ctx *parser.ImportFromBlockContext) interface{} {
-	imf := &ImportFromBlock{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+func (v *Visitor) VisitImportFromBlock(ctx *parser.ImportFromBlockContext) interface{} {
+	imf := &ImportFromBlock{
+		children: v.VisitChildren(ctx).([]VNode), SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	// iterate here as some are there, some not.
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+	for _, ch := range imf.children {
 		switch ch.Type() {
 		case "ImportDefault":
 			imf.Default = ch.(*ImportDefault)
@@ -245,11 +335,13 @@ func (v *visitor) VisitImportFromBlock(ctx *parser.ImportFromBlockContext) inter
 }
 
 //  Import '(' singleExpression ')' || Import "whatever"
-func (v *visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) interface{} {
+func (v *Visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) interface{} {
 	// log.Println("VisitImportExpression", ctx.GetText())
-	ime := &ImportExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	ime := &ImportExpression{
+		children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	// alwyas tokens
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+	for _, ch := range ime.children {
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "Import":
@@ -268,10 +360,12 @@ func (v *visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) int
 	return ime
 }
 
-func (v *visitor) VisitModuleItems(ctx *parser.ModuleItemsContext) interface{} {
+func (v *Visitor) VisitModuleItems(ctx *parser.ModuleItemsContext) interface{} {
 
-	mit := &ModuleItems{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+	mit := &ModuleItems{
+		children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	for _, ch := range mit.children {
 		switch ch.Type() {
 		case "AliasName":
 			mit.AliasNames = append(mit.AliasNames, ch.(*AliasName))
@@ -303,23 +397,46 @@ func (v *visitor) VisitModuleItems(ctx *parser.ModuleItemsContext) interface{} {
 // importDefault
 //     : aliasName ','
 //     ;
-func (v *visitor) VisitImportDefault(ctx *parser.ImportDefaultContext) interface{} {
+func (v *Visitor) VisitImportDefault(ctx *parser.ImportDefaultContext) interface{} {
 	// could iterate over children but this is the same thing.
 	// todo: check types?
-	return &ImportDefault{
+	ind := &ImportDefault{
+		children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-		Default:    v.VisitAliasName(ctx.AliasName().(*parser.AliasNameContext)).(*AliasName),
-		Comma:      ident(v, ctx.Comma().GetSymbol())}
+	}
+
+	for _, ch := range ind.children {
+		switch ch.Type() {
+		case "AliasName":
+			ind.Default = ch.(*AliasName)
+		case "LToken":
+			t := ch.(Token)
+
+			if t.SymbolName() == "Comma" {
+				ind.Comma = t
+				continue
+			}
+			panic(t.SymbolName())
+
+		default:
+
+			panic(fmt.Sprintf("%+v %s\n", ch, ch.Type()))
+		}
+	}
+	return ind
 }
 
 // importNamespace
 //     : ('*' | identifierName) (As identifierName)?
 //     ;
-func (v *visitor) VisitImportNamespace(ctx *parser.ImportNamespaceContext) interface{} {
+func (v *Visitor) VisitImportNamespace(ctx *parser.ImportNamespaceContext) interface{} {
 	// log.Println("VisitImportNamespace", ctx.GetText())
 
-	imn := &ImportNamespace{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	for i, ch := range v.VisitChildren(ctx).([]VNode) {
+	imn := &ImportNamespace{
+		children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+	for i, ch := range imn.children {
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "Identifier":
@@ -344,9 +461,10 @@ func (v *visitor) VisitImportNamespace(ctx *parser.ImportNamespaceContext) inter
 // importFrom
 //     : From StringLiteral
 //     ;
-func (v *visitor) VisitImportFrom(ctx *parser.ImportFromContext) interface{} {
-	imfr := &ImportFrom{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+func (v *Visitor) VisitImportFrom(ctx *parser.ImportFromContext) interface{} {
+	imfr := &ImportFrom{children: v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	for _, ch := range imfr.children {
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "From":
@@ -370,10 +488,26 @@ type AliasName struct {
 	Alias          Token
 	As             Token
 	Comma          Token
+	children       []VNode
+	prev, next     VNode
 }
 
 var _ VNode = (*AliasName)(nil)
 
+func (i *AliasName) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
+	return i.next
+}
+func (i *AliasName) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
 func (a *AliasName) Code() string {
 	return CodeDef(a)
 }
@@ -381,15 +515,17 @@ func (i *AliasName) Type() string {
 	return "AliasName"
 }
 
-func (i *AliasName) GetChildren() []VNode {
+func (i *AliasName) Children() []VNode {
 
-	return []VNode{i.IdentifierName, i.As, i.Alias}
+	return i.children
 }
 
-func (v *visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
-	al := &AliasName{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+func (v *Visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
+	al := &AliasName{
+		children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
-	for i, ch := range v.VisitChildren(ctx).([]VNode) {
+	for i, ch := range al.children {
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "Identifier":
