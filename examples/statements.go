@@ -43,7 +43,9 @@ func (i *StatementList) Children() []VNode {
 }
 func (v *Visitor) VisitStatementList(ctx *parser.StatementListContext) interface{} {
 	// log.Println("VisitStatementList", ctx.GetText())
-	return &StatementList{children: v.VisitChildren(ctx).([]VNode), SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	return &StatementList{
+		children:   v.VisitChildren(ctx).([]VNode),
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 }
 
 type Statement struct {

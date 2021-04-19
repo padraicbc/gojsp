@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	antlr "github.com/padraicbc/antlr4"
@@ -101,7 +102,7 @@ export default function () { } // also class, function*
 		for _, st := range se.Children() {
 			log.Println(st.Type())
 			vch(st)
-			log.Println()
+			fmt.Println()
 
 		}
 	}
@@ -116,6 +117,11 @@ func vch(v VNode) {
 		}
 
 		log.Println(ch.Type(), ch.Code(), ch.GetInfo().Start, ch.GetInfo().End)
+		if ch.Type() == "AliasName" {
+			log.Println(ch.(*AliasName).IdentifierName.Value())
+			ch.(*AliasName).IdentifierName.SetValue("changed")
+			log.Println(ch.(*AliasName).IdentifierName.Value())
+		}
 		vch(ch)
 
 	}

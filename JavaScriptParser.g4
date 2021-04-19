@@ -92,7 +92,7 @@ importDefault
     ;
 
 importNamespace
-    : (Star='*' | Ident=identifierName) (As Alias=identifierName)?
+    : ('*' | identifierName) (As identifierName)?
     ;
 
 importFrom
@@ -140,7 +140,7 @@ expressionStatement
     ;
 
 ifStatement
-    : If '(' Test=expressionSequence ')' Consequent=statement (Else Alternate=statement)?
+    : If '(' expressionSequence ')' statement (Else statement)?
     ;
 
 

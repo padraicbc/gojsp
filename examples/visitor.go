@@ -74,7 +74,6 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 		// first node
 		switch rr := res.(type) {
-
 		case *LToken:
 			rr.rn = v.parser.GetRuleNames()[node.GetRuleContext().GetRuleIndex()]
 			result = append(result, rr)
