@@ -10,7 +10,7 @@ import "github.com/padraicbc/gojsp/parser"
 type Declaration struct {
 	*SourceInfo
 	Node       VNode
-	children   []VNode
+	children   VNode
 	prev, next VNode
 }
 
@@ -38,13 +38,23 @@ func (i *Declaration) Code() string {
 }
 
 func (i *Declaration) Children() []VNode {
-	return i.children
+	return children(i.children)
 }
 func (v *Visitor) VisitDeclaration(ctx *parser.DeclarationContext) interface{} {
 	d := &Declaration{
-		children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	d.Node = d.children[0]
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if d.children == nil {
+			d.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
+
+	}
+	d.Node = d.children
 	return d
 
 }
@@ -57,7 +67,7 @@ type VariableDeclaration struct {
 	Assignable VNode
 	Equals     Token
 	Expression VNode
-	children   []VNode
+	children   VNode
 	next, prev VNode
 }
 
@@ -85,16 +95,17 @@ func (i *VariableDeclaration) Code() string {
 }
 
 func (i *VariableDeclaration) Children() []VNode {
-	return i.children
+	return children(i.children)
 }
 func (v *Visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContext) interface{} {
 	// log.Println(ctx.SingleExpression().GetText(), ctx.Assignable().GetText())
 
 	d := &VariableDeclaration{
-		children:   v.VisitChildren(ctx).([]VNode),
+
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
-	for _, ch := range d.children {
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 
 		switch ch.(type) {
 		case *ArrayLiteral: // todo ObjectLiteral":
@@ -112,6 +123,14 @@ func (v *Visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContex
 			panic(ch.Type())
 
 		}
+		if d.children == nil {
+			d.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
+
 	}
 	return d
 }
@@ -124,7 +143,7 @@ type VariableDeclarationList struct {
 	VarModifier          Token // var, let, const
 	VariableDeclarations []*VariableDeclaration
 	Commas               []Token
-	children             []VNode
+	children             VNode
 	prev, next           VNode
 }
 
@@ -152,11 +171,12 @@ func (i *VariableDeclarationList) Code() string {
 }
 
 func (i *VariableDeclarationList) Children() []VNode {
-	return i.children
+	return children(i.children)
 }
 
 func (v *Visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationListContext) interface{} {
-	vdl := &VariableDeclarationList{}
+	vdl := &VariableDeclarationList{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 
 		switch ch.Type() {
@@ -174,9 +194,16 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationLi
 			panic(ch.Type())
 
 		}
+		if vdl.children == nil {
+			vdl.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 	}
 
-	return v.VisitChildren(ctx)
+	return vdl
 }
 func (v *Visitor) VisitVarModifier(ctx *parser.VarModifierContext) interface{} {
 
@@ -191,7 +218,7 @@ func (v *Visitor) VisitVarModifier(ctx *parser.VarModifierContext) interface{} {
 type Assignable struct {
 	*SourceInfo
 	Node       VNode
-	children   []VNode
+	children   VNode
 	prev, next VNode
 }
 
@@ -219,7 +246,7 @@ func (i *Assignable) Prev(v VNode) VNode {
 }
 
 func (i *Assignable) Children() []VNode {
-	return i.children
+	return children(i.children)
 }
 
 // Maybe just retrun children as it is not a concrete type and let others check what it is...

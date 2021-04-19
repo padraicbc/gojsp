@@ -10,7 +10,7 @@ type ArrayLiteral struct {
 	OpenBracket  Token
 	ElementList  *ElementList
 	CloseBracket Token
-	children     []VNode
+	children     VNode
 	next, prev   VNode
 }
 
@@ -40,13 +40,15 @@ func (i *ArrayLiteral) Code() string {
 
 func (i *ArrayLiteral) Children() []VNode {
 	// todo: flatten
-	return i.children
+	return children(i.children)
 }
 func (v *Visitor) VisitArrayLiteral(ctx *parser.ArrayLiteralContext) interface{} {
-	arl := &ArrayLiteral{children: v.VisitChildren(ctx).([]VNode),
+	arl := &ArrayLiteral{
+
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	for _, ch := range arl.children {
-		arl.children = append(arl.children, ch)
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+
 		switch ch.Type() {
 		case "OpenBracket":
 			arl.OpenBracket = ch.(Token)
@@ -56,6 +58,13 @@ func (v *Visitor) VisitArrayLiteral(ctx *parser.ArrayLiteralContext) interface{}
 			arl.ElementList = ch.(*ElementList)
 
 		}
+		if arl.children == nil {
+			arl.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 	}
 	return arl
 }
@@ -67,7 +76,7 @@ type ElementList struct {
 	*SourceInfo
 	ArrayElements []*ArrayElement
 	Commas        []Token
-	children      []VNode
+	children      VNode
 	prev, next    VNode
 }
 
@@ -95,12 +104,14 @@ func (i *ElementList) Code() string {
 }
 
 func (i *ElementList) Children() []VNode {
-	// todo: flatteb
-	return i.children
+	return children(i.children)
 }
 
 func (v *Visitor) VisitElementList(ctx *parser.ElementListContext) interface{} {
-	el := &ElementList{children: v.VisitChildren(ctx).([]VNode), SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	el := &ElementList{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		switch ch.Type() {
 		case "ArrayElement":
@@ -111,6 +122,13 @@ func (v *Visitor) VisitElementList(ctx *parser.ElementListContext) interface{} {
 			panic(ch.Type())
 
 		}
+		if el.children == nil {
+			el.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 	}
 	return el
 }
@@ -122,7 +140,7 @@ type ArrayElement struct {
 	*SourceInfo
 	Ellipsis         Token
 	SingleExpression VNode
-	children         []VNode
+	children         VNode
 	prev, next       VNode
 }
 
@@ -150,11 +168,14 @@ func (i *ArrayElement) Code() string {
 }
 
 func (i *ArrayElement) Children() []VNode {
-	return i.children
+	return children(i.children)
 }
 func (v *Visitor) VisitArrayElement(ctx *parser.ArrayElementContext) interface{} {
-	ae := ArrayElement{children: v.VisitChildren(ctx).([]VNode), SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	for _, ch := range ae.children {
+	ae := ArrayElement{
+
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 
 		switch ch.Type() {
 		case "Ellipsis":
@@ -164,6 +185,13 @@ func (v *Visitor) VisitArrayElement(ctx *parser.ArrayElementContext) interface{}
 		default:
 			panic(ch.Type())
 		}
+		if ae.children == nil {
+			ae.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 	}
 	return ae
 }

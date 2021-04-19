@@ -10,7 +10,7 @@ import (
 type StatementList struct {
 	*SourceInfo
 	// *Statements
-	children   []VNode
+	children   VNode
 	prev, next VNode
 }
 
@@ -39,19 +39,30 @@ func (i *StatementList) Code() string {
 }
 func (i *StatementList) Children() []VNode {
 
-	return i.children
+	return children(i.children)
 }
 func (v *Visitor) VisitStatementList(ctx *parser.StatementListContext) interface{} {
 	// log.Println("VisitStatementList", ctx.GetText())
-	return &StatementList{
-		children:   v.VisitChildren(ctx).([]VNode),
+	stl := &StatementList{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+
+		if stl.children == nil {
+			stl.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
+	}
+	return stl
 }
 
 type Statement struct {
 	*SourceInfo
 	From       string
-	children   []VNode
+	children   VNode
 	prev, next VNode //
 }
 
@@ -79,14 +90,25 @@ func (i *Statement) Code() string {
 	return CodeDef(i)
 }
 func (i *Statement) Children() []VNode {
-	return i.children
+	return children(i.children)
 }
 
 func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface{} {
 	// log.Println("VisitStatement", ctx.GetText())
-	return &Statement{
-		children:   v.VisitChildren(ctx).([]VNode),
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	st := &Statement{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if st.children == nil {
+			st.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
+	}
+	return st
 }
 
 // labelledStatement
@@ -97,7 +119,7 @@ type LabeledStatement struct {
 	Statement  *Statement
 	Label      Token
 	Colon      Token
-	children   []VNode
+	children   VNode
 	prev, next VNode
 }
 
@@ -125,7 +147,7 @@ func (i *LabeledStatement) Code() string {
 }
 func (i *LabeledStatement) Children() []VNode {
 
-	return i.children
+	return children(i.children)
 }
 
 // special case for $: ... todo: a type
@@ -134,12 +156,12 @@ func (v *Visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) i
 
 	if ctx.Identifier().GetText() == "$" {
 		// log.Println("Reactive?")
-
 	}
 	lst := &LabeledStatement{
-		children:   v.VisitChildren(ctx).([]VNode),
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	for _, ch := range lst.children {
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		switch ch.Type() {
 		case "LToken":
 			t := ch.(Token)
@@ -154,6 +176,13 @@ func (v *Visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) i
 			panic(ch.Type())
 
 		}
+		if lst.children == nil {
+			lst.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 	}
 	return lst
 }
@@ -164,8 +193,8 @@ func (v *Visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) i
 type Block struct {
 	*SourceInfo
 	// *StatementList
-	StatementList []VNode
-	prev, next    VNode
+	children   VNode
+	prev, next VNode
 }
 
 var _ VNode = (*Block)(nil)
@@ -192,11 +221,22 @@ func (i *Block) Code() string {
 	return CodeDef(i)
 }
 func (i *Block) Children() []VNode {
-	return i.StatementList
+	return children(i.children)
 }
 func (v *Visitor) VisitBlock(ctx *parser.BlockContext) interface{} {
 	// log.Println("VisitBlock", ctx.GetText())
-	return &Block{
-		StatementList: v.VisitChildren(ctx).([]VNode),
-		SourceInfo:    getSourceInfo(*ctx.BaseParserRuleContext)}
+	b := &Block{
+
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if b.children == nil {
+			b.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
+	}
+	return b
 }

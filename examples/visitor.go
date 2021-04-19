@@ -80,14 +80,16 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 		case VNode:
 			result = append(result, rr)
-			v.ParseTree.LastChild = rr
+
 			if prev != nil {
 				prev.Next(rr)
 				rr.Prev(prev)
 			}
+
 			prev = rr
 		case []VNode:
 			result = append(result, rr...)
+			// log.Println(rr[0].GetInfo().Source, len(rr), rr, result)
 		case nil:
 			// panic(rr)
 		default:

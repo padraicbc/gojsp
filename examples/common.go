@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"runtime"
 	"strings"
@@ -115,6 +116,7 @@ func (p *PTree) NextNodes() chan VNode {
 	nodes := make(chan VNode)
 	go func() {
 		next := p.Root
+		log.Println(next.Type(), next.Code())
 		for next != nil {
 			nodes <- next
 			next = next.Next(nil)
@@ -124,9 +126,7 @@ func (p *PTree) NextNodes() chan VNode {
 	return nodes
 }
 
-// An identifier. Note that an identifier may be an expression or a destructuring pattern.
-// token has line/col info and the actual value.
-// Parent will have type
+// Parent will have type VNode
 type Token interface {
 	VNode
 	SetValue(string)
@@ -141,7 +141,8 @@ type LToken struct {
 	// From .. StringLiteral...
 	sn string
 	// rulename .. reservedWord...
-	rn string
+	rn         string
+	prev, next VNode
 }
 
 var _ Token = (*LToken)(nil)
@@ -166,12 +167,20 @@ func (i *LToken) Children() []VNode {
 	return nil
 }
 func (i *LToken) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
+	}
 
-	return nil
+	return i.next
 }
 func (i *LToken) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
 
-	return nil
+	return i.prev
 }
 
 // keyword, reservedword, identifier
@@ -191,19 +200,21 @@ type AliasName struct {
 	Alias          Token
 	As             Token
 	Comma          Token
-	children       []VNode
+	children       VNode
 	prev, next     VNode
 }
 
 var _ VNode = (*AliasName)(nil)
 
 func (i *AliasName) Next(v VNode) VNode {
+
 	if v != nil {
 		i.next = v
 		return nil
 	}
 	return i.next
 }
+
 func (i *AliasName) Prev(v VNode) VNode {
 	if v != nil {
 		i.prev = v
@@ -220,17 +231,19 @@ func (i *AliasName) Type() string {
 
 func (i *AliasName) Children() []VNode {
 
-	return i.children
+	return children(i.children)
 }
 
 func (v *Visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
 	al := &AliasName{
-		children:   v.VisitChildren(ctx).([]VNode),
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
-	for i, ch := range al.children {
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	var prev VNode
+	for i, ch := range v.VisitChildren(ctx).([]VNode) {
 		t := ch.(Token)
+
 		switch t.SymbolName() {
+
 		case "Identifier":
 			// always there
 			if i == 0 {
@@ -245,6 +258,23 @@ func (v *Visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
 			panic(t.SymbolName())
 
 		}
+		if al.children == nil {
+			al.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 	}
 	return al
+}
+
+func children(start VNode) []VNode {
+	out := []VNode{}
+	n := start
+	for n != nil {
+		out = append(out, n)
+		n = n.Next(nil)
+	}
+	return out
 }

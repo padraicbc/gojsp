@@ -8,7 +8,7 @@ import (
 type Program struct {
 	prev, next VNode
 	tree       PTree
-	children   []VNode
+	children   VNode
 }
 
 var _ VNode = (*Program)(nil)
@@ -41,14 +41,25 @@ func (i *Program) GetInfo() *SourceInfo {
 }
 func (i *Program) Children() []VNode {
 
-	return i.children
+	return children(i.children)
 }
 
 func (v *Visitor) VisitProgram(ctx *parser.ProgramContext) interface{} {
 	// sourceElements as called when .Program() is used...
-	children := ctx.GetChild(0).(antlr.ParserRuleContext).Accept(v).([]VNode)
+	pg := &Program{}
+	var prev VNode
+	for _, ch := range ctx.GetChild(0).(antlr.ParserRuleContext).Accept(v).([]VNode) {
+		if pg.children == nil {
+			pg.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 
-	return &Program{children: children}
+	}
+
+	return pg
 
 }
 
@@ -59,7 +70,7 @@ func (v *Visitor) VisitProgram(ctx *parser.ProgramContext) interface{} {
 type SourceElement struct {
 	*SourceInfo
 	// VNodes have their own next/prev. Can visit all children from here
-	children []VNode
+	children VNode
 
 	prev, next VNode
 }
@@ -90,16 +101,26 @@ func (i *SourceElement) Type() string {
 
 func (i *SourceElement) Children() []VNode {
 
-	return i.children
+	return children(i.children)
 }
 
 func (v *Visitor) VisitSourceElement(ctx *parser.SourceElementContext) interface{} {
 	// log.Println("VisitSourceElement", ctx.GetText(), ctx.GetChildCount())
 	s := &SourceElement{
-		children:   v.VisitChildren(ctx).([]VNode),
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
 
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if s.children == nil {
+			s.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
+
+	}
 	if v.ParseTree.Root == nil {
 		v.ParseTree.Root = s
 
