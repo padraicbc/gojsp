@@ -63,6 +63,7 @@ func (v *Visitor) shouldVisitNextChild(node antlr.RuleNode, currentResult interf
 	return true
 }
 
+// todo: build tree from result nodes not each iteration and remove dupes
 func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 	var result []VNode
@@ -75,15 +76,9 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 		switch rr := res.(type) {
 
 		case *LToken:
-
 			rr.rn = v.parser.GetRuleNames()[node.GetRuleContext().GetRuleIndex()]
 			result = append(result, rr)
-			if prev != nil {
-				prev.Next(rr)
-				rr.Prev(prev)
-			}
-			prev = rr
-			v.ParseTree.LastChild = rr
+
 		case VNode:
 			result = append(result, rr)
 			v.ParseTree.LastChild = rr
@@ -94,15 +89,6 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 			prev = rr
 		case []VNode:
 			result = append(result, rr...)
-			rrr := rr[len(rr)-1]
-			v.ParseTree.LastChild = rrr
-			if prev != nil {
-				prev.Next(rrr)
-				rrr.Prev(prev)
-			}
-			prev.Next(rrr)
-			rrr.Prev(prev)
-			prev = rrr
 		case nil:
 			// panic(rr)
 		default:
