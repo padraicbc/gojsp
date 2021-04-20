@@ -113,6 +113,13 @@ func (v *Visitor) VisitElementList(ctx *parser.ElementListContext) interface{} {
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if el.children == nil {
+			el.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 		switch ch.Type() {
 		case "ArrayElement":
 			el.ArrayElements = append(el.ArrayElements, ch.(*ArrayElement))
@@ -122,13 +129,7 @@ func (v *Visitor) VisitElementList(ctx *parser.ElementListContext) interface{} {
 			panic(ch.Type())
 
 		}
-		if el.children == nil {
-			el.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
+
 	}
 	return el
 }

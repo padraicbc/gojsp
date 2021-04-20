@@ -34,15 +34,15 @@ func visit(tree antlr.ParseTree, v *Visitor) interface{} {
 
 func impexp() {
 	stream := antlr.NewInputStream(`
-//    import foo as name from "star-module-name";
-// 	import defaultExport from "default-module-name";
-	import defaultname, { export1 , export2 as alias} from "module-name";
-// 	import "module-name";
+    import foo as name from "star-module-name";
+ 	import defaultExport from "default-module-name";
+	import defaultname, { export1, export2 as alias} from "module-name";
+ 	import "module-name";
 
-// var promise = import("module-name");
-// import * as name from "star-module-name";
-// import { export1 } from "exp1-module-name";
-// export { name1, name2, nameN };
+var promise = import("module-name");
+import * as name from "star-module-name";
+import { export1 } from "exp1-module-name";
+export { name1, name2, nameN };
 // let a = 123;
 // $: {
 	
@@ -85,24 +85,41 @@ func impexp() {
 	p := parser.NewJavaScriptParser(tokenStream)
 	// all
 	tree := p.Program()
-
 	v := NewVisitor(lexer, p)
 	v.lexer = lexer
 	v.parser = p
-	for _, ch := range visit(tree, v).(*Program).Children() {
-		_ = ch
-		// log.Println(ch.Type())
-	}
+	visit(tree, v) //.(*Program) // .Children()[0].Children()[0].Children()[0].Children()[1].(*ImportFromBlock).ImportDefault.Default)
 	// sourceElement
 	// : statement
 	// ;
 	// each  -> statement
 	for se := range v.ParseTree.NextNodes() {
-		// Statements at top
+		// Statements ...
 		for _, st := range se.Children() {
-			log.Println(st.Type())
-			vch(st)
-			fmt.Println()
+
+			for _, ch := range st.Children() {
+				switch ch.Type() {
+				case "ImportStatement":
+					ims := st.Children()[0].(*ImportStatement)
+					log.Println("Before code", st.Code())
+					// "import 'whatever'"
+					if ims.ImportFromBlock.StringLiteral != nil {
+						ims.ImportFromBlock.StringLiteral.SetValue(`"a-new/path"`)
+						// else has an ImportFrom
+					} else {
+
+						log.Println(ims.ImportFromBlock.ImportFrom.Path.Value())
+						ims.ImportFromBlock.ImportFrom.Path.SetValue(`"some/new_path"`)
+						log.Println(ims.ImportFromBlock.ImportFrom.Path.Value())
+					}
+					log.Println("After code", st.Code())
+
+				}
+				fmt.Println()
+
+			}
+
+			// vch(st)
 
 		}
 	}
@@ -116,11 +133,12 @@ func vch(v VNode) {
 			return
 		}
 
-		log.Println(ch.Type(), ch.Code(), ch.GetInfo().Start, ch.GetInfo().End)
 		if ch.Type() == "AliasName" {
-			log.Println(ch.(*AliasName).IdentifierName.Value())
+			log.Println(ch.Code())
+			log.Println("Alias before", ch.(*AliasName).IdentifierName.Value())
 			ch.(*AliasName).IdentifierName.SetValue("changed")
-			log.Println(ch.(*AliasName).IdentifierName.Value())
+			log.Println("Alias after", ch.(*AliasName).IdentifierName.Value())
+			log.Println(ch.Code())
 		}
 		vch(ch)
 

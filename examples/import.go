@@ -54,7 +54,7 @@ func (i *ImportStatement) Children() []VNode {
 type ImportFromBlock struct {
 	*SourceInfo
 
-	Default         *ImportDefault
+	ImportDefault   *ImportDefault
 	ModuleItems     *ModuleItems
 	ImportNamespace *ImportNamespace
 	StringLiteral   Token
@@ -303,13 +303,6 @@ func (v *Visitor) VisitImportStatement(ctx *parser.ImportStatementContext) inter
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-
-		if ch.Type() == "LToken" {
-			im.Import = ch.(Token)
-
-		} else {
-			im.ImportFromBlock = ch.(*ImportFromBlock)
-		}
 		if im.children == nil {
 			im.children = ch
 		} else {
@@ -318,6 +311,14 @@ func (v *Visitor) VisitImportStatement(ctx *parser.ImportStatementContext) inter
 		}
 		ch.Prev(prev)
 		prev = ch
+
+		if ch.Type() == "LToken" {
+			im.Import = ch.(Token)
+
+		} else {
+			im.ImportFromBlock = ch.(*ImportFromBlock)
+		}
+
 	}
 
 	return im
@@ -331,25 +332,6 @@ func (v *Visitor) VisitImportFromBlock(ctx *parser.ImportFromBlockContext) inter
 	var prev VNode
 	// iterate here as some are there, some not.
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		switch ch.Type() {
-		case "ImportDefault":
-			imf.Default = ch.(*ImportDefault)
-		case "ImportNamespace":
-			imf.ImportNamespace = ch.(*ImportNamespace)
-		case "ModuleItems":
-			imf.ModuleItems = ch.(*ModuleItems)
-		case "ImportFrom":
-			imf.ImportFrom = ch.(*ImportFrom)
-
-		default:
-			if t, ok := ch.(Token); ok {
-				// sn:SemiColon
-				imf.Eos = t
-				continue
-
-			}
-			panic(fmt.Sprintf("%+v %s\n", ch, ch.Type()))
-		}
 		if imf.children == nil {
 			imf.children = ch
 		} else {
@@ -357,8 +339,35 @@ func (v *Visitor) VisitImportFromBlock(ctx *parser.ImportFromBlockContext) inter
 
 		}
 		ch.Prev(prev)
+
 		prev = ch
+		switch ch.Type() {
+
+		case "ImportDefault":
+			imf.ImportDefault = ch.(*ImportDefault)
+		case "ImportNamespace":
+			imf.ImportNamespace = ch.(*ImportNamespace)
+		case "ModuleItems":
+			imf.ModuleItems = ch.(*ModuleItems)
+		case "ImportFrom":
+			imf.ImportFrom = ch.(*ImportFrom)
+		case "LToken":
+			tk := ch.(Token)
+			if tk.SymbolName() == "StringLiteral" {
+				imf.StringLiteral = tk
+				continue
+			}
+			if tk.SymbolName() == "SemiColon" {
+				imf.Eos = tk
+				continue
+			}
+
+			panic(fmt.Sprintf("%+v %s\n", ch, ch.Type()))
+
+		}
+
 	}
+
 	return imf
 
 }
@@ -373,6 +382,13 @@ func (v *Visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) int
 	// alwyas tokens
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if ime.children == nil {
+			ime.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "Import":
@@ -386,13 +402,7 @@ func (v *Visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) int
 		default:
 			panic(t.SymbolName())
 		}
-		if ime.children == nil {
-			ime.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
+
 	}
 
 	return ime
@@ -401,10 +411,17 @@ func (v *Visitor) VisitImportExpression(ctx *parser.ImportExpressionContext) int
 func (v *Visitor) VisitModuleItems(ctx *parser.ModuleItemsContext) interface{} {
 
 	mit := &ModuleItems{
-
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if mit.children == nil {
+			mit.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 		switch ch.Type() {
 		case "AliasName":
 			mit.AliasNames = append(mit.AliasNames, ch.(*AliasName))
@@ -425,17 +442,11 @@ func (v *Visitor) VisitModuleItems(ctx *parser.ModuleItemsContext) interface{} {
 			panic(t.SymbolName())
 
 		default:
-
 			panic(fmt.Sprintf("%+v %s\n", ch, ch.Type()))
 		}
-		if mit.children == nil {
-			mit.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
+
 	}
+
 	return mit
 
 }
@@ -490,6 +501,13 @@ func (v *Visitor) VisitImportNamespace(ctx *parser.ImportNamespaceContext) inter
 	}
 	var prev VNode
 	for i, ch := range v.VisitChildren(ctx).([]VNode) {
+		if imn.children == nil {
+			imn.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "Identifier":
@@ -506,13 +524,7 @@ func (v *Visitor) VisitImportNamespace(ctx *parser.ImportNamespaceContext) inter
 		default:
 			panic(fmt.Sprintf("%+v\n", ch))
 		}
-		if imn.children == nil {
-			imn.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
+
 	}
 	return imn
 
@@ -527,6 +539,14 @@ func (v *Visitor) VisitImportFrom(ctx *parser.ImportFromContext) interface{} {
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if imfr.children == nil {
+			imfr.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+
+		prev = ch
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "From":
@@ -536,13 +556,7 @@ func (v *Visitor) VisitImportFrom(ctx *parser.ImportFromContext) interface{} {
 		default:
 			panic(t.SymbolName())
 		}
-		if imfr.children == nil {
-			imfr.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
+
 	}
 
 	return imfr

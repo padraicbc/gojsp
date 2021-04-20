@@ -9,7 +9,7 @@ import "github.com/padraicbc/gojsp/parser"
 //     ;
 type Declaration struct {
 	*SourceInfo
-	Node       VNode
+	Dec        VNode
 	children   VNode
 	prev, next VNode
 }
@@ -42,7 +42,8 @@ func (i *Declaration) Children() []VNode {
 }
 func (v *Visitor) VisitDeclaration(ctx *parser.DeclarationContext) interface{} {
 	d := &Declaration{
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if d.children == nil {
@@ -54,7 +55,7 @@ func (v *Visitor) VisitDeclaration(ctx *parser.DeclarationContext) interface{} {
 		prev = ch
 
 	}
-	d.Node = d.children
+	d.Dec = d.children
 	return d
 
 }
@@ -106,13 +107,19 @@ func (v *Visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContex
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-
+		if d.children == nil {
+			d.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 		switch ch.(type) {
 		case *ArrayLiteral: // todo ObjectLiteral":
 			d.Assignable = ch
 		case *LToken:
 			t := ch.(Token)
-			if t.RName() == "identifier" {
+			if t.RName("") == "identifier" {
 				d.Assignable = t
 				continue
 			}
@@ -123,13 +130,6 @@ func (v *Visitor) VisitVariableDeclaration(ctx *parser.VariableDeclarationContex
 			panic(ch.Type())
 
 		}
-		if d.children == nil {
-			d.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
 
 	}
 	return d
@@ -178,7 +178,13 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationLi
 	vdl := &VariableDeclarationList{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-
+		if vdl.children == nil {
+			vdl.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 		switch ch.Type() {
 		case "VariableDeclaration":
 			vdl.VariableDeclarations = append(vdl.VariableDeclarations, ch.(*VariableDeclaration))
@@ -194,13 +200,7 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *parser.VariableDeclarationLi
 			panic(ch.Type())
 
 		}
-		if vdl.children == nil {
-			vdl.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
+
 	}
 
 	return vdl

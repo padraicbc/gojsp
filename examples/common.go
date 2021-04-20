@@ -2,10 +2,7 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"reflect"
 	"runtime"
-	"strings"
 
 	antlr "github.com/padraicbc/antlr4"
 	"github.com/padraicbc/gojsp/parser"
@@ -74,22 +71,64 @@ func (i *BaseDefaultVNode) Prev(v VNode) VNode {
 	return i.prev
 }
 
+func _fill(v VNode, cc chan VNode) {
+	for _, c := range v.Children() {
+		cc <- c
+		_fill(c, cc)
+
+	}
+
+}
+
+// get a flattened list of tokens
+func fill(v VNode) chan VNode {
+	chi := v.Children()
+
+	cc := make(chan VNode, 1)
+	go func() {
+		for _, c := range chi {
+			cc <- c
+			if c.Type() != "LToken" {
+				_fill(c, cc)
+			}
+
+		}
+		close(cc)
+	}()
+
+	return cc
+
+}
+
+// prints out the source respecting any changes made to Tokens and original spacing etc..
 func CodeDef(t VNode) string {
 
 	if t == nil {
 		return ""
 	}
 
-	var c []string
-	for _, n := range t.Children() {
-		// ugly but zero value is not nil, this will change or be remove completely
-		if reflect.ValueOf(n).Kind() == reflect.Ptr && !reflect.ValueOf(n).IsNil() {
-			c = append(c, n.Code())
+	orig := t.GetInfo().Source
+	start := t.GetInfo().Start
+	// keep track of what we have seen so we don't concta twice
+	offset := 0
+	var source string
+	for n := range fill(t) {
+
+		if tk, ok := n.(Token); ok {
+			// need to subtract as these offsets are based on original source
+			tkstart, tkend := tk.GetInfo().Start-start, tk.GetInfo().End-start
+			fh := orig[offset:tkstart]
+
+			source += fmt.Sprintf("%s%s", fh, tk.Value())
+			// use tkend - tkstar as that is original token offsets
+			// if we have changed it may have srhunk/grown...
+			offset += len(fh) + tkend - tkstart
+
 		}
 
 	}
 
-	return strings.Join(c, "")
+	return source
 
 }
 
@@ -116,7 +155,6 @@ func (p *PTree) NextNodes() chan VNode {
 	nodes := make(chan VNode)
 	go func() {
 		next := p.Root
-		log.Println(next.Type(), next.Code())
 		for next != nil {
 			nodes <- next
 			next = next.Next(nil)
@@ -131,7 +169,7 @@ type Token interface {
 	VNode
 	SetValue(string)
 	Value() string
-	RName() string
+	RName(string) string
 	SymbolName() string
 }
 
@@ -160,7 +198,11 @@ func (i *LToken) SymbolName() string {
 func (i *LToken) Code() string {
 	return i.value
 }
-func (i *LToken) RName() string {
+func (i *LToken) RName(s string) string {
+	if s != "" {
+		i.rn = s
+		return ""
+	}
 	return i.rn
 }
 func (i *LToken) Children() []VNode {
@@ -240,6 +282,13 @@ func (v *Visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	var prev VNode
 	for i, ch := range v.VisitChildren(ctx).([]VNode) {
+		if al.children == nil {
+			al.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 		t := ch.(Token)
 
 		switch t.SymbolName() {
@@ -258,13 +307,7 @@ func (v *Visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
 			panic(t.SymbolName())
 
 		}
-		if al.children == nil {
-			al.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
+
 	}
 	return al
 }
@@ -272,9 +315,11 @@ func (v *Visitor) VisitAliasName(ctx *parser.AliasNameContext) interface{} {
 func children(start VNode) []VNode {
 	out := []VNode{}
 	n := start
+
 	for n != nil {
 		out = append(out, n)
 		n = n.Next(nil)
+
 	}
 	return out
 }

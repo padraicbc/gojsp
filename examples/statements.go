@@ -162,10 +162,17 @@ func (v *Visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) i
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if lst.children == nil {
+			lst.children = ch
+		} else {
+			prev.Next(ch)
+		}
+		ch.Prev(prev)
+		prev = ch
 		switch ch.Type() {
 		case "LToken":
 			t := ch.(Token)
-			if t.RName() == "identifier" {
+			if t.RName("") == "identifier" {
 				lst.Label = t
 				continue
 			}
@@ -176,13 +183,7 @@ func (v *Visitor) VisitLabelledStatement(ctx *parser.LabelledStatementContext) i
 			panic(ch.Type())
 
 		}
-		if lst.children == nil {
-			lst.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
+
 	}
 	return lst
 }

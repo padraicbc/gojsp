@@ -64,13 +64,17 @@ func main() {
 
 	}
 
-	if err = os.WriteFile(*path+"/javascript_parser_base.go", bytes.ReplaceAll(parserbase, []byte("package parser"), []byte("package "+*path)), os.ModePerm); err != nil {
+	if err = os.WriteFile(*path+"/javascript_parser_base.go",
+		bytes.ReplaceAll(parserbase, []byte("package parser"),
+			[]byte("package "+*path)), os.ModePerm); err != nil {
 
 		log.Println(err)
 		return
 
 	}
-	if err = os.WriteFile(*path+"/javascript_lexer_base.go", bytes.ReplaceAll(lexerbase, []byte("package parser"), []byte("package "+*path)), os.ModePerm); err != nil {
+	if err = os.WriteFile(*path+"/javascript_lexer_base.go",
+		bytes.ReplaceAll(lexerbase, []byte("package parser"),
+			[]byte("package "+*path)), os.ModePerm); err != nil {
 
 		log.Println(err)
 		return
@@ -91,7 +95,9 @@ func main() {
 			log.Println(err)
 			return
 		}
-		repl := bytes.ReplaceAll(f, []byte(`"github.com/antlr/antlr4/runtime/Go/antlr"`), []byte(`antlr "github.com/padraicbc/antlr4"`))
+		repl := bytes.ReplaceAll(f,
+			[]byte(`"github.com/antlr/antlr4/runtime/Go/antlr"`),
+			[]byte(`antlr "github.com/padraicbc/antlr4"`))
 		repl = bytes.ReplaceAll(repl, []byte("package parser"), []byte("package "+*path))
 		fo, err := os.CreateTemp(".", "")
 		if err != nil {

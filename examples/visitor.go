@@ -67,29 +67,21 @@ func (v *Visitor) shouldVisitNextChild(node antlr.RuleNode, currentResult interf
 func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 	var result []VNode
-	prev := v.ParseTree.LastChild
+	// prev := v.ParseTree.LastChild
 	for _, ch := range node.GetChildren() {
 
 		res := ch.(antlr.ParseTree).Accept(v)
 
 		// first node
 		switch rr := res.(type) {
-		case *LToken:
-			rr.rn = v.parser.GetRuleNames()[node.GetRuleContext().GetRuleIndex()]
+		case Token:
+			rr.RName(v.parser.GetRuleNames()[node.GetRuleContext().GetRuleIndex()])
 			result = append(result, rr)
 
 		case VNode:
 			result = append(result, rr)
-
-			if prev != nil {
-				prev.Next(rr)
-				rr.Prev(prev)
-			}
-
-			prev = rr
 		case []VNode:
 			result = append(result, rr...)
-			// log.Println(rr[0].GetInfo().Source, len(rr), rr, result)
 		case nil:
 			// panic(rr)
 		default:
