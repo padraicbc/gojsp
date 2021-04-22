@@ -1,4 +1,4 @@
-// Code generated from antlr/JavaScriptLexer.g4 by ANTLR 4.9.2. DO NOT EDIT.
+// Code generated from /home/padraic/gits/jp/runantlr/JavaScriptLexer.g4 by ANTLR 4.9.2. DO NOT EDIT.
 
 package base
 

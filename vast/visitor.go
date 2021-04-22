@@ -79,14 +79,6 @@ func (v *Visitor) VisitVariableStatement(ctx *base.VariableStatementContext) int
 	return v.VisitChildren(ctx)
 }
 
-// functionDeclaration
-//     : Async? Function '*'? identifier '(' formalParameterList? ')' functionBody
-//     ;
-func (v *Visitor) VisitFunctionDeclaration(ctx *base.FunctionDeclarationContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
 // classDeclaration
 //     : Class identifier classTail
 //     ;
@@ -114,44 +106,6 @@ func (v *Visitor) VisitClassElement(ctx *base.ClassElementContext) interface{} {
 }
 
 func (v *Visitor) VisitMethodDefinition(ctx *base.MethodDefinitionContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitFormalParameterList(ctx *base.FormalParameterListContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitFormalParameterArg(ctx *base.FormalParameterArgContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitLastFormalParameterArg(ctx *base.LastFormalParameterArgContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitFunctionProperty(ctx *base.FunctionPropertyContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitArguments(ctx *base.ArgumentsContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-func (v *Visitor) VisitMemberDotExpression(ctx *base.MemberDotExpressionContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-func (v *Visitor) VisitFunctionExpression(ctx *base.FunctionExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
