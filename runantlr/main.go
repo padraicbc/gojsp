@@ -6,7 +6,10 @@ import (
 	"flag"
 	"log"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"regexp"
+	"runtime"
 	"strings"
 )
 
@@ -17,18 +20,33 @@ var parserbase []byte
 var lexerbase []byte
 var base embed.FS
 
-// fixes based on suggst here https://github.com/antlr/grammars-v4/tree/master/javascript/javascript/Go
+// fixes based on suggested here https://github.com/antlr/grammars-v4/tree/master/javascript/javascript/Go
 // g4 files already have fixes
 func main() {
 
 	log.SetFlags(log.Llongfile)
+	_, fname, _, _ := (runtime.Caller(0))
 
+	mnpth := filepath.Dir(fname) + "/"
 	// 	// javascript_lexer.go
 	// p *JavaScriptLexer => l *JavaScriptLexer
 	// antlr.ParserBase => antlr.BaseParser
+	l4 := flag.String("l4", mnpth+"JavaScriptLexer.g4", "-l4 path to lexerut")
+
+	p4 := flag.String("p4", mnpth+"JavaScriptParser.g4", "-p path to parser")
 	path := flag.String("p", "", "-p path to antlr output")
 	flag.Parse()
 	*path = strings.Trim(*path, "/ ")
+
+	antlr4 := []string{"-jar", mnpth + "antlr-4.9.2-complete.jar", "-Dlanguage=Go",
+		"-visitor", "-no-listener", *l4, *p4, "-Xexact-output-dir", "-o", *path,
+		"-package", filepath.Base(*path)}
+	cmd := exec.Command("/usr/bin/java", antlr4...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		log.Fatal(err)
+	}
 
 	jsLexerBytes, err := os.ReadFile(*path + "/javascript_lexer.go")
 	if err != nil {
@@ -46,7 +64,6 @@ func main() {
 
 	jsLexerBytes = ptol.ReplaceAll(jsLexerBytes, []byte("l *JavaScriptLexer"))
 	jsLexerBytes = bp.ReplaceAll(jsLexerBytes, []byte(`antlr.BaseParser`))
-	jsLexerBytes = bytes.ReplaceAll(jsLexerBytes, []byte("package parser"), []byte("package "+*path))
 	fo, err := os.CreateTemp(".", "")
 	if err != nil {
 		log.Println(err)
@@ -64,13 +81,17 @@ func main() {
 
 	}
 
-	if err = os.WriteFile(*path+"/javascript_parser_base.go", bytes.ReplaceAll(parserbase, []byte("package parser"), []byte("package "+*path)), os.ModePerm); err != nil {
+	if err = os.WriteFile(*path+"/javascript_parser_base.go",
+		bytes.ReplaceAll(parserbase, []byte("package parser"),
+			[]byte("package "+*path)), os.ModePerm); err != nil {
 
 		log.Println(err)
 		return
 
 	}
-	if err = os.WriteFile(*path+"/javascript_lexer_base.go", bytes.ReplaceAll(lexerbase, []byte("package parser"), []byte("package "+*path)), os.ModePerm); err != nil {
+	if err = os.WriteFile(*path+"/javascript_lexer_base.go",
+		bytes.ReplaceAll(lexerbase, []byte("package parser"),
+			[]byte("package "+*path)), os.ModePerm); err != nil {
 
 		log.Println(err)
 		return
@@ -91,8 +112,9 @@ func main() {
 			log.Println(err)
 			return
 		}
-		repl := bytes.ReplaceAll(f, []byte(`"github.com/antlr/antlr4/runtime/Go/antlr"`), []byte(`antlr "github.com/padraicbc/antlr4"`))
-		repl = bytes.ReplaceAll(repl, []byte("package parser"), []byte("package "+*path))
+		repl := bytes.ReplaceAll(f,
+			[]byte(`"github.com/antlr/antlr4/runtime/Go/antlr"`),
+			[]byte(`antlr "github.com/padraicbc/antlr4"`))
 		fo, err := os.CreateTemp(".", "")
 		if err != nil {
 			log.Println(err)

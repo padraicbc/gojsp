@@ -1,4 +1,4 @@
-package parser
+package base
 
 import antlr "github.com/padraicbc/antlr4"
 

@@ -1,7 +1,6 @@
-// Code generated from JavaScriptParser.g4 by ANTLR 4.9.2. DO NOT EDIT.
+// Code generated from antlr/JavaScriptParser.g4 by ANTLR 4.9.2. DO NOT EDIT.
 
-package parser // JavaScriptParser
-
+package base // JavaScriptParser
 import antlr "github.com/padraicbc/antlr4"
 
 type BaseJavaScriptParserVisitor struct {
@@ -284,10 +283,6 @@ func (v *BaseJavaScriptParserVisitor) VisitTernaryExpression(ctx *TernaryExpress
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitLogicalAndExpression(ctx *LogicalAndExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseJavaScriptParserVisitor) VisitPowerExpression(ctx *PowerExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -301,14 +296,6 @@ func (v *BaseJavaScriptParserVisitor) VisitObjectLiteralExpression(ctx *ObjectLi
 }
 
 func (v *BaseJavaScriptParserVisitor) VisitMetaExpression(ctx *MetaExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitInExpression(ctx *InExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitLogicalOrExpression(ctx *LogicalOrExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -352,7 +339,7 @@ func (v *BaseJavaScriptParserVisitor) VisitTypeofExpression(ctx *TypeofExpressio
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitInstanceofExpression(ctx *InstanceofExpressionContext) interface{} {
+func (v *BaseJavaScriptParserVisitor) VisitLeftRightExpression(ctx *LeftRightExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -368,35 +355,11 @@ func (v *BaseJavaScriptParserVisitor) VisitImportExpression(ctx *ImportExpressio
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitEqualityExpression(ctx *EqualityExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitBitXOrExpression(ctx *BitXOrExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseJavaScriptParserVisitor) VisitSuperExpression(ctx *SuperExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitMultiplicativeExpression(ctx *MultiplicativeExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitBitShiftExpression(ctx *BitShiftExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseJavaScriptParserVisitor) VisitParenthesizedExpression(ctx *ParenthesizedExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitAdditiveExpression(ctx *AdditiveExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitRelationalExpression(ctx *RelationalExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -440,23 +403,7 @@ func (v *BaseJavaScriptParserVisitor) VisitIdentifierExpression(ctx *IdentifierE
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseJavaScriptParserVisitor) VisitBitAndExpression(ctx *BitAndExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitBitOrExpression(ctx *BitOrExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitAssignmentOperatorExpression(ctx *AssignmentOperatorExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BaseJavaScriptParserVisitor) VisitVoidExpression(ctx *VoidExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitCoalesceExpression(ctx *CoalesceExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -525,10 +472,6 @@ func (v *BaseJavaScriptParserVisitor) VisitReservedWord(ctx *ReservedWordContext
 }
 
 func (v *BaseJavaScriptParserVisitor) VisitKeyword(ctx *KeywordContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BaseJavaScriptParserVisitor) VisitLet_(ctx *Let_Context) interface{} {
 	return v.VisitChildren(ctx)
 }
 
