@@ -26,6 +26,7 @@ func singleExp() {
 
 	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 	expc.OP().SetValue("/")
+	expc.Right().(vast.Token).SetValue("1000")
 	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
 	// reuse lexer and parser
@@ -39,6 +40,7 @@ func singleExp() {
 	tree2 := p.Program()
 	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
 	exp = visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement)
+	expc = exp.Children()[0].(*vast.LRExpression)
 
 	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
