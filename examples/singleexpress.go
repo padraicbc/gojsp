@@ -28,6 +28,7 @@ func singleExp() {
 	expc.OP().SetValue("/")
 	expc.Right().(vast.Token).SetValue("1000")
 	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
+	log.Println(expc.Code())
 
 	// reuse lexer and parser
 	stream.Seek(0)
@@ -43,5 +44,6 @@ func singleExp() {
 	expc = exp.Children()[0].(*vast.LRExpression)
 
 	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
+	log.Println(expc.Code())
 
 }

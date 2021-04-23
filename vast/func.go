@@ -1,7 +1,6 @@
 package vast
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/padraicbc/gojsp/base"
@@ -80,9 +79,18 @@ func (i *FunctionDeclaration) Children() []VNode {
 
 // Visit a parse tree produced by JavaScriptParser#functionDeclaration.
 func (v *Visitor) VisitFunctionDeclaration(ctx *base.FunctionDeclarationContext) interface{} {
-	fd := &FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
+	fd := &FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if fd.children == nil {
+			fd.children = ch
+		} else {
+			prev.Next(ch)
+
+		}
+		ch.Prev(prev)
+		prev = ch
 
 		switch ch.Type() {
 		case "LToken":
@@ -169,22 +177,31 @@ func (i *FormalParameterList) Children() []VNode {
 
 func (v *Visitor) VisitFormalParameterList(ctx *base.FormalParameterListContext) interface{} {
 	fp := &FormalParameterList{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if fp.children == nil {
+			fp.children = ch
+		} else {
+			prev.Next(ch)
+
+		}
+		ch.Prev(prev)
+		prev = ch
 
 		switch ch.Type() {
 		case "LToken":
-			tk := ch.(Token)
-			switch tk.SymbolName() {
+
+			switch tk := ch.(Token); tk.SymbolName() {
 			case "Comma":
 				fp.Commas = append(fp.Commas, tk)
 
 			default:
-				log.Println(fmt.Sprintf("%+v\n", ch))
+				log.Panicf("%+v\n", ch)
 			}
-		case "FormalParameterList":
+		case "FormalParameterArg":
 			fp.FormalParameterArgs = append(fp.FormalParameterArgs, ch.(*FormalParameterArg))
 		default:
-			// log.Println(ch)
+			log.Panicf("%+v %s\n", ch, ch.Type())
 
 		}
 	}
@@ -231,7 +248,9 @@ func (i *FormalParameterArg) Children() []VNode {
 }
 func (v *Visitor) VisitFormalParameterArg(ctx *base.FormalParameterArgContext) interface{} {
 	fa := &FormalParameterArg{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
 	var prev VNode
+
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if fa.children == nil {
 			fa.children = ch
@@ -241,14 +260,16 @@ func (v *Visitor) VisitFormalParameterArg(ctx *base.FormalParameterArgContext) i
 		}
 		ch.Prev(prev)
 		prev = ch
-		// log.Printf("%+vz\n", ch)
-
-		// if ch.Type() == "LToken" {
-		// 	fa.faport = ch.(Token)
-
-		// } else {
-		// 	im.ImportFromBlock = ch.(*ImportFromBlock)
-		// }
+		switch tk := ch.(Token); tk.SymbolName() {
+		case "Identifier":
+			fa.Assignable = tk
+		case "SingleExpression":
+			fa.SingleExpression = tk
+		case "Assign":
+			fa.Equals = tk
+		default:
+			log.Panicf("%+v\n", tk)
+		}
 
 	}
 	return fa
