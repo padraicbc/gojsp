@@ -14,7 +14,9 @@ func main() {
 
 	log.SetFlags(log.Llongfile)
 
-	impexp()
+	// impexp()
+	fs()
+	singleExp()
 }
 
 func visit(tree antlr.ParseTree, v *vast.Visitor) interface{} {

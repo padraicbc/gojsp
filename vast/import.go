@@ -6,9 +6,6 @@ import (
 	"github.com/padraicbc/gojsp/base"
 )
 
-// ** Not sure if pointer receivers are better or not. Means checkign for nil a lot more
-// but does allow easily manipulating struct values...**
-
 // importStatement
 //     : Import importFromBlock
 //     ;
