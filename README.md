@@ -7,8 +7,18 @@ The [vast](https://github.com/padraicbc/gojsp/tree/master/vast) folder is the im
 Thre are a few example functions in the exampls folder including how to parse and [manipulate](https://github.com/padraicbc/gojsp/blob/master/examples/singleexpress.go) a single expression. 
 
 
-    stream := antlr.NewInputStream(`i + j;`)
-    lexer := base.NewJavaScriptLexer(stream)
+    import (
+	"log"
+
+	antlr "github.com/padraicbc/antlr4"
+	"github.com/padraicbc/gojsp/base"
+	"github.com/padraicbc/gojsp/vast"
+    )
+
+
+
+	stream := antlr.NewInputStream(`i + j;`)
+	lexer := base.NewJavaScriptLexer(stream)
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
@@ -25,6 +35,7 @@ Thre are a few example functions in the exampls folder including how to parse an
 	expc.OP().SetValue("/")
 	expc.Right().(vast.Token).SetValue("1000")
 	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
+	log.Println(expc.Code())
 
 	// reuse lexer and parser
 	stream.Seek(0)
@@ -35,10 +46,5 @@ Thre are a few example functions in the exampls folder including how to parse an
 	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
 	// alterntive using Body
 	tree2 := p.Program()
-	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-	exp = visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement)
-	expc = exp.Children()[0].(*vast.LRExpression)
-
-	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
-
+	
 Quite verbose but more about getting it working than pretty to start...
