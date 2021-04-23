@@ -16,7 +16,10 @@ func fs() {
 			return 10;
 		})();
 		return width * height;
-	  }`)
+	  }
+	  
+	  foo(a,b)=> a +b
+	  `)
 	lexer := base.NewJavaScriptLexer(stream)
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
@@ -38,4 +41,33 @@ func fs() {
 	fd.FormalParameterList.FormalParameterArgs[0].Assignable.(vast.Token).SetValue("new")
 	log.Println(fd.Code())
 
+}
+
+func arrow() {
+	stream := antlr.NewInputStream(`
+	 
+	 (a,b) => a + b;
+
+	(a, b) => {
+		 return a+b;
+	 }
+	 `)
+	lexer := base.NewJavaScriptLexer(stream)
+
+	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	p := base.NewJavaScriptParser(tokenStream)
+
+	tree := p.Program()
+
+	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+
+	// other way to go
+	rfs := visit(tree, v).(*vast.Program).Body
+	a, b := rfs[0].Children()[0].(*vast.ArrowFunction), rfs[1].Children()[0].(*vast.ArrowFunction)
+
+	// makes no logical sense but shows how to change
+	log.Println(a.Code())
+
+	log.Println(b.Code())
 }

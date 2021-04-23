@@ -14,9 +14,10 @@ func main() {
 
 	log.SetFlags(log.Llongfile)
 
-	impexp()
-	fs()
-	singleExp()
+	// impexp()
+	// fs()
+	arrow()
+	// singleExp()
 }
 
 func visit(tree antlr.ParseTree, v *vast.Visitor) interface{} {
