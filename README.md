@@ -37,14 +37,5 @@ Thre are a few example functions in the exampls folder including how to parse an
 	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 	log.Println(expc.Code())
 
-	// reuse lexer and parser
-	stream.Seek(0)
-	lexer.SetInputStream(stream)
-	tokenStream = antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-	p.SetInputStream(tokenStream)
-
-	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-	// alterntive using Body
-	tree2 := p.Program()
 	
 Quite verbose but more about getting it working than pretty to start...
