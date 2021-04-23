@@ -12,6 +12,7 @@ func fs() {
 
 	stream := antlr.NewInputStream(`function calcRectArea(width, height) {
 		 width = width * 12 / 3 ** (function () {
+			 a *= 12;
 			return 10;
 		})();
 		return width * height;

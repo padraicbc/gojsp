@@ -16,6 +16,7 @@ func main() {
 
 	// impexp()
 	fs()
+	singleExp()
 }
 
 func visit(tree antlr.ParseTree, v *vast.Visitor) interface{} {

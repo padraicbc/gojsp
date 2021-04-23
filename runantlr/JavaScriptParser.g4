@@ -308,41 +308,6 @@ expressionSequence
     : singleExpression (',' singleExpression)*
     ;
 
-// singleExpression
-//     : anoymousFunction                                                      # FunctionExpression
-//     | Class identifier? classTail                                           # ClassExpression
-//     | singleExpression '[' expressionSequence ']'                           # MemberIndexExpression
-//     | singleExpression '?'? '.' '#'? identifierName                         # MemberDotExpression
-//     | singleExpression arguments                                            # ArgumentsExpression
-//     | New singleExpression arguments?                                       # NewExpression
-//     | New '.' identifier                                                    # MetaExpression // new.target
-//     | singleExpression {p.notLineTerminator()}? '++'                     # PostIncrementExpression
-//     | singleExpression {p.notLineTerminator()}? '--'                     # PostDecreaseExpression
-//     | Delete singleExpression                                               # DeleteExpression
-//     | Void singleExpression                                                 # VoidExpression
-//     | Typeof singleExpression                                               # TypeofExpression
-//     | '++' singleExpression                                                 # PreIncrementExpression
-//     | '--' singleExpression                                                 # PreDecreaseExpression
-//     | '+' singleExpression                                                  # UnaryPlusExpression
-//     | '-' singleExpression                                                  # UnaryMinusExpression
-//     | '~' singleExpression                                                  # BitNotExpression
-//     | '!' singleExpression                                                  # NotExpression
-//     | Await singleExpression                                                # AwaitExpression
-//     | <assoc=right> Left=singleExpression OP='**' Right=singleExpression                  # PowerExpression
-//     | Left=singleExpression OP=('*' | '/' | '%' | '+' | '-' | '??' | '<' | '>' | '<=' | '>=' | '==' | '!=' | '===' | '!==' | '^' | '|' | '&&' | '||' ) right=singleExpression   # LeftRightExpression
-//     | Left=singleExpression '?' ExpT=singleExpression ':' ExpF=singleExpression            # TernaryExpression
-//     | <assoc=right> Left=singleExpression OP=assignmentOperator Right=singleExpression     # AssignmentExpression  
-//     | Import '(' singleExpression ')'                                       # ImportExpression
-//     | singleExpression TemplateStringLiteral                                # TemplateStringExpression  // ECMAScript 6
-//     | yieldStatement                                                        # YieldExpression // ECMAScript 6
-//     | This                                                                  # ThisExpression
-//     | identifier                                                            # IdentifierExpression
-//     | Super                                                                 # SuperExpression
-//     | literal                                                               # LiteralExpression
-//     | arrayLiteral                                                          # ArrayLiteralExpression
-//     | objectLiteral                                                         # ObjectLiteralExpression
-//     | '(' expressionSequence ')'                                            # ParenthesizedExpression
-//     ;
 singleExpression
     : anoymousFunction                                                      # FunctionExpression
     | Class identifier? classTail                                           # ClassExpression

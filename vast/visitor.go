@@ -156,7 +156,3 @@ func ident(v *Visitor, token antlr.Token) *LToken {
 		},
 	}
 }
-
-// func (v *BaseJavaScriptParserVisitor) VisitAssignmentOperator(ctx *AssignmentOperatorContext) interface{} {
-// 	return v.VisitChildren(ctx)
-// }

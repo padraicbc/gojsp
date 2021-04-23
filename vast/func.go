@@ -101,13 +101,15 @@ func (v *Visitor) VisitFunctionDeclaration(ctx *base.FunctionDeclarationContext)
 			case "Async":
 				fd.Async = tk
 			default:
-				log.Panic(fmt.Sprintf("%+v\n", ch))
+				log.Panicf("%+v %s\n", ch, ch.Type())
 			}
-		// case ""
+
 		case "FormalParameterList":
 			fd.FormalParameterList = ch.(*FormalParameterList)
+		case "FunctionBody":
+			fd.FunctionBody = ch.(*FunctionBody)
 		default:
-			// log.Printf("%+v\n", ch)
+			log.Panicf("%+v %s\n", ch, ch.Type())
 
 		}
 	}
@@ -299,7 +301,8 @@ func (v *Visitor) VisitLastFormalParameterArg(ctx *base.LastFormalParameterArgCo
 //     ;
 type FunctionBody struct {
 	*SourceInfo
-	OpenBrace      Token
+	OpenBrace Token
+	// statements
 	SourceElements []VNode
 	CloseBrace     Token
 	Eos            Token //
@@ -343,6 +346,7 @@ func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
 			prev.Next(ch)
 
 		}
+
 		ch.Prev(prev)
 		prev = ch
 
@@ -358,11 +362,12 @@ func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
 				fb.Eos = tk
 
 			default:
-				log.Println(fmt.Sprintf("%+v\n", ch))
+				log.Panicf("%+v\n", ch)
 			}
 
 		default:
-			log.Println(fmt.Sprintf("%+v\n", ch))
+			// ExpressionStatement ...
+			// log.Printf("%+v %s\n", ch, ch.Type())
 			fb.SourceElements = append(fb.SourceElements, ch)
 
 		}
