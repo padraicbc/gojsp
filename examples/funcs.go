@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	antlr "github.com/padraicbc/antlr4"
@@ -46,11 +47,24 @@ func fs() {
 func arrow() {
 	stream := antlr.NewInputStream(`
 	 
-	 (a,b) => a + b;
+// Arrow Function Break Down
 
-	(a, b) => {
-		 return a+b;
-	 }
+// 1. Remove the word "function" and place arrow between the argument and opening body bracket
+(a) => {
+  return a + 100;
+}
+
+// 2. Remove the body brackets and word "return" -- the return is implied.
+(b) => b + 100;
+
+// 3. Remove the argument parentheses
+c => c 
+
+// Arrow Function
+(a, b) => {
+  let chuck = 42;
+  return a + b + chuck;
+}
 	 `)
 	lexer := base.NewJavaScriptLexer(stream)
 
@@ -62,12 +76,30 @@ func arrow() {
 
 	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
 
-	// other way to go
 	rfs := visit(tree, v).(*vast.Program).Body
-	a, b := rfs[0].Children()[0].(*vast.ArrowFunction), rfs[1].Children()[0].(*vast.ArrowFunction)
+	// *ExpressionStatememts
+	for _, fn := range rfs {
+		var trans string
+		// all with one child
+		af := fn.Children()[0].(*vast.ArrowFunction)
+		fmt.Println("Before ->", af.Code())
+		// either has a fucntion body with {} of a signle expression.
+		if af.FunctionBody.SingleExpression != nil {
+			// can be there or not
+			var open, close string
+			if af.FunctionParameters.OpenParen == nil {
+				open, close = "(", ")"
+			}
+			trans = fmt.Sprintf("function%s%s%s {\n\treturn %s\n}",
+				open, af.FunctionParameters.Source, close, af.FunctionBody.SingleExpression.Code())
 
-	// makes no logical sense but shows how to change
-	log.Println(a.Code())
+		}
+		if af.FunctionBody.FunctionBody != nil {
 
-	log.Println(b.Code())
+			trans = fmt.Sprintf("function%s %s", af.FunctionParameters.Source, af.FunctionBody.FunctionBody.Source)
+
+		}
+		fmt.Println("After ->", trans)
+
+	}
 }

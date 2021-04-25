@@ -11,7 +11,7 @@ import (
 
 // just pulls original source code info
 func getSourceInfo(ctx antlr.BaseParserRuleContext) *SourceInfo {
-	start, end := ctx.GetStart().GetStart(), ctx.GetStop().GetStop()+1
+	start, end := ctx.GetStart().GetStart(), ctx.GetStop().GetStop()
 	return &SourceInfo{Line: ctx.GetStart().GetLine(), Start: start, End: end,
 		Column: ctx.GetStart().GetColumn(),
 		Source: ctx.GetStart().GetInputStream().GetTextFromInterval(&antlr.Interval{
@@ -80,7 +80,7 @@ func CodeDef(t VNode) string {
 
 	orig := t.GetInfo().Source
 	start := t.GetInfo().Start
-	// keep track of what we have seen so we don't concta twice
+	// keep track of what we have seen so we don't concat twice
 	offset := 0
 	var source string
 	for n := range fill(t) {
@@ -294,7 +294,7 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 		case []VNode:
 			result = append(result, rr...)
 		case nil:
-			// panic(rr)
+		// panic(rr)
 		default:
 
 			panic(reflect.TypeOf(rr))
