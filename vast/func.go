@@ -8,12 +8,20 @@ import (
 )
 
 // Async? arrowFunctionParameters '=>' arrowFunctionBody
+// arrowFunctionParameters
+//     : identifier
+//     | '(' formalParameterList? ')'
+//     ;
+// arrowFunctionBody
+//     : singleExpression
+//     | functionBody
+//     ;
 type ArrowFunction struct {
 	*SourceInfo
 	Async              Token
 	Arrow              Token
 	FunctionParameters *ArrowFunctionParameters
-	FunctionBody       VNode
+	FunctionBody       *ArrowFunctionBody
 	children           VNode
 	prev, next         VNode
 }
@@ -48,7 +56,26 @@ func (i *ArrowFunction) Children() []VNode {
 func (v *Visitor) VisitArrowFunction(ctx *base.ArrowFunctionContext) interface{} {
 	af := &ArrowFunction{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	var prev VNode
+	// if ctx.Async() != nil {
+	// 	af.Async = ident(v, ctx.Async().GetSymbol())
+	// 	af.children = af.Async
+	// 	prev = af.Async
+	// }
+	// f := v.Visit(ctx.ArrowFunctionParameters()).(*ArrowFunctionParameters)
+	// if prev != nil {
+	// 	prev.Next(f)
+	// } else {
+	// 	af.children = f
+	// }
+	// f.prev = prev
+	// prev = f
+	// af.FunctionParameters = f
+
+	// af.Arrow = ident(v, ctx.ARROW().GetSymbol())
+	// af.FunctionBody = v.Visit(ctx.ArrowFunctionBody()).(*Arr)
+	// log.Println("VisitArrowFunction", v.Visit(ctx.ArrowFunctionParameters()))
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+
 		if af.children == nil {
 			af.children = ch
 		} else {
@@ -57,12 +84,16 @@ func (v *Visitor) VisitArrowFunction(ctx *base.ArrowFunctionContext) interface{}
 		}
 		ch.Prev(prev)
 		prev = ch
+		// log.Printf("%+v\n", ch)
 
 		switch ch.Type() {
+		case "ArrowFunctionBody":
+			af.FunctionBody = ch.(*ArrowFunctionBody)
+		case "ArrowFunctionParameters":
+			af.FunctionParameters = ch.(*ArrowFunctionParameters)
 		case "LToken":
 
 			switch tk := ch.(Token); tk.SymbolName() {
-
 			case "Async":
 				af.Async = tk
 			case "ARROW":
@@ -72,12 +103,9 @@ func (v *Visitor) VisitArrowFunction(ctx *base.ArrowFunctionContext) interface{}
 				log.Panicf("%+v %s\n", ch, ch.Type())
 			}
 
-		case "ArrowFunctionParameters":
-			af.FunctionParameters = ch.(*ArrowFunctionParameters)
 			// todo: check this better
 		default:
-			log.Printf("%s\n", ch.Type())
-			af.FunctionBody = ch
+			log.Panicf("%+v %s\n", ch, ch.Type())
 
 		}
 	}
@@ -127,7 +155,9 @@ func (i *ArrowFunctionParameters) Children() []VNode {
 }
 
 func (v *Visitor) VisitArrowFunctionParameters(ctx *base.ArrowFunctionParametersContext) interface{} {
-	ar := &ArrowFunctionParameters{}
+
+	ar := &ArrowFunctionParameters{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if ar.children == nil {
@@ -144,12 +174,12 @@ func (v *Visitor) VisitArrowFunctionParameters(ctx *base.ArrowFunctionParameters
 
 			switch tk := ch.(Token); tk.SymbolName() {
 
-			case "Identifier":
-				ar.Identifier = tk
 			case "OpenParen":
 				ar.OpenParen = tk
 			case "CloseParen":
 				ar.CloseParen = tk
+			case "Identifier":
+				ar.Identifier = tk
 
 			default:
 				log.Panicf("%+v %s\n", ch, ch.Type())
@@ -171,11 +201,65 @@ func (v *Visitor) VisitArrowFunctionParameters(ctx *base.ArrowFunctionParameters
 //     : singleExpression
 //     | functionBody
 //     ;
-func (v *Visitor) VisitArrowFunctionBody(ctx *base.ArrowFunctionBodyContext) interface{} {
-	if ctx.FunctionBody() != nil {
-		return v.Visit(ctx.FunctionBody())
+type ArrowFunctionBody struct {
+	*SourceInfo
+	SingleExpression VNode
+
+	FunctionBody *FunctionBody
+
+	children   VNode
+	prev, next VNode
+}
+
+var _ VNode = (*ArrowFunctionBody)(nil)
+
+func (i *ArrowFunctionBody) Type() string {
+	return "ArrowFunctionBody"
+}
+func (i *ArrowFunctionBody) Code() string {
+	return CodeDef(i)
+}
+func (i *ArrowFunctionBody) Next(v VNode) VNode {
+	if v != nil {
+		i.next = v
+		return nil
 	}
-	return v.Visit(ctx.SingleExpression())
+	return i.next
+}
+func (i *ArrowFunctionBody) Prev(v VNode) VNode {
+	if v != nil {
+		i.prev = v
+		return nil
+	}
+	return i.prev
+}
+
+func (i *ArrowFunctionBody) Children() []VNode {
+	return children(i.children)
+}
+
+func (v *Visitor) VisitArrowFunctionBody(ctx *base.ArrowFunctionBodyContext) interface{} {
+	af := &ArrowFunctionBody{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
+	if ctx.FunctionBody() != nil {
+
+		ch := v.Visit(ctx.FunctionBody()).(*FunctionBody)
+		af.children = ch
+		af.FunctionBody = ch
+		return af
+	}
+	// todo: validate and check if always should have flat element?
+	ch := v.Visit(ctx.SingleExpression())
+	if v, ok := ch.([]VNode); ok {
+		af.children = v[0]
+		af.SingleExpression = v[0]
+		return af
+
+	}
+	af.children = ch.(VNode)
+	af.SingleExpression = af.children
+	return af
+
 }
 
 // function name([param[, param[, ... param]]]) {
@@ -196,13 +280,14 @@ type FunctionDeclaration struct {
 	FormalParameterList *FormalParameterList
 	CloseParen          Token
 	children            VNode
+	typeOf              string
 	prev, next          VNode
 }
 
 var _ VNode = (*FunctionDeclaration)(nil)
 
 func (i *FunctionDeclaration) Type() string {
-	return "FunctionDeclaration"
+	return i.typeOf
 }
 func (i *FunctionDeclaration) Code() string {
 	return CodeDef(i)
@@ -273,13 +358,16 @@ func fdecl(fd *FunctionDeclaration, ctx antlr.RuleNode, v *Visitor) interface{} 
 // Visit a parse tree produced by JavaScriptParser#functionDeclaration.
 func (v *Visitor) VisitFunctionDeclaration(ctx *base.FunctionDeclarationContext) interface{} {
 
-	return fdecl(&FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}, ctx, v)
+	return fdecl(&FunctionDeclaration{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+		typeOf:     "FunctionDeclaration"}, ctx, v)
 
 }
 
 func (v *Visitor) VisitFunctionDecl(ctx *base.FunctionDeclContext) interface{} {
 	// log.Println(ctx)
-	return fdecl(&FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}, ctx, v)
+	return fdecl(&FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+		typeOf: "AnonymousFunctionDeclaration"}, ctx, v)
 }
 
 // same as any fun dec
@@ -290,7 +378,9 @@ func (v *Visitor) VisitFunctionDecl(ctx *base.FunctionDeclContext) interface{} {
 //     ;
 func (v *Visitor) VisitAnoymousFunctionDecl(ctx *base.AnoymousFunctionDeclContext) interface{} {
 	// log.Println("VisitAnoymousFunctionDecl", ctx.FunctionBody().GetText())
-	return fdecl(&FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}, ctx, v)
+	return fdecl(&FunctionDeclaration{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+		typeOf:     "AnonymousFunctionDeclaration"}, ctx, v)
 }
 
 // formalParameterList
