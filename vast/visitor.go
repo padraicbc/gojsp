@@ -18,6 +18,7 @@ type Visitor struct {
 
 	ruleNames     []string
 	symbolicNames []string
+	Debug         bool
 }
 
 func NewVisitor(symbolicNames []string, ruleNames []string) *Visitor {
@@ -114,15 +115,6 @@ func (v *Visitor) VisitParenthesizedExpression(ctx *base.ParenthesizedExpression
 
 	return v.VisitChildren(ctx)
 }
-func (v *Visitor) VisitLiteral(ctx *base.LiteralContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitNumericLiteral(ctx *base.NumericLiteralContext) interface{} {
-
-	return v.VisitChildren(ctx)
-}
 
 func (v *Visitor) VisitAwaitExpression(ctx *base.AwaitExpressionContext) interface{} {
 
@@ -131,7 +123,6 @@ func (v *Visitor) VisitAwaitExpression(ctx *base.AwaitExpressionContext) interfa
 
 // not a token
 func (v *Visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
-
 	return ident(v, node.GetSymbol())
 
 }

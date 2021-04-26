@@ -1,6 +1,10 @@
 package vast
 
-import "github.com/padraicbc/gojsp/base"
+import (
+	"log"
+
+	"github.com/padraicbc/gojsp/base"
+)
 
 // objectLiteral
 //     : '{' (propertyAssignment (',' propertyAssignment)*)? ','? '}'
@@ -10,26 +14,26 @@ type ObjectLiteral struct {
 	OpenBracket  Token
 	ElementList  *ElementList
 	CloseBracket Token
-	children     VNode
-	next, prev   VNode
+	firstChild   VNode
+
+	next, prev VNode
 }
 
 var _ VNode = (*ObjectLiteral)(nil)
 
-func (i *ObjectLiteral) Next(v VNode) VNode {
+func (i *ObjectLiteral) Next() VNode {
 
-	if v != nil {
-		i.next = v
-		return nil
-	}
 	return i.next
 }
-func (i *ObjectLiteral) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ObjectLiteral) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ObjectLiteral) Prev() VNode {
+
 	return i.prev
+}
+func (i *ObjectLiteral) SetPrev(v VNode) {
+	i.prev = v
 }
 func (i *ObjectLiteral) Type() string {
 	return "ObjectLiteral"
@@ -38,17 +42,25 @@ func (i *ObjectLiteral) Code() string {
 	return CodeDef(i)
 }
 
-func (i *ObjectLiteral) Children() []VNode {
+func (i *ObjectLiteral) FirstChild() VNode {
+
 	// todo: flatten
-	return children(i.children)
+	return i.firstChild
+
 }
 
 func (v *Visitor) VisitObjectLiteralExpression(ctx *base.ObjectLiteralExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitObjectLiteralExpression", ctx.GetText())
+	}
 
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitObjectLiteral(ctx *base.ObjectLiteralContext) interface{} {
+	if v.Debug {
+		log.Println("VisitObjectLiteral", ctx.GetText())
+	}
 
 	return v.VisitChildren(ctx)
 }
@@ -64,20 +76,32 @@ func (v *Visitor) VisitObjectLiteral(ctx *base.ObjectLiteralContext) interface{}
 
 func (v *Visitor) VisitPropertyGetter(ctx *base.PropertyGetterContext) interface{} {
 
+	if v.Debug {
+		log.Println("VisitPropertyGetter", ctx.GetText())
+	}
+
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitPropertySetter(ctx *base.PropertySetterContext) interface{} {
-
+	if v.Debug {
+		log.Println("VisitPropertySetter", ctx.GetText())
+	}
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitPropertyShorthand(ctx *base.PropertyShorthandContext) interface{} {
+	if v.Debug {
+		log.Println("VisitPropertyShorthand", ctx.GetText())
+	}
 
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitPropertyName(ctx *base.PropertyNameContext) interface{} {
+	if v.Debug {
+		log.Println("VisitPropertyName", ctx.GetText())
+	}
 
 	return v.VisitChildren(ctx)
 }
