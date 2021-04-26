@@ -14,8 +14,9 @@ type ImportStatement struct {
 	Import Token
 	// one child *ImportFromBlock
 	ImportFromBlock *ImportFromBlock
-	children        VNode
-	prev, next      VNode
+	firstChild      VNode
+
+	prev, next VNode
 }
 
 var _ VNode = (*ImportStatement)(nil)
@@ -26,23 +27,25 @@ func (i *ImportStatement) Type() string {
 func (i *ImportStatement) Code() string {
 	return CodeDef(i)
 }
-func (i *ImportStatement) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ImportStatement) Next() VNode {
+
 	return i.next
 }
-func (i *ImportStatement) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ImportStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ImportStatement) Prev() VNode {
+
 	return i.prev
 }
+func (i *ImportStatement) SetPrev(v VNode) {
+	i.prev = v
+}
 
-func (i *ImportStatement) Children() []VNode {
-	return children(i.children)
+func (i *ImportStatement) FirstChild() VNode {
+
+	return i.firstChild
+
 }
 
 // importFromBlock
@@ -57,25 +60,26 @@ type ImportFromBlock struct {
 	StringLiteral   Token
 	ImportFrom      *ImportFrom
 	Eos             Token
-	children        VNode
-	prev, next      VNode
+	firstChild      VNode
+
+	prev, next VNode
 }
 
 var _ VNode = (*ImportFromBlock)(nil)
 
-func (i *ImportFromBlock) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ImportFromBlock) Next() VNode {
+
 	return i.next
 }
-func (i *ImportFromBlock) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ImportFromBlock) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ImportFromBlock) Prev() VNode {
+
 	return i.prev
+}
+func (i *ImportFromBlock) SetPrev(v VNode) {
+	i.prev = v
 }
 func (i *ImportFromBlock) Type() string {
 	return "ImportFromBlock"
@@ -84,14 +88,16 @@ func (i *ImportFromBlock) Code() string {
 	return CodeDef(i)
 }
 
-func (i *ImportFromBlock) Children() []VNode {
+func (i *ImportFromBlock) FirstChild() VNode {
 
-	return children(i.children)
+	return i.firstChild
+
 }
 
 type ImportFrom struct {
 	*SourceInfo
-	children   VNode
+	firstChild VNode
+
 	prev, next VNode
 
 	From Token
@@ -100,19 +106,19 @@ type ImportFrom struct {
 
 var _ VNode = (*ImportFrom)(nil)
 
-func (i *ImportFrom) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ImportFrom) Next() VNode {
+
 	return i.next
 }
-func (i *ImportFrom) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ImportFrom) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ImportFrom) Prev() VNode {
+
 	return i.prev
+}
+func (i *ImportFrom) SetPrev(v VNode) {
+	i.prev = v
 }
 func (i *ImportFrom) Type() string {
 	return "ImportFrom"
@@ -122,9 +128,10 @@ func (i *ImportFrom) Code() string {
 	return CodeDef(i)
 }
 
-func (i *ImportFrom) Children() []VNode {
+func (i *ImportFrom) FirstChild() VNode {
 
-	return children(i.children)
+	return i.firstChild
+
 }
 
 // import '(' singleExpression ')'                                       # ImportExpression
@@ -134,25 +141,26 @@ type ImportExpression struct {
 	Module     Token
 	OpenParen  Token
 	CloseParen Token
-	children   VNode
+	firstChild VNode
+
 	prev, next VNode
 }
 
 var _ VNode = (*ImportExpression)(nil)
 
-func (i *ImportExpression) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ImportExpression) Next() VNode {
+
 	return i.next
 }
-func (i *ImportExpression) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ImportExpression) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ImportExpression) Prev() VNode {
+
 	return i.prev
+}
+func (i *ImportExpression) SetPrev(v VNode) {
+	i.prev = v
 }
 func (i *ImportExpression) Code() string {
 	return CodeDef(i)
@@ -162,9 +170,10 @@ func (i *ImportExpression) Type() string {
 	return "ImportExpression"
 }
 
-func (i *ImportExpression) Children() []VNode {
+func (i *ImportExpression) FirstChild() VNode {
 
-	return children(i.children)
+	return i.firstChild
+
 }
 
 // moduleItems
@@ -177,25 +186,26 @@ type ModuleItems struct {
 	Commas     []Token
 	OpenBrace  Token
 	CloseBrace Token
-	children   VNode
+	firstChild VNode
+
 	prev, next VNode
 }
 
 var _ VNode = (*ModuleItems)(nil)
 
-func (i *ModuleItems) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ModuleItems) Next() VNode {
+
 	return i.next
 }
-func (i *ModuleItems) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ModuleItems) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ModuleItems) Prev() VNode {
+
 	return i.prev
+}
+func (i *ModuleItems) SetPrev(v VNode) {
+	i.prev = v
 }
 func (m *ModuleItems) Code() string {
 
@@ -206,9 +216,10 @@ func (m *ModuleItems) Type() string {
 }
 
 /// todo: AliasNames
-func (m *ModuleItems) Children() []VNode {
+func (m *ModuleItems) FirstChild() VNode {
 
-	return children(m.children)
+	return m.firstChild
+
 }
 
 // importNamespace
@@ -220,25 +231,26 @@ type ImportNamespace struct {
 	IdentifierName Token
 	AliasName      Token
 	As             Token
-	children       VNode
-	prev, next     VNode
+	firstChild     VNode
+
+	prev, next VNode
 }
 
 var _ VNode = (*ImportNamespace)(nil)
 
-func (i *ImportNamespace) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ImportNamespace) Next() VNode {
+
 	return i.next
 }
-func (i *ImportNamespace) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ImportNamespace) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ImportNamespace) Prev() VNode {
+
 	return i.prev
+}
+func (i *ImportNamespace) SetPrev(v VNode) {
+	i.prev = v
 }
 
 func (in *ImportNamespace) Code() string {
@@ -248,9 +260,10 @@ func (i *ImportNamespace) Type() string {
 	return "ImportNamespace"
 }
 
-func (i *ImportNamespace) Children() []VNode {
+func (i *ImportNamespace) FirstChild() VNode {
 
-	return children(i.children)
+	return i.firstChild
+
 }
 
 // importDefault
@@ -259,25 +272,26 @@ type ImportDefault struct {
 	*SourceInfo
 	Default    *AliasName
 	Comma      Token
-	children   VNode
+	firstChild VNode
+
 	prev, next VNode
 }
 
 var _ VNode = (*ImportDefault)(nil)
 
-func (i *ImportDefault) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ImportDefault) Next() VNode {
+
 	return i.next
 }
-func (i *ImportDefault) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ImportDefault) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ImportDefault) Prev() VNode {
+
 	return i.prev
+}
+func (i *ImportDefault) SetPrev(v VNode) {
+	i.prev = v
 }
 func (i *ImportDefault) Type() string {
 	return "ImportDefault"
@@ -286,9 +300,10 @@ func (i *ImportDefault) Type() string {
 func (i *ImportDefault) Code() string {
 	return CodeDef(i)
 }
-func (i *ImportDefault) Children() []VNode {
+func (i *ImportDefault) FirstChild() VNode {
 
-	return children(i.children)
+	return i.firstChild
+
 }
 
 func (v *Visitor) VisitImportStatement(ctx *base.ImportStatementContext) interface{} {
@@ -300,13 +315,14 @@ func (v *Visitor) VisitImportStatement(ctx *base.ImportStatementContext) interfa
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if im.children == nil {
-			im.children = ch
+		if im.firstChild == nil {
+			im.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
 
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 
 		if ch.Type() == "LToken" {
@@ -329,13 +345,13 @@ func (v *Visitor) VisitImportFromBlock(ctx *base.ImportFromBlockContext) interfa
 	var prev VNode
 	// iterate here as some are there, some not.
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if imf.children == nil {
-			imf.children = ch
+		if imf.firstChild == nil {
+			imf.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
 
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
 
 		prev = ch
 		switch ch.Type() {
@@ -379,12 +395,14 @@ func (v *Visitor) VisitImportExpression(ctx *base.ImportExpressionContext) inter
 	// alwyas tokens
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if ime.children == nil {
-			ime.children = ch
+		if ime.firstChild == nil {
+			ime.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 		t := ch.(Token)
 		switch t.SymbolName() {
@@ -412,12 +430,14 @@ func (v *Visitor) VisitModuleItems(ctx *base.ModuleItemsContext) interface{} {
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if mit.children == nil {
-			mit.children = ch
+		if mit.firstChild == nil {
+			mit.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 		switch ch.Type() {
 		case "AliasName":
@@ -476,12 +496,14 @@ func (v *Visitor) VisitImportDefault(ctx *base.ImportDefaultContext) interface{}
 
 			panic(fmt.Sprintf("%+v %s\n", ch, ch.Type()))
 		}
-		if ind.children == nil {
-			ind.children = ch
+		if ind.firstChild == nil {
+			ind.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 	}
 	return ind
@@ -498,12 +520,14 @@ func (v *Visitor) VisitImportNamespace(ctx *base.ImportNamespaceContext) interfa
 	}
 	var prev VNode
 	for i, ch := range v.VisitChildren(ctx).([]VNode) {
-		if imn.children == nil {
-			imn.children = ch
+		if imn.firstChild == nil {
+			imn.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 		t := ch.(Token)
 		switch t.SymbolName() {
@@ -536,12 +560,13 @@ func (v *Visitor) VisitImportFrom(ctx *base.ImportFromContext) interface{} {
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if imfr.children == nil {
-			imfr.children = ch
+		if imfr.firstChild == nil {
+			imfr.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
 
 		prev = ch
 		t := ch.(Token)

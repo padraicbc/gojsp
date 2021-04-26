@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
 	antlr "github.com/padraicbc/antlr4"
 	"github.com/padraicbc/gojsp/base"
@@ -16,19 +16,18 @@ func singleExp() {
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
 	p := base.NewJavaScriptParser(tokenStream)
-	// one
-	tree := p.ExpressionStatement()
+	// start at ExpressionSequence
+	tree := p.ExpressionSequence()
 	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-	exp := visit(tree, v).(*vast.ExpressionStatement)
+	exp := visit(tree, v).(*vast.ExpressionSequence)
 
-	chi := exp.Children()
-	expc := chi[0].(*vast.LRExpression)
+	expc := exp.FirstChild().(*vast.LRExpression)
 
-	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
+	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
+	// change OP
 	expc.OP().SetValue("/")
 	expc.Right().(vast.Token).SetValue("1000")
-	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
-	log.Println(expc.Code())
+	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
 	// reuse lexer and parser
 	stream.Seek(0)
@@ -37,13 +36,13 @@ func singleExp() {
 	p.SetInputStream(tokenStream)
 
 	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-	// alterntive using Body
+	// alternative using Body
 	tree2 := p.Program()
 	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-	exp = visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement)
-	expc = exp.Children()[0].(*vast.LRExpression)
+	exp2 := visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement).FirstChild()
 
-	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
-	log.Println(expc.Code())
+	expc = exp2.FirstChild().(*vast.LRExpression)
+	// can be any singleExpression so any VNode
+	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
 }

@@ -20,7 +20,8 @@ func getSourceInfo(ctx antlr.BaseParserRuleContext) *SourceInfo {
 }
 
 type Node struct {
-	children VNode
+	firstChild VNode
+
 	VNode
 }
 
@@ -29,10 +30,11 @@ type VNode interface {
 	Code() string
 	GetInfo() *SourceInfo
 	Type() string
-	Children() []VNode
-
-	Prev(VNode) VNode
-	Next(VNode) VNode
+	FirstChild() VNode
+	SetPrev(VNode)
+	Prev() VNode
+	Next() VNode
+	SetNext(VNode)
 }
 
 func debug(v VNode) {
@@ -43,7 +45,7 @@ func debug(v VNode) {
 }
 
 func _fill(v VNode, cc chan VNode) {
-	for _, c := range v.Children() {
+	for _, c := range Children(v.FirstChild()) {
 		cc <- c
 		_fill(c, cc)
 
@@ -53,7 +55,7 @@ func _fill(v VNode, cc chan VNode) {
 
 // get a flattened list of tokens
 func fill(v VNode) chan VNode {
-	chi := v.Children()
+	chi := Children(v.FirstChild())
 
 	cc := make(chan VNode, 1)
 	go func() {
@@ -153,27 +155,26 @@ func (i *LToken) RName(s string) string {
 	}
 	return i.rn
 }
-func (i *LToken) Children() []VNode {
+func (i *LToken) FirstChild() VNode {
 	return nil
 }
 func (i *LToken) SetChild(ch, prev VNode) {
 	return
 }
-func (i *LToken) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *LToken) Next() VNode {
 
 	return i.next
 }
-func (i *LToken) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *LToken) SetNext(v VNode) {
+	i.next = v
+}
+
+func (i *LToken) Prev() VNode {
 
 	return i.prev
+}
+func (i *LToken) SetPrev(v VNode) {
+	i.prev = v
 }
 
 // keyword, reservedword, identifier
@@ -193,27 +194,27 @@ type AliasName struct {
 	Alias          Token
 	As             Token
 	Comma          Token
-	children       VNode
-	prev, next     VNode
+	firstChild     VNode
+
+	prev, next VNode
 }
 
 var _ VNode = (*AliasName)(nil)
 
-func (i *AliasName) Next(v VNode) VNode {
+func (i *AliasName) Next() VNode {
 
-	if v != nil {
-		i.next = v
-		return nil
-	}
 	return i.next
 }
+func (i *AliasName) SetNext(v VNode) {
+	i.next = v
+}
 
-func (i *AliasName) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *AliasName) Prev() VNode {
+
 	return i.prev
+}
+func (i *AliasName) SetPrev(v VNode) {
+	i.prev = v
 }
 func (a *AliasName) Code() string {
 	return CodeDef(a)
@@ -222,9 +223,10 @@ func (i *AliasName) Type() string {
 	return "AliasName"
 }
 
-func (i *AliasName) Children() []VNode {
+func (i *AliasName) FirstChild() VNode {
 
-	return children(i.children)
+	return i.firstChild
+
 }
 
 func (v *Visitor) VisitAliasName(ctx *base.AliasNameContext) interface{} {
@@ -233,12 +235,14 @@ func (v *Visitor) VisitAliasName(ctx *base.AliasNameContext) interface{} {
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	var prev VNode
 	for i, ch := range v.VisitChildren(ctx).([]VNode) {
-		if al.children == nil {
-			al.children = ch
+		if al.firstChild == nil {
+			al.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 		t := ch.(Token)
 
@@ -263,13 +267,13 @@ func (v *Visitor) VisitAliasName(ctx *base.AliasNameContext) interface{} {
 	return al
 }
 
-func children(start VNode) []VNode {
+func Children(start VNode) []VNode {
 	out := []VNode{}
 	n := start
 
 	for n != nil {
 		out = append(out, n)
-		n = n.Next(nil)
+		n = n.Next()
 
 	}
 	return out
@@ -293,8 +297,10 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 			result = append(result, rr)
 		case []VNode:
 			result = append(result, rr...)
-		case nil:
-		// panic(rr)
+		case error:
+			// eof
+			// log.Println(rr)
+
 		default:
 
 			panic(reflect.TypeOf(rr))

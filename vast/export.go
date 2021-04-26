@@ -1,6 +1,10 @@
 package vast
 
-import "github.com/padraicbc/gojsp/base"
+import (
+	"log"
+
+	"github.com/padraicbc/gojsp/base"
+)
 
 // declaration
 //     : variableStatement
@@ -9,7 +13,9 @@ import "github.com/padraicbc/gojsp/base"
 //     ;
 
 func (v *Visitor) VisitExportDefaultDeclaration(ctx *base.ExportDefaultDeclarationContext) interface{} {
-	// log.Println("VisitExportDefaultDeclaration", ctx.GetText())
+	if v.Debug {
+		log.Println("VisitExportDefaultDeclaration", ctx.GetText())
+	}
 	return v.VisitChildren(ctx)
 }
 
@@ -18,8 +24,9 @@ func (v *Visitor) VisitExportDefaultDeclaration(ctx *base.ExportDefaultDeclarati
 //     | moduleItems importFrom? eos
 //     ;
 func (v *Visitor) VisitExportFromBlock(ctx *base.ExportFromBlockContext) interface{} {
-	// log.Println("VisitExportFromBlock", ctx.GetText())
-
+	if v.Debug {
+		log.Println("VisitExportFromBlock", ctx.GetText())
+	}
 	return v.VisitChildren(ctx)
 }
 
@@ -28,6 +35,9 @@ func (v *Visitor) VisitExportFromBlock(ctx *base.ExportFromBlockContext) interfa
 //     | Export Default singleExpression eos           # ExportDefaultDeclaration
 //     ;
 func (v *Visitor) VisitExportDeclaration(ctx *base.ExportDeclarationContext) interface{} {
+	if v.Debug {
+		log.Println("VisitExportDeclaration", ctx.GetText())
+	}
 
 	return v.VisitChildren(ctx)
 

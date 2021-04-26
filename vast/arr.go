@@ -1,6 +1,10 @@
 package vast
 
-import "github.com/padraicbc/gojsp/base"
+import (
+	"log"
+
+	"github.com/padraicbc/gojsp/base"
+)
 
 // arrayLiteral
 //     : ('[' elementList ']')
@@ -10,26 +14,26 @@ type ArrayLiteral struct {
 	OpenBracket  Token
 	ElementList  *ElementList
 	CloseBracket Token
-	children     VNode
-	next, prev   VNode
+	firstChild   VNode
+
+	next, prev VNode
 }
 
 var _ VNode = (*ArrayLiteral)(nil)
 
-func (i *ArrayLiteral) Next(v VNode) VNode {
+func (i *ArrayLiteral) Next() VNode {
 
-	if v != nil {
-		i.next = v
-		return nil
-	}
 	return i.next
 }
-func (i *ArrayLiteral) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ArrayLiteral) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ArrayLiteral) Prev() VNode {
+
 	return i.prev
+}
+func (i *ArrayLiteral) SetPrev(v VNode) {
+	i.prev = v
 }
 func (i *ArrayLiteral) Type() string {
 	return "ArrayLiteral"
@@ -38,11 +42,15 @@ func (i *ArrayLiteral) Code() string {
 	return CodeDef(i)
 }
 
-func (i *ArrayLiteral) Children() []VNode {
-	// todo: flatten
-	return children(i.children)
+func (i *ArrayLiteral) FirstChild() VNode {
+
+	return i.firstChild
+
 }
 func (v *Visitor) VisitArrayLiteral(ctx *base.ArrayLiteralContext) interface{} {
+	if v.Debug {
+		log.Println("VisitArrayLiteral", ctx.GetText())
+	}
 	arl := &ArrayLiteral{
 
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
@@ -58,12 +66,14 @@ func (v *Visitor) VisitArrayLiteral(ctx *base.ArrayLiteralContext) interface{} {
 			arl.ElementList = ch.(*ElementList)
 
 		}
-		if arl.children == nil {
-			arl.children = ch
+		if arl.firstChild == nil {
+			arl.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 	}
 	return arl
@@ -76,25 +86,26 @@ type ElementList struct {
 	*SourceInfo
 	ArrayElements []*ArrayElement
 	Commas        []Token
-	children      VNode
-	prev, next    VNode
+	firstChild    VNode
+
+	prev, next VNode
 }
 
 var _ VNode = (*ElementList)(nil)
 
-func (i *ElementList) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ElementList) Next() VNode {
+
 	return i.next
 }
-func (i *ElementList) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ElementList) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ElementList) Prev() VNode {
+
 	return i.prev
+}
+func (i *ElementList) SetPrev(v VNode) {
+	i.prev = v
 }
 func (i *ElementList) Type() string {
 	return "ElementList"
@@ -103,22 +114,29 @@ func (i *ElementList) Code() string {
 	return CodeDef(i)
 }
 
-func (i *ElementList) Children() []VNode {
-	return children(i.children)
+func (i *ElementList) FirstChild() VNode {
+
+	return i.firstChild
+
 }
 
 func (v *Visitor) VisitElementList(ctx *base.ElementListContext) interface{} {
+	if v.Debug {
+		log.Println("VisitElementList", ctx.GetText())
+	}
 	el := &ElementList{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if el.children == nil {
-			el.children = ch
+		if el.firstChild == nil {
+			el.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 		switch ch.Type() {
 		case "ArrayElement":
@@ -141,25 +159,26 @@ type ArrayElement struct {
 	*SourceInfo
 	Ellipsis         Token
 	SingleExpression VNode
-	children         VNode
-	prev, next       VNode
+	firstChild       VNode
+
+	prev, next VNode
 }
 
 var _ VNode = (*ArrayElement)(nil)
 
-func (i *ArrayElement) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *ArrayElement) Next() VNode {
+
 	return i.next
 }
-func (i *ArrayElement) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *ArrayElement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ArrayElement) Prev() VNode {
+
 	return i.prev
+}
+func (i *ArrayElement) SetPrev(v VNode) {
+	i.prev = v
 }
 func (i *ArrayElement) Type() string {
 	return "ArrayElement"
@@ -168,10 +187,15 @@ func (i *ArrayElement) Code() string {
 	return CodeDef(i)
 }
 
-func (i *ArrayElement) Children() []VNode {
-	return children(i.children)
+func (i *ArrayElement) FirstChild() VNode {
+
+	return i.firstChild
+
 }
 func (v *Visitor) VisitArrayElement(ctx *base.ArrayElementContext) interface{} {
+	if v.Debug {
+		log.Println("VisitArrayElement", ctx.GetText())
+	}
 	ae := ArrayElement{
 
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
@@ -186,12 +210,14 @@ func (v *Visitor) VisitArrayElement(ctx *base.ArrayElementContext) interface{} {
 		default:
 			panic(ch.Type())
 		}
-		if ae.children == nil {
-			ae.children = ch
+		if ae.firstChild == nil {
+			ae.firstChild = ch
 		} else {
-			prev.Next(ch)
+			prev.SetNext(ch)
+
 		}
-		ch.Prev(prev)
+		ch.SetPrev(prev)
+
 		prev = ch
 	}
 	return ae

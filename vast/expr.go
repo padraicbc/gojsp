@@ -22,8 +22,9 @@ type LRExpression struct {
 	left, right VNode
 	op          Token
 	typeOf      string
-	children    VNode
-	prev, next  VNode
+	firstChild  VNode
+
+	prev, next VNode
 }
 
 func (i *LRExpression) Left() VNode {
@@ -48,21 +49,21 @@ func (i *LRExpression) SetRight(vn VNode) {
 	i.right = vn
 }
 func (i *LRExpression) SetChild(vn VNode) {
-	i.children = vn
+	i.firstChild = vn
 }
-func (i *LRExpression) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
+func (i *LRExpression) Next() VNode {
+
 	return i.next
 }
-func (i *LRExpression) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
+func (i *LRExpression) SetNext(v VNode) {
+	i.next = v
+}
+func (i *LRExpression) Prev() VNode {
+
 	return i.prev
+}
+func (i *LRExpression) SetPrev(v VNode) {
+	i.prev = v
 }
 
 func (e *LRExpression) GetInfo() *SourceInfo {
@@ -75,19 +76,20 @@ func (i *LRExpression) Code() string {
 
 	return CodeDef(i)
 }
-func (i *LRExpression) Children() []VNode {
+func (i *LRExpression) FirstChild() VNode {
 
-	return children(i.children)
+	return i.firstChild
+
 }
 
 // simple helper to add tree pointers when not iterating
 func setLR(v *Visitor, l, r base.ISingleExpressionContext, par ExpI) {
 	left, right := flt(v.Visit(l)), flt(v.Visit(r))
 	par.SetChild(left)
-	left.Next(par.OP())
-	par.OP().Next(right)
-	par.OP().Prev(left)
-	right.Prev(par.OP())
+	left.SetNext(par.OP())
+	par.OP().SetNext(right)
+	par.OP().SetPrev(left)
+	right.SetPrev(par.OP())
 	par.SetLeft(left)
 	par.SetRight(right)
 	// not sure we need +"Expression" as it cannot but be one.
@@ -111,72 +113,12 @@ func flt(i interface{}) VNode {
 
 }
 
-type ExpressionStatement struct {
-	*SourceInfo
-	// singlerexpressions
-	children   VNode
-	prev, next VNode
-}
-
-func (i *ExpressionStatement) Next(v VNode) VNode {
-	if v != nil {
-		i.next = v
-		return nil
-	}
-	return i.next
-}
-func (i *ExpressionStatement) Prev(v VNode) VNode {
-	if v != nil {
-		i.prev = v
-		return nil
-	}
-	return i.prev
-}
-
-func (e *ExpressionStatement) GetInfo() *SourceInfo {
-	return e.SourceInfo
-}
-func (e *ExpressionStatement) Type() string {
-	return "ExpressionStatement"
-}
-func (i *ExpressionStatement) Code() string {
-
-	return CodeDef(i)
-}
-func (i *ExpressionStatement) Children() []VNode {
-
-	return children(i.children)
-}
-
-func (v *Visitor) VisitExpressionStatement(ctx *base.ExpressionStatementContext) interface{} {
-	exp := &ExpressionStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if exp.children == nil {
-			exp.children = ch
-		} else {
-			prev.Next(ch)
-		}
-		ch.Prev(prev)
-		prev = ch
-
-	}
-	return exp
-}
-
-// expressionSequence
-//     : singleExpression (',' singleExpression)*
-//     ;
-func (v *Visitor) VisitExpressionSequence(ctx *base.ExpressionSequenceContext) interface{} {
-	// log.Println("VisitExpressionSequence", ctx.GetText())
-	return v.VisitChildren(ctx)
-
-}
-
 // <assoc=right> singleExpression '=' singleExpression
 
 func (v *Visitor) VisitAssignmentExpression(ctx *base.AssignmentExpressionContext) interface{} {
-	// log.Println("VisitAssignmentExpression", ctx.OP.GetText())
+	if v.Debug {
+		log.Println("VisitAssignmentExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	exp.op = ident(v, ctx.Assign().GetSymbol())
 	setLR(v, ctx.SingleExpression(0), ctx.SingleExpression(1), exp)
@@ -186,6 +128,9 @@ func (v *Visitor) VisitAssignmentExpression(ctx *base.AssignmentExpressionContex
 
 //     | <assoc=right> singleExpression '**' singleExpression
 func (v *Visitor) VisitPowerExpression(ctx *base.PowerExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitPowerExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.Power().GetSymbol())
@@ -196,7 +141,9 @@ func (v *Visitor) VisitPowerExpression(ctx *base.PowerExpressionContext) interfa
 
 // Visit a parse tree produced by JavaScriptParser#MultiplicativeExpression.
 func (v *Visitor) VisitMultiplicativeExpression(ctx *base.MultiplicativeExpressionContext) interface{} {
-	// log.Println("VisitMultiplicativeExpression", ctx.GetText())
+	if v.Debug {
+		log.Println("VisitMultiplicativeExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	if ctx.Multiply() != nil {
@@ -214,6 +161,9 @@ func (v *Visitor) VisitMultiplicativeExpression(ctx *base.MultiplicativeExpressi
 
 }
 func (v *Visitor) VisitAdditiveExpression(ctx *base.AdditiveExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitAdditiveExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	if ctx.Plus() != nil {
@@ -229,6 +179,9 @@ func (v *Visitor) VisitAdditiveExpression(ctx *base.AdditiveExpressionContext) i
 
 }
 func (v *Visitor) VisitCoalesceExpression(ctx *base.CoalesceExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitCoalesceExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.NullCoalesce().GetSymbol())
@@ -238,6 +191,9 @@ func (v *Visitor) VisitCoalesceExpression(ctx *base.CoalesceExpressionContext) i
 }
 
 func (v *Visitor) VisitBitShiftExpression(ctx *base.BitShiftExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitBitShiftExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	if ctx.LeftShiftArithmetic() != nil {
 		exp.op = ident(v, ctx.LeftShiftArithmetic().GetSymbol())
@@ -252,6 +208,9 @@ func (v *Visitor) VisitBitShiftExpression(ctx *base.BitShiftExpressionContext) i
 }
 
 func (v *Visitor) VisitRelationalExpression(ctx *base.RelationalExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitRelationalExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	if ctx.LessThan() != nil {
 		exp.op = ident(v, ctx.LessThan().GetSymbol())
@@ -269,6 +228,9 @@ func (v *Visitor) VisitRelationalExpression(ctx *base.RelationalExpressionContex
 }
 
 func (v *Visitor) VisitInstanceofExpression(ctx *base.InstanceofExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitInstanceofExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.Instanceof().GetSymbol())
@@ -278,6 +240,9 @@ func (v *Visitor) VisitInstanceofExpression(ctx *base.InstanceofExpressionContex
 }
 
 func (v *Visitor) VisitInExpression(ctx *base.InExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitInExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.In().GetSymbol())
@@ -286,6 +251,9 @@ func (v *Visitor) VisitInExpression(ctx *base.InExpressionContext) interface{} {
 	return exp
 }
 func (v *Visitor) VisitEqualityExpression(ctx *base.EqualityExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitEqualityExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	if ctx.NotEquals() != nil {
@@ -302,6 +270,9 @@ func (v *Visitor) VisitEqualityExpression(ctx *base.EqualityExpressionContext) i
 	return exp
 }
 func (v *Visitor) VisitBitAndExpression(ctx *base.BitAndExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitBitAndExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.BitAnd().GetSymbol())
@@ -311,6 +282,9 @@ func (v *Visitor) VisitBitAndExpression(ctx *base.BitAndExpressionContext) inter
 }
 
 func (v *Visitor) VisitBitXOrExpression(ctx *base.BitXOrExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitBitXOrExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.BitXOr().GetSymbol())
@@ -319,6 +293,9 @@ func (v *Visitor) VisitBitXOrExpression(ctx *base.BitXOrExpressionContext) inter
 	return exp
 }
 func (v *Visitor) VisitBitOrExpression(ctx *base.BitOrExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitBitOrExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.BitOr().GetSymbol())
@@ -328,6 +305,9 @@ func (v *Visitor) VisitBitOrExpression(ctx *base.BitOrExpressionContext) interfa
 }
 
 func (v *Visitor) VisitLogicalAndExpression(ctx *base.LogicalAndExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitLogicalAndExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.And().GetSymbol())
@@ -336,6 +316,9 @@ func (v *Visitor) VisitLogicalAndExpression(ctx *base.LogicalAndExpressionContex
 	return exp
 }
 func (v *Visitor) VisitLogicalOrExpression(ctx *base.LogicalOrExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitLogicalOrExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	exp.op = ident(v, ctx.Or().GetSymbol())
@@ -344,11 +327,16 @@ func (v *Visitor) VisitLogicalOrExpression(ctx *base.LogicalOrExpressionContext)
 	return exp
 }
 func (v *Visitor) VisitAssignmentOperator(ctx *base.AssignmentOperatorContext) interface{} {
+	if v.Debug {
+		log.Println("VisitAssignmentOperator", ctx.GetText())
+	}
 	// ctx.GetStart().GetLine() etc.. could be  used directly but still have to switch on a lot of types so as easy do this.
-	return v.VisitChildren(ctx).([]VNode)[0].(Token)
+	return v.VisitChildren(ctx).([]VNode)[0]
 }
 func (v *Visitor) VisitAssignmentOperatorExpression(ctx *base.AssignmentOperatorExpressionContext) interface{} {
-	// log.Println("VisitAssignmentOperatorExpression")
+	if v.Debug {
+		log.Println("VisitAssignmentOperatorExpression", ctx.GetText())
+	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	// ctx.AssignmentOperator().GetText() but we want source info?
 	exp.op = v.Visit(ctx.AssignmentOperator()).(Token)
@@ -356,24 +344,39 @@ func (v *Visitor) VisitAssignmentOperatorExpression(ctx *base.AssignmentOperator
 	return exp
 }
 func (v *Visitor) VisitTernaryExpression(ctx *base.TernaryExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitTernaryExpression", ctx.GetText())
+	}
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitArgumentsExpression(ctx *base.ArgumentsExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitArgumentsExpression", ctx.GetText())
+	}
 
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitLiteralExpression(ctx *base.LiteralExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitLiteralExpression", ctx.GetText())
+	}
 
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitPropertyExpressionAssignment(ctx *base.PropertyExpressionAssignmentContext) interface{} {
+	if v.Debug {
+		log.Println("VisitPropertyExpressionAssignment", ctx.GetText())
+	}
 
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitComputedPropertyExpressionAssignment(ctx *base.ComputedPropertyExpressionAssignmentContext) interface{} {
+	if v.Debug {
+		log.Println("VisitComputedPropertyExpressionAssignment", ctx.GetText())
+	}
 	return v.VisitChildren(ctx)
 } // An expression statement, i.e., a statement consisting of a single expression.

@@ -15,28 +15,103 @@ Thre are a few example functions in the exampls folder including how to parse an
 	"github.com/padraicbc/gojsp/vast"
     )
 
-
-
-	stream := antlr.NewInputStream(`i + j;`)
+stream := antlr.NewInputStream(`i + j;`)
 	lexer := base.NewJavaScriptLexer(stream)
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 
 	p := base.NewJavaScriptParser(tokenStream)
-	// one
-	tree := p.ExpressionStatement()
+	// start at ExpressionSequence
+	tree := p.ExpressionSequence()
 	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-	exp := visit(tree, v).(*vast.ExpressionStatement)
+	exp := visit(tree, v).(*vast.ExpressionSequence)
 
-	chi := exp.Children()
-	expc := chi[0].(*vast.LRExpression)
+	expc := exp.FirstChild().(*vast.LRExpression)
 
-	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
+	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
+	// change OP
 	expc.OP().SetValue("/")
 	expc.Right().(vast.Token).SetValue("1000")
-	log.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
-	log.Println(expc.Code())
+	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
+	// reuse lexer and parser
+	stream.Seek(0)
+	lexer.SetInputStream(stream)
+	tokenStream = antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+	p.SetInputStream(tokenStream)
+
+	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	// alternative using Body
+	tree2 := p.Program()
+	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	exp2 := visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement).FirstChild()
+
+	expc = exp2.FirstChild().(*vast.LRExpression)
+	// can be any singleExpression so any VNode
+	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
+
+And a very incomplete conversion from arrow to es5 functions but it shows the general idea:
+
+		stream := antlr.NewInputStream(`
+
+    // Arrow Function Break Down
+
+    // 1. Remove the word "function" and place arrow between the argument and opening body bracket
+    (a) => {
+    return a + 100;
+    }
+
+    // 2. Remove the body brackets and word "return" -- the return is implied.
+    (b) => b + 100;
+
+    // 3. Remove the argument parentheses
+    c => c 
+
+    // Arrow Function
+    (a, b) => {
+    let chuck = 42;
+    return a + b + chuck;
+    }
+    `)
+	lexer := base.NewJavaScriptLexer(stream)
+
+	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+
+	p := base.NewJavaScriptParser(tokenStream)
+
+	tree := p.Program()
+
+	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	// v.Debug = true
+
+	rfs := visit(tree, v).(*vast.Program).Body
+	// *ExpressionStatememts -> ExpressionSequence, iterate and check types
+	for _, fn := range rfs {
+		log.Println(fn.Type())
+		var trans string
+		// all with one child
+		af := fn.FirstChild().FirstChild().(*vast.ArrowFunction)
+		fmt.Println("Before ->", af.Code())
+		// either has a fucntion body with {} of a single expression.
+		if af.Body.FirstChild() != nil {
+			// can be there or not
+			var open, close string
+			if af.FunctionParameters.OpenParen == nil {
+				open, close = "(", ")"
+			}
+			log.Println(af.Body.FirstChild().Type(), af.FunctionParameters.Source)
+			trans = fmt.Sprintf("function%s%s%s {\n\treturn %s\n}",
+				open, af.FunctionParameters.Source, close, af.Body.FirstChild().GetInfo().Source)
+
+		}
+		if af.Body != nil {
+
+			trans = fmt.Sprintf("function%s %s", af.FunctionParameters.Source, af.Body.Source)
+
+		}
+		fmt.Println("After ->", trans)
+
+<<<<<<< HEAD
 And a very incomplete conversion from arrow to es5 fucntions but it shows the general idea:
 
 	stream := antlr.NewInputStream(`
@@ -95,6 +170,8 @@ And a very incomplete conversion from arrow to es5 fucntions but it shows the ge
 		}
 		fmt.Println("After ->", trans)
 
+=======
+>>>>>>> wrk
 	}
 	
 Quite verbose but more about getting it working than pretty to start...
