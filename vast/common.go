@@ -21,7 +21,6 @@ func getSourceInfo(ctx antlr.BaseParserRuleContext) *SourceInfo {
 
 type Node struct {
 	firstChild VNode
-
 	VNode
 }
 
@@ -300,6 +299,8 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 		case error:
 			// eof
 			// log.Println(rr)
+		case antlr.ErrorNode:
+			// log.Fatal(rr)
 
 		default:
 

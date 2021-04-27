@@ -12,7 +12,7 @@ import (
 type ArrayLiteral struct {
 	*SourceInfo
 	OpenBracket  Token
-	ElementList  *ElementList
+	Elems        *ElementList
 	CloseBracket Token
 	firstChild   VNode
 
@@ -63,7 +63,7 @@ func (v *Visitor) VisitArrayLiteral(ctx *base.ArrayLiteralContext) interface{} {
 		case "CloseBracket":
 			arl.CloseBracket = ch.(Token)
 		case "ElementList":
-			arl.ElementList = ch.(*ElementList)
+			arl.Elems = ch.(*ElementList)
 
 		}
 		if arl.firstChild == nil {

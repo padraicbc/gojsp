@@ -14,15 +14,17 @@ Thre are a few example functions in the exampls folder including how to parse an
 	    "github.com/padraicbc/gojsp/vast"
     )
 
-    stream := antlr.NewInputStream(`i + j;`)
-	lexer := base.NewJavaScriptLexer(stream)
 
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+    code := `i + j;`
+	v := vast.NewVisitor(code)
+	// do whatever with errors
+	go func() {
+		e := <-v.Errors
+		log.Fatal(e)
+	}()
 
-	p := base.NewJavaScriptParser(tokenStream)
 	// start at ExpressionSequence
-	tree := p.ExpressionSequence()
-	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	tree := v.Parser.ExpressionSequence()
 	exp := visit(tree, v).(*vast.ExpressionSequence)
 
 	expc := exp.FirstChild().(*vast.LRExpression)
@@ -33,16 +35,16 @@ Thre are a few example functions in the exampls folder including how to parse an
 	expc.Right().(vast.Token).SetValue("1000")
 	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
-	// reuse lexer and parser
-	stream.Seek(0)
-	lexer.SetInputStream(stream)
-	tokenStream = antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-	p.SetInputStream(tokenStream)
 
-	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-	// alternative using Body
-	tree2 := p.Program()
-	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+
+    //  reuse the lexer and parser(faster)
+	// can pass new/different antlrStream too antlr.NewInputStream(code) imn place of v.Stream.Seek(0)...
+	v.Stream.Seek(0)
+	v.Lexer.SetInputStream(v.Stream)
+	tokenStream := antlr.NewCommonTokenStream(v.Lexer, antlr.TokenDefaultChannel)
+	v.Parser.SetInputStream(tokenStream)
+
+	tree2 := v.Parser.Program()
 	exp2 := visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement).FirstChild()
 
 	expc = exp2.FirstChild().(*vast.LRExpression)
@@ -51,36 +53,28 @@ Thre are a few example functions in the exampls folder including how to parse an
 
 And a very incomplete conversion from arrow to es5 functions but it shows the general idea:
 
-	stream := antlr.NewInputStream(`
+	code := `
+	// Arrow Function Break Down
+	// 1. Remove the word "function" and place arrow between the argument and opening body bracket
+	(a) => {
+	return a + 100;
+	}
 
-    // Arrow Function Break Down
+	// 2. Remove the body brackets and word "return" -- the return is implied.
+	(b) => b + 100;
 
-    // 1. Remove the word "function" and place arrow between the argument and opening body bracket
-    (a) => {
-    return a + 100;
-    }
+	// 3. Remove the argument parentheses
+	c => c 
 
-    // 2. Remove the body brackets and word "return" -- the return is implied.
-    (b) => b + 100;
+	// Arrow Function
+	(a, b) => {
+	let chuck = 42;
+	return a + b + chuck;
+	}
+	`
 
-    // 3. Remove the argument parentheses
-    c => c 
-
-    // Arrow Function
-    (a, b) => {
-    let chuck = 42;
-    return a + b + chuck;
-    }
-    `)
-	lexer := base.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := base.NewJavaScriptParser(tokenStream)
-
-	tree := p.Program()
-
-	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	v := vast.NewVisitor(code)
+	tree := v.Parser.Program()
 	// v.Debug = true
 
 	rfs := visit(tree, v).(*vast.Program).Body
