@@ -154,6 +154,11 @@ func (v *Visitor) VisitClassElement(ctx *base.ClassElementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+// methodDefinition
+//     : '*'? '#'? propertyName '(' formalParameterList? ')' functionBody
+//     | '*'? '#'? getter '(' ')' functionBody
+//     | '*'? '#'? setter '(' formalParameterList? ')' functionBody
+//     ;
 func (v *Visitor) VisitMethodDefinition(ctx *base.MethodDefinitionContext) interface{} {
 
 	return v.VisitChildren(ctx)
