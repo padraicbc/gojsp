@@ -34,7 +34,7 @@ Thre are a few example functions in the exampls folder including how to parse an
 	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
 	// reuse lexer and parser
-	// can pass new/differnt antlrStream too antlr.NewInputStream(code)...
+	// can pass new/different antlrStream too antlr.NewInputStream(code)...
 	v.Stream.Seek(0)
 	v.Lexer.SetInputStream(v.Stream)
 	tokenStream := antlr.NewCommonTokenStream(v.Lexer, antlr.TokenDefaultChannel)
