@@ -86,7 +86,6 @@ func arrow() {
 
 func toes5() {
 	code := `
-
 // Arrow Function Break Down
 
 // 1. Remove the word "function" and place arrow between the argument and opening body bracket
