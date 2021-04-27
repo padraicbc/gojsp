@@ -2,23 +2,23 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	antlr "github.com/padraicbc/antlr4"
-	"github.com/padraicbc/gojsp/base"
 	"github.com/padraicbc/gojsp/vast"
 )
 
 func singleExp() {
 
-	stream := antlr.NewInputStream(`i + j;`)
-	lexer := base.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := base.NewJavaScriptParser(tokenStream)
+	code := `i + j;`
+	v := vast.NewVisitor(code)
+	// do whatever with errors
+	go func() {
+		e := <-v.Errors
+		log.Fatal(e)
+	}()
 	// start at ExpressionSequence
-	tree := p.ExpressionSequence()
-	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	tree := v.Parser.ExpressionSequence()
 	exp := visit(tree, v).(*vast.ExpressionSequence)
 
 	expc := exp.FirstChild().(*vast.LRExpression)
@@ -30,15 +30,12 @@ func singleExp() {
 	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
 	// reuse lexer and parser
-	stream.Seek(0)
-	lexer.SetInputStream(stream)
-	tokenStream = antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-	p.SetInputStream(tokenStream)
+	v.Stream.Seek(0)
+	v.Lexer.SetInputStream(v.Stream)
+	tokenStream := antlr.NewCommonTokenStream(v.Lexer, antlr.TokenDefaultChannel)
+	v.Parser.SetInputStream(tokenStream)
 
-	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-	// alternative using Body
-	tree2 := p.Program()
-	v = vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	tree2 := v.Parser.Program()
 	exp2 := visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement).FirstChild()
 
 	expc = exp2.FirstChild().(*vast.LRExpression)

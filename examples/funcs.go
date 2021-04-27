@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"log"
 
-	antlr "github.com/padraicbc/antlr4"
-	"github.com/padraicbc/gojsp/base"
 	"github.com/padraicbc/gojsp/vast"
 )
 
 func fs() {
 
-	stream := antlr.NewInputStream(`function calcRectArea(width, height) {
+	code := `function calcRectArea(width, height) {
 		 width = width * 12 / 3 ** (function () {
 			 a *= 12;
 			return 10;
@@ -20,19 +18,12 @@ func fs() {
 	  }
 	  
 	  foo(a,b)=> a +b
-	  `)
-	lexer := base.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := base.NewJavaScriptParser(tokenStream)
-
-	tree := p.FunctionDeclaration()
+	  `
 	// could use this with .body way below
 	// tree := p.Program()
 
-	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
-
+	v := vast.NewVisitor(code)
+	tree := v.Parser.FunctionDeclaration()
 	// other way to go
 	// tree := p.Program()
 	// fd := visit(tree, v).(*vast.Program).Body[0].(*vast.FunctionDeclaration)
@@ -44,25 +35,28 @@ func fs() {
 }
 
 func arrow() {
-	stream := antlr.NewInputStream(`
+	code := `
 
 (a,b) => a + b;
 
 (a, b) => {
 	return a + b;
 }
-	 `)
-	lexer := base.NewJavaScriptLexer(stream)
+`
 
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := base.NewJavaScriptParser(tokenStream)
-
-	tree := p.Program()
-
-	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	v := vast.NewVisitor(code)
+	// do whatever with errors
+	go func() {
+		e := <-v.Errors
+		log.Fatal(e)
+	}()
+	tree := v.Parser.Program()
 	// v.Debug = true
 
+	go func() {
+		e := <-v.Errors
+		log.Fatal(e)
+	}()
 	rfs := visit(tree, v).(*vast.Program).Body
 
 	// ExpressionStatement -> ExpressionSequence -> ArrowFunction
@@ -75,7 +69,7 @@ func arrow() {
 	lr.OP().SetValue("*")
 	lft := lr.Left().(vast.Token)
 	lft.SetValue(lft.Value() + " * 100")
-	fmt.Println(exp1.Code(), "\n")
+	fmt.Println(exp1.Code() + "\n")
 
 	// change operator
 	fmt.Println(exp2.Code())
@@ -91,7 +85,7 @@ func arrow() {
 }
 
 func toes5() {
-	stream := antlr.NewInputStream(`
+	code := `
 
 // Arrow Function Break Down
 
@@ -111,16 +105,10 @@ c => c
   let chuck = 42;
   return a + b + chuck;
 }
- `)
-	lexer := base.NewJavaScriptLexer(stream)
+ `
 
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := base.NewJavaScriptParser(tokenStream)
-
-	tree := p.Program()
-
-	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+	v := vast.NewVisitor(code)
+	tree := v.Parser.Program()
 	// v.Debug = true
 
 	rfs := visit(tree, v).(*vast.Program).Body

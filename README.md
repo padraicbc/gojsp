@@ -8,14 +8,13 @@ Thre are a few example functions in the exampls folder including how to parse an
 
 
     import (
-	"log"
-
-	antlr "github.com/padraicbc/antlr4"
-	"github.com/padraicbc/gojsp/base"
-	"github.com/padraicbc/gojsp/vast"
+	    "log"
+	    antlr "github.com/padraicbc/antlr4"
+	    "github.com/padraicbc/gojsp/base"
+	    "github.com/padraicbc/gojsp/vast"
     )
 
-stream := antlr.NewInputStream(`i + j;`)
+    stream := antlr.NewInputStream(`i + j;`)
 	lexer := base.NewJavaScriptLexer(stream)
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
@@ -52,7 +51,7 @@ stream := antlr.NewInputStream(`i + j;`)
 
 And a very incomplete conversion from arrow to es5 functions but it shows the general idea:
 
-		stream := antlr.NewInputStream(`
+	stream := antlr.NewInputStream(`
 
     // Arrow Function Break Down
 

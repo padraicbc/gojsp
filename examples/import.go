@@ -2,15 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
 
-	antlr "github.com/padraicbc/antlr4"
-	"github.com/padraicbc/gojsp/base"
 	"github.com/padraicbc/gojsp/vast"
 )
 
 func impexp() {
-	stream := antlr.NewInputStream(`
-import foo as name from "star-module-name";
+	code := `import foo as name from "star-module-name";
 import defaultExport from "default-module-name";
 import defaultname, { export1, export2 as alias} from "module-name";
 import "module-name";
@@ -32,20 +30,17 @@ import {
    } from '/modules/my-module.js';
  import { getUsefulContents } from '/modules2/file.js';
  var promise = import("promise-module-name");
- let module = await import('/await/modules/my-module.js');
+ let module = await import('/await/modules/my-module.js');`
 
-
-
-`)
-
-	lexer := base.NewJavaScriptLexer(stream)
-
-	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
-
-	p := base.NewJavaScriptParser(tokenStream)
 	// all
-	tree := p.Program()
-	v := vast.NewVisitor(lexer.SymbolicNames, p.GetRuleNames())
+
+	v := vast.NewVisitor(code)
+	// do whatever with errors
+	go func() {
+		e := <-v.Errors
+		log.Fatal(e)
+	}()
+	tree := v.Parser.Program()
 	vp := visit(tree, v)
 
 	for _, ch := range vp.(*vast.Program).Body {
