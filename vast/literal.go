@@ -6,6 +6,15 @@ import (
 	"github.com/padraicbc/gojsp/base"
 )
 
+// literal
+//     : NullLiteral
+//     | BooleanLiteral
+//     | StringLiteral
+//     | TemplateStringLiteral
+//     | RegularExpressionLiteral
+//     | numericLiteral
+//     | bigintLiteral
+//     ;
 func (v *Visitor) VisitLiteral(ctx *base.LiteralContext) interface{} {
 	if v.Debug {
 		log.Println("VisitLiteralExpression", ctx.GetText())

@@ -309,3 +309,5 @@ fragment RegularExpressionClassChar
 fragment RegularExpressionBackslashSequence
     : '\\' ~[\r\n\u2028\u2029]
     ;
+
+ANY: . ;

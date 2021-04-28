@@ -63,24 +63,7 @@ func (v *Visitor) VisitArrowFunction(ctx *base.ArrowFunctionContext) interface{}
 	af := &ArrowFunction{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	var prev VNode
-	// if ctx.Async() != nil {
-	// 	af.Async = ident(v, ctx.Async().GetSymbol())
-	// 	af.children = af.Async
-	// 	prev = af.Async
-	// }
-	// f := v.Visit(ctx.ArrowFunctionParameters()).(*ArrowFunctionParameters)
-	// if prev != nil {
-	// 	prev.Next(f)
-	// } else {
-	// 	af.children = f
-	// }
-	// f.prev = prev
-	// prev = f
-	// af.FunctionParameters = f
 
-	// af.Arrow = ident(v, ctx.ARROW().GetSymbol())
-	// af.FunctionBody = v.Visit(ctx.ArrowFunctionBody()).(*Arr)
-	// log.Println("VisitArrowFunction", v.Visit(ctx.ArrowFunctionParameters()))
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if af.firstChild == nil {
 			af.firstChild = ch
@@ -378,7 +361,9 @@ func fdecl(fd *FunctionDeclaration, ctx antlr.RuleNode, v *Visitor) interface{} 
 	return fd
 }
 
-// Visit a parse tree produced by JavaScriptParser#functionDeclaration.
+// functionDeclaration
+// : Async? Function '*'? identifier '(' formalParameterList? ')' functionBody
+// ;
 func (v *Visitor) VisitFunctionDeclaration(ctx *base.FunctionDeclarationContext) interface{} {
 	if v.Debug {
 		log.Println("VisitFunctionDeclaration", ctx.GetText())
@@ -705,6 +690,7 @@ func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
 	return fb
 }
 
+// Async? '*'? propertyName '(' formalParameterList?  ')'  functionBody
 func (v *Visitor) VisitFunctionProperty(ctx *base.FunctionPropertyContext) interface{} {
 	if v.Debug {
 		log.Println("VisitFunctionProperty", ctx.GetText())
@@ -713,6 +699,41 @@ func (v *Visitor) VisitFunctionProperty(ctx *base.FunctionPropertyContext) inter
 	return v.VisitChildren(ctx)
 }
 
+// arguments
+//     : '('(argument (',' argument)* ','?)?')'
+//     ;
+type Arguments struct {
+	*SourceInfo
+	OpenBrace  Token
+	Args       *Argument
+	CloseParen Token
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*Arguments)(nil)
+
+func (i *Arguments) Type() string {
+	return "Arguments"
+}
+func (i *Arguments) Code() string {
+	return CodeDef(i)
+}
+func (i *Arguments) Next() VNode {
+	return i.next
+}
+func (i *Arguments) SetNext(v VNode) {
+	i.next = v
+}
+func (i *Arguments) Prev() VNode {
+	return i.prev
+}
+func (i *Arguments) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *Arguments) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitArguments(ctx *base.ArgumentsContext) interface{} {
 	if v.Debug {
 		log.Println("VisitArguments", ctx.GetText())
@@ -720,6 +741,8 @@ func (v *Visitor) VisitArguments(ctx *base.ArgumentsContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
+
+// singleExpression '?'? '.' '#'? identifierName
 func (v *Visitor) VisitMemberDotExpression(ctx *base.MemberDotExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitMemberDotExpression", ctx.GetText())

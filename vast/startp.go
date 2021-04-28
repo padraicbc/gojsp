@@ -35,7 +35,6 @@ func (v *Visitor) VisitProgram(ctx *base.ProgramContext) interface{} {
 // VisitChildren(node RuleNode) interface{}
 // VisitTerminal(node Identifier) interface{}
 // VisitErrorNode(node ErrorNode) interface{}
-
 func (v *Visitor) VisitSourceElement(ctx *base.SourceElementContext) interface{} {
 	if v.Debug {
 		log.Println("VisitSourceElement", ctx.GetText())

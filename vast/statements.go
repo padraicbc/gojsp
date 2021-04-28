@@ -490,14 +490,23 @@ func (v *Visitor) VisitReturnStatement(ctx *base.ReturnStatementContext) interfa
 	return r
 }
 
+// yieldStatement
+// : Yield ({p.notLineTerminator()}? expressionSequence)? eos
+// ;
 func (v *Visitor) VisitYieldStatement(ctx *base.YieldStatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+// withStatement
+//     : With '(' expressionSequence ')' statement
+//     ;
 func (v *Visitor) VisitWithStatement(ctx *base.WithStatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+// switchStatement
+//     : Switch '(' expressionSequence ')' caseBlock
+//     ;
 func (v *Visitor) VisitSwitchStatement(ctx *base.SwitchStatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }

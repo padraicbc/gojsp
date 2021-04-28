@@ -7,6 +7,41 @@ import (
 )
 
 // arrayLiteral
+type ArrayLiteralExpression struct {
+	*SourceInfo
+	Array      *ArrayLiteral
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*ArrayLiteralExpression)(nil)
+
+func (i *ArrayLiteralExpression) Type() string {
+	return "ArrayLiteralExpression"
+}
+func (i *ArrayLiteralExpression) Code() string {
+	return CodeDef(i)
+}
+func (i *ArrayLiteralExpression) Next() VNode {
+	return i.next
+}
+func (i *ArrayLiteralExpression) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ArrayLiteralExpression) Prev() VNode {
+	return i.prev
+}
+func (i *ArrayLiteralExpression) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ArrayLiteralExpression) FirstChild() VNode {
+	return i.firstChild
+}
+func (v *Visitor) VisitArrayLiteralExpression(ctx *base.ArrayLiteralExpressionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+// arrayLiteral
 //     : ('[' elementList ']')
 //     ;
 type ArrayLiteral struct {

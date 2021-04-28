@@ -140,6 +140,7 @@ func (v *Visitor) VisitPowerExpression(ctx *base.PowerExpressionContext) interfa
 }
 
 // Visit a parse tree produced by JavaScriptParser#MultiplicativeExpression.
+// singleExpression ('*' | '/' | '%') singleExpression
 func (v *Visitor) VisitMultiplicativeExpression(ctx *base.MultiplicativeExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitMultiplicativeExpression", ctx.GetText())
@@ -160,6 +161,8 @@ func (v *Visitor) VisitMultiplicativeExpression(ctx *base.MultiplicativeExpressi
 	return exp
 
 }
+
+// singleExpression ('+' | '-') singleExpression
 func (v *Visitor) VisitAdditiveExpression(ctx *base.AdditiveExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitAdditiveExpression", ctx.GetText())
@@ -178,6 +181,8 @@ func (v *Visitor) VisitAdditiveExpression(ctx *base.AdditiveExpressionContext) i
 	return exp
 
 }
+
+// singleExpression '??' singleExpression
 func (v *Visitor) VisitCoalesceExpression(ctx *base.CoalesceExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitCoalesceExpression", ctx.GetText())
@@ -190,6 +195,7 @@ func (v *Visitor) VisitCoalesceExpression(ctx *base.CoalesceExpressionContext) i
 	return exp
 }
 
+// singleExpression ('<<' | '>>' | '>>>') singleExpression
 func (v *Visitor) VisitBitShiftExpression(ctx *base.BitShiftExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitBitShiftExpression", ctx.GetText())
@@ -207,6 +213,7 @@ func (v *Visitor) VisitBitShiftExpression(ctx *base.BitShiftExpressionContext) i
 	return exp
 }
 
+// singleExpression ('<' | '>' | '<=' | '>=') singleExpression
 func (v *Visitor) VisitRelationalExpression(ctx *base.RelationalExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitRelationalExpression", ctx.GetText())
@@ -227,6 +234,7 @@ func (v *Visitor) VisitRelationalExpression(ctx *base.RelationalExpressionContex
 
 }
 
+// singleExpression Instanceof singleExpression
 func (v *Visitor) VisitInstanceofExpression(ctx *base.InstanceofExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitInstanceofExpression", ctx.GetText())
@@ -239,6 +247,7 @@ func (v *Visitor) VisitInstanceofExpression(ctx *base.InstanceofExpressionContex
 	return exp
 }
 
+// singleExpression In singleExpression
 func (v *Visitor) VisitInExpression(ctx *base.InExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitInExpression", ctx.GetText())
@@ -250,6 +259,8 @@ func (v *Visitor) VisitInExpression(ctx *base.InExpressionContext) interface{} {
 	setLR(v, ctx.SingleExpression(0), ctx.SingleExpression(1), exp)
 	return exp
 }
+
+// singleExpression ('==' | '!=' | '===' | '!==') singleExpression
 func (v *Visitor) VisitEqualityExpression(ctx *base.EqualityExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitEqualityExpression", ctx.GetText())
@@ -269,6 +280,8 @@ func (v *Visitor) VisitEqualityExpression(ctx *base.EqualityExpressionContext) i
 	setLR(v, ctx.SingleExpression(0), ctx.SingleExpression(1), exp)
 	return exp
 }
+
+//  singleExpression '&' singleExpression
 func (v *Visitor) VisitBitAndExpression(ctx *base.BitAndExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitBitAndExpression", ctx.GetText())
@@ -281,6 +294,7 @@ func (v *Visitor) VisitBitAndExpression(ctx *base.BitAndExpressionContext) inter
 	return exp
 }
 
+// singleExpression '^' singleExpression
 func (v *Visitor) VisitBitXOrExpression(ctx *base.BitXOrExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitBitXOrExpression", ctx.GetText())
@@ -292,6 +306,8 @@ func (v *Visitor) VisitBitXOrExpression(ctx *base.BitXOrExpressionContext) inter
 	setLR(v, ctx.SingleExpression(0), ctx.SingleExpression(1), exp)
 	return exp
 }
+
+// singleExpression '|' singleExpression
 func (v *Visitor) VisitBitOrExpression(ctx *base.BitOrExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitBitOrExpression", ctx.GetText())
@@ -304,6 +320,7 @@ func (v *Visitor) VisitBitOrExpression(ctx *base.BitOrExpressionContext) interfa
 	return exp
 }
 
+// singleExpression '&&' singleExpression
 func (v *Visitor) VisitLogicalAndExpression(ctx *base.LogicalAndExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitLogicalAndExpression", ctx.GetText())
@@ -315,6 +332,8 @@ func (v *Visitor) VisitLogicalAndExpression(ctx *base.LogicalAndExpressionContex
 	setLR(v, ctx.SingleExpression(0), ctx.SingleExpression(1), exp)
 	return exp
 }
+
+//  singleExpression '||' singleExpression
 func (v *Visitor) VisitLogicalOrExpression(ctx *base.LogicalOrExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitLogicalOrExpression", ctx.GetText())
@@ -326,6 +345,8 @@ func (v *Visitor) VisitLogicalOrExpression(ctx *base.LogicalOrExpressionContext)
 	setLR(v, ctx.SingleExpression(0), ctx.SingleExpression(1), exp)
 	return exp
 }
+
+// <assoc=right> singleExpression '=' singleExpression
 func (v *Visitor) VisitAssignmentOperator(ctx *base.AssignmentOperatorContext) interface{} {
 	if v.Debug {
 		log.Println("VisitAssignmentOperator", ctx.GetText())
@@ -333,6 +354,8 @@ func (v *Visitor) VisitAssignmentOperator(ctx *base.AssignmentOperatorContext) i
 	// ctx.GetStart().GetLine() etc.. could be  used directly but still have to switch on a lot of types so as easy do this.
 	return v.VisitChildren(ctx).([]VNode)[0]
 }
+
+// <assoc=right> singleExpression assignmentOperator singleExpression
 func (v *Visitor) VisitAssignmentOperatorExpression(ctx *base.AssignmentOperatorExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitAssignmentOperatorExpression", ctx.GetText())
@@ -343,6 +366,8 @@ func (v *Visitor) VisitAssignmentOperatorExpression(ctx *base.AssignmentOperator
 	setLR(v, ctx.SingleExpression(0), ctx.SingleExpression(1), exp)
 	return exp
 }
+
+//  singleExpression '?' singleExpression ':' singleExpression
 func (v *Visitor) VisitTernaryExpression(ctx *base.TernaryExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitTernaryExpression", ctx.GetText())
@@ -350,6 +375,7 @@ func (v *Visitor) VisitTernaryExpression(ctx *base.TernaryExpressionContext) int
 	return v.VisitChildren(ctx)
 }
 
+//  singleExpression arguments
 func (v *Visitor) VisitArgumentsExpression(ctx *base.ArgumentsExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitArgumentsExpression", ctx.GetText())
@@ -358,6 +384,7 @@ func (v *Visitor) VisitArgumentsExpression(ctx *base.ArgumentsExpressionContext)
 	return v.VisitChildren(ctx)
 }
 
+// literal
 func (v *Visitor) VisitLiteralExpression(ctx *base.LiteralExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitLiteralExpression", ctx.GetText())
