@@ -63,11 +63,8 @@ func (v *Visitor) VisitLabelledStatement(ctx *base.LabelledStatementContext) int
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if lst.firstChild == nil {
 			lst.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch ch.Type() {
@@ -145,11 +142,8 @@ func (v *Visitor) VisitBlock(ctx *base.BlockContext) interface{} {
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if b.firstChild == nil {
 			b.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 	}
@@ -267,11 +261,8 @@ func (v *Visitor) VisitExpressionSequence(ctx *base.ExpressionSequenceContext) i
 
 		if e.firstChild == nil {
 			e.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch ch.Type() {
@@ -402,8 +393,10 @@ func (i *ContinueStatement) FirstChild() VNode {
 }
 
 func (v *Visitor) VisitContinueStatement(ctx *base.ContinueStatementContext) interface{} {
-	c := &ContinueStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-		Continue: ident(v, ctx.Continue().GetSymbol())}
+	c := &ContinueStatement{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+		Continue:   ident(v, ctx.Continue().GetSymbol())}
+
 	c.firstChild = c.Continue
 	if ctx.Identifier() != nil {
 		c.Identifier = v.VisitIdentifier(ctx.Identifier().(*base.IdentifierContext)).(Token)
@@ -423,8 +416,54 @@ func (v *Visitor) VisitContinueStatement(ctx *base.ContinueStatementContext) int
 	return c
 }
 
+// While '(' expressionSequence ')' statement
+type WhileStatement struct {
+	*SourceInfo
+	While       Token
+	OpenParen   Token
+	ExpSequence *ExpressionSequence
+	Statement   VNode
+	CloseParen  Token
+	firstChild  VNode
+	prev, next  VNode
+}
+
+var _ VNode = (*WhileStatement)(nil)
+
+func (i *WhileStatement) Type() string {
+	return "WhileStatement"
+}
+func (i *WhileStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *WhileStatement) Next() VNode {
+	return i.next
+}
+func (i *WhileStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *WhileStatement) Prev() VNode {
+	return i.prev
+}
+func (i *WhileStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *WhileStatement) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitWhileStatement(ctx *base.WhileStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+	wh := &WhileStatement{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+		While:      ident(v, ctx.While().GetSymbol()),
+	}
+	wh.firstChild = wh.While
+
+	wh.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
+	wh.ExpSequence = v.VisitExpressionSequence(
+		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+	wh.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
+	wh.Statement = v.VisitStatement(ctx.Statement().(*base.StatementContext)).(VNode)
+	return wh
 }
 
 func (v *Visitor) VisitForStatement(ctx *base.ForStatementContext) interface{} {
@@ -499,12 +538,8 @@ func (v *Visitor) VisitReturnStatement(ctx *base.ReturnStatementContext) interfa
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if r.firstChild == nil {
 			r.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 

@@ -47,7 +47,7 @@ a = 13;
 `
 
 	v := vast.NewVisitor(code)
-	v.Debug = true
+	// v.Debug = true
 	// do whatever with errors
 	go func() {
 		e := <-v.Errors
@@ -64,8 +64,8 @@ a = 13;
 	// ExpressionStatement -> ExpressionSequence -> ArrowFunction
 	// either way below can access
 	exp1, exp2 := rfs[0], rfs[1]
-	ar1, ar2 := exp1.(*vast.ExpressionStatement).ExpSequence.FirstChild().(*vast.ArrowFunction),
-		exp2.FirstChild().FirstChild().(*vast.ArrowFunction)
+	ar1, ar2 := exp1.(*vast.Statement).FirstChild().(*vast.ExpressionStatement).ExpSequence.FirstChild().(*vast.ArrowFunction),
+		exp2.FirstChild().FirstChild().FirstChild().(*vast.ArrowFunction)
 
 	fmt.Println(exp1.Code())
 	lr := ar1.Body.SingleExpression.(*vast.LRExpression)
@@ -79,13 +79,13 @@ a = 13;
 	bdy := ar2.Body.FBody
 
 	// FirstChild() -> .Next() = brace then return
-	ret := bdy.FirstChild().Next().(*vast.ReturnStatement)
+	ret := bdy.FirstChild().Next().FirstChild().(*vast.ReturnStatement)
 	// is a left/right with single token expressions
 	ret.ExpSeq.FirstChild().(*vast.LRExpression).OP().SetValue("/")
 	fmt.Println(exp2.Code())
 	// source stays the same
 	fmt.Println(exp2.GetInfo().Source)
-	log.Println(rfs[2].(*vast.VariableDeclarationList).VarModifier)
+	log.Println(rfs[2].FirstChild().(*vast.VariableDeclarationList).VarModifier)
 }
 
 func toes5() {
@@ -115,12 +115,12 @@ c => c
 	// v.Debug = true
 
 	rfs := visit(tree, v).(*vast.Program).Body
-	// *ExpressionStatememts -> ExpressionSequence, iterate and check types
+	// Statement -> *ExpressionStatememts -> ExpressionSequence, iterate and check types
 	for _, fn := range rfs {
 		log.Println(fn.Type())
 		var trans string
 		// all with one child
-		af := fn.FirstChild().FirstChild().(*vast.ArrowFunction)
+		af := fn.(*vast.Statement).FirstChild().FirstChild().FirstChild().(*vast.ArrowFunction)
 		fmt.Println("Before ->", af.Code())
 		// either has a fucntion body with {} of a single expression.
 		if af.Body.FirstChild() != nil {

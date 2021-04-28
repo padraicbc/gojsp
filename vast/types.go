@@ -14,7 +14,7 @@ type Token interface {
 	VNode
 	SetValue(string)
 	Value() string
-	RName(string) string
+	rname(string) string
 	SymbolName() string
 }
 
@@ -23,7 +23,7 @@ type LToken struct {
 	*SourceInfo
 	// From .. StringLiteral...
 	sn string
-	// rulename .. reservedWord...
+	// RuleName .. reservedWord...
 	rn         string
 	prev, next VNode
 }
@@ -43,7 +43,7 @@ func (i *LToken) SymbolName() string {
 func (i *LToken) Code() string {
 	return i.value
 }
-func (i *LToken) RName(s string) string {
+func (i *LToken) rname(s string) string {
 	if s != "" {
 		i.rn = s
 		return ""

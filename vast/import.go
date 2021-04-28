@@ -2,6 +2,7 @@ package vast
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/padraicbc/gojsp/base"
 )
@@ -176,52 +177,6 @@ func (i *ImportExpression) FirstChild() VNode {
 
 }
 
-// moduleItems
-//     : '{' (aliasName ',')* (aliasName ','?)? '}'
-//     ;
-type ModuleItems struct {
-	*SourceInfo
-	// always AliasName(s) not sure of any nice way dynamically add so 1-n so juyst using a slice of them
-	AliasNames []*AliasName
-	Commas     []Token
-	OpenBrace  Token
-	CloseBrace Token
-	firstChild VNode
-
-	prev, next VNode
-}
-
-var _ VNode = (*ModuleItems)(nil)
-
-func (i *ModuleItems) Next() VNode {
-
-	return i.next
-}
-func (i *ModuleItems) SetNext(v VNode) {
-	i.next = v
-}
-func (i *ModuleItems) Prev() VNode {
-
-	return i.prev
-}
-func (i *ModuleItems) SetPrev(v VNode) {
-	i.prev = v
-}
-func (m *ModuleItems) Code() string {
-
-	return CodeDef(m)
-}
-func (m *ModuleItems) Type() string {
-	return "ModuleItems"
-}
-
-/// todo: AliasNames
-func (m *ModuleItems) FirstChild() VNode {
-
-	return m.firstChild
-
-}
-
 // importNamespace
 //     : ('*' | identifierName) (As identifierName)?
 //     ;
@@ -307,7 +262,9 @@ func (i *ImportDefault) FirstChild() VNode {
 }
 
 func (v *Visitor) VisitImportStatement(ctx *base.ImportStatementContext) interface{} {
-	// log.Println("VisitImportStatement", ctx.GetText())
+	if v.Debug {
+		log.Println("VisitImportStatement", ctx.GetText())
+	}
 	// could vists and switch check but this is the same thing.
 
 	im := &ImportStatement{
@@ -317,19 +274,18 @@ func (v *Visitor) VisitImportStatement(ctx *base.ImportStatementContext) interfa
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if im.firstChild == nil {
 			im.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
-
-		if ch.Type() == "LToken" {
+		switch ch.Type() {
+		case "LToken":
 			im.Import = ch.(Token)
 
-		} else {
+		case "ImportFromBlock":
 			im.ImportFromBlock = ch.(*ImportFromBlock)
+		default:
+			log.Panicf("%+v\n", ch)
 		}
 
 	}
@@ -347,11 +303,8 @@ func (v *Visitor) VisitImportFromBlock(ctx *base.ImportFromBlockContext) interfa
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if imf.firstChild == nil {
 			imf.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch ch.Type() {
@@ -387,7 +340,10 @@ func (v *Visitor) VisitImportFromBlock(ctx *base.ImportFromBlockContext) interfa
 
 //  Import '(' singleExpression ')' || Import "whatever"
 func (v *Visitor) VisitImportExpression(ctx *base.ImportExpressionContext) interface{} {
-	// log.Println("VisitImportExpression", ctx.GetText())
+
+	if v.Debug {
+		log.Println("VisitImportExpression", ctx.GetText(), ctx.GetChildCount())
+	}
 	ime := &ImportExpression{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
@@ -397,11 +353,8 @@ func (v *Visitor) VisitImportExpression(ctx *base.ImportExpressionContext) inter
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if ime.firstChild == nil {
 			ime.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		t := ch.(Token)
@@ -423,51 +376,6 @@ func (v *Visitor) VisitImportExpression(ctx *base.ImportExpressionContext) inter
 	return ime
 }
 
-func (v *Visitor) VisitModuleItems(ctx *base.ModuleItemsContext) interface{} {
-
-	mit := &ModuleItems{
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-	}
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if mit.firstChild == nil {
-			mit.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
-		}
-		ch.SetPrev(prev)
-
-		prev = ch
-		switch ch.Type() {
-		case "AliasName":
-			mit.AliasNames = append(mit.AliasNames, ch.(*AliasName))
-		case "LToken":
-			t := ch.(Token)
-			if t.SymbolName() == "OpenBrace" {
-				mit.OpenBrace = t
-				continue
-			}
-			if t.SymbolName() == "CloseBrace" {
-				mit.CloseBrace = t
-				continue
-			}
-			if t.SymbolName() == "Comma" {
-				mit.Commas = append(mit.Commas, t)
-				continue
-			}
-			panic(t.SymbolName())
-
-		default:
-			panic(fmt.Sprintf("%+v %s\n", ch, ch.Type()))
-		}
-
-	}
-
-	return mit
-
-}
-
 // importDefault
 //     : aliasName ','
 //     ;
@@ -475,11 +383,17 @@ func (v *Visitor) VisitImportDefault(ctx *base.ImportDefaultContext) interface{}
 	// could iterate over children but this is the same thing.
 	// todo: check types?
 	ind := &ImportDefault{
-
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if ind.firstChild == nil {
+			ind.firstChild = ch
+		}
+		prev = setSib(prev, ch)
+
+		prev = ch
+
 		switch ch.Type() {
 		case "AliasName":
 			ind.Default = ch.(*AliasName)
@@ -490,21 +404,13 @@ func (v *Visitor) VisitImportDefault(ctx *base.ImportDefaultContext) interface{}
 				ind.Comma = t
 				continue
 			}
-			panic(t.SymbolName())
+			log.Panic(t.SymbolName())
 
 		default:
 
-			panic(fmt.Sprintf("%+v %s\n", ch, ch.Type()))
+			log.Panicf("%+v %s\n", ch, ch.Type())
 		}
-		if ind.firstChild == nil {
-			ind.firstChild = ch
-		} else {
-			prev.SetNext(ch)
 
-		}
-		ch.SetPrev(prev)
-
-		prev = ch
 	}
 	return ind
 }
@@ -522,11 +428,8 @@ func (v *Visitor) VisitImportNamespace(ctx *base.ImportNamespaceContext) interfa
 	for i, ch := range v.VisitChildren(ctx).([]VNode) {
 		if imn.firstChild == nil {
 			imn.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		t := ch.(Token)
@@ -562,11 +465,8 @@ func (v *Visitor) VisitImportFrom(ctx *base.ImportFromContext) interface{} {
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if imfr.firstChild == nil {
 			imfr.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		t := ch.(Token)
@@ -582,4 +482,92 @@ func (v *Visitor) VisitImportFrom(ctx *base.ImportFromContext) interface{} {
 	}
 
 	return imfr
+}
+
+// moduleItems
+//     : '{' (aliasName ',')* (aliasName ','?)? '}'
+//     ;
+type ModuleItems struct {
+	*SourceInfo
+	// always AliasName(s) not sure of any nice way dynamically add so 1-n so just using a slice of them
+	AliasNames []*AliasName
+	Commas     []Token
+	OpenBrace  Token
+	CloseBrace Token
+	firstChild VNode
+
+	prev, next VNode
+}
+
+var _ VNode = (*ModuleItems)(nil)
+
+func (i *ModuleItems) Next() VNode {
+
+	return i.next
+}
+func (i *ModuleItems) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ModuleItems) Prev() VNode {
+
+	return i.prev
+}
+func (i *ModuleItems) SetPrev(v VNode) {
+	i.prev = v
+}
+func (m *ModuleItems) Code() string {
+
+	return CodeDef(m)
+}
+func (m *ModuleItems) Type() string {
+	return "ModuleItems"
+}
+
+func (m *ModuleItems) FirstChild() VNode {
+
+	return m.firstChild
+
+}
+
+func (v *Visitor) VisitModuleItems(ctx *base.ModuleItemsContext) interface{} {
+
+	mit := &ModuleItems{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if mit.firstChild == nil {
+			mit.firstChild = ch
+		}
+		prev = setSib(prev, ch)
+
+		prev = ch
+
+		switch ch.Type() {
+		case "AliasName":
+			mit.AliasNames = append(mit.AliasNames, ch.(*AliasName))
+		case "LToken":
+			t := ch.(Token)
+			if t.SymbolName() == "OpenBrace" {
+				mit.OpenBrace = t
+				continue
+			}
+			if t.SymbolName() == "CloseBrace" {
+				mit.CloseBrace = t
+				continue
+			}
+			if t.SymbolName() == "Comma" {
+				mit.Commas = append(mit.Commas, t)
+				continue
+			}
+			log.Panic(t.SymbolName())
+
+		default:
+			log.Panicf("%+v %s\n", ch, ch.Type())
+		}
+
+	}
+
+	return mit
+
 }

@@ -35,11 +35,13 @@ import {
 	// all
 
 	v := vast.NewVisitor(code)
+	v.Debug = true
 	// do whatever with errors
 	go func() {
 		e := <-v.Errors
 		log.Fatal(e)
 	}()
+
 	tree := v.Parser.Program()
 	vp := visit(tree, v)
 

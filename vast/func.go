@@ -67,11 +67,8 @@ func (v *Visitor) VisitArrowFunction(ctx *base.ArrowFunctionContext) interface{}
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if af.firstChild == nil {
 			af.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		// log.Printf("%+v\n", ch)
@@ -158,11 +155,8 @@ func (v *Visitor) VisitArrowFunctionParameters(ctx *base.ArrowFunctionParameters
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if ar.firstChild == nil {
 			ar.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 
@@ -246,11 +240,8 @@ func (v *Visitor) VisitArrowFunctionBody(ctx *base.ArrowFunctionBodyContext) int
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if afb.firstChild == nil {
 			afb.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch ch.Type() {
@@ -321,11 +312,8 @@ func fdecl(fd *FunctionDeclaration, ctx antlr.RuleNode, v *Visitor) interface{} 
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if fd.firstChild == nil {
 			fd.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 
@@ -450,11 +438,8 @@ func (v *Visitor) VisitFormalParameterList(ctx *base.FormalParameterListContext)
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if fp.firstChild == nil {
 			fp.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 
@@ -530,11 +515,8 @@ func (v *Visitor) VisitFormalParameterArg(ctx *base.FormalParameterArgContext) i
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if fa.firstChild == nil {
 			fa.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch tk := ch.(Token); tk.SymbolName() {
@@ -645,9 +627,7 @@ func (i *FunctionBody) FirstChild() VNode {
 
 }
 func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
-	if v.Debug {
-		log.Println("VisitArrowFunctionBody", ctx.GetText())
-	}
+
 	if v.Debug {
 		log.Println("VisitFunctionBody", ctx.GetText(), ctx.GetChildCount())
 	}
@@ -657,12 +637,8 @@ func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if fb.firstChild == nil {
 			fb.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch ch.Type() {
@@ -680,8 +656,7 @@ func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
 			}
 
 		default:
-			// ExpressionStatement ...
-
+			// todo: check a type?
 			fb.SourceElements = append(fb.SourceElements, ch)
 
 		}
@@ -691,12 +666,86 @@ func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
 }
 
 // Async? '*'? propertyName '(' formalParameterList?  ')'  functionBody
+type FunctionProperty struct {
+	*SourceInfo
+	Async               Token
+	Multiply            Token
+	PropertyName        *PropertyName
+	OpenParen           Token
+	FormalParameterList *FormalParameterList
+	CloseParen          Token
+	FunctionBody        *FunctionBody
+
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*FunctionProperty)(nil)
+
+func (i *FunctionProperty) Type() string {
+	return "FunctionProperty"
+}
+func (i *FunctionProperty) Code() string {
+	return CodeDef(i)
+}
+func (i *FunctionProperty) Next() VNode {
+	return i.next
+}
+func (i *FunctionProperty) SetNext(v VNode) {
+	i.next = v
+}
+func (i *FunctionProperty) Prev() VNode {
+	return i.prev
+}
+func (i *FunctionProperty) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *FunctionProperty) FirstChild() VNode {
+	return i.firstChild
+}
+
 func (v *Visitor) VisitFunctionProperty(ctx *base.FunctionPropertyContext) interface{} {
 	if v.Debug {
 		log.Println("VisitFunctionProperty", ctx.GetText())
 	}
+	fp := &FunctionProperty{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if fp.firstChild == nil {
+			fp.firstChild = ch
+		}
+		prev = setSib(prev, ch)
 
-	return v.VisitChildren(ctx)
+		prev = ch
+		switch ch.Type() {
+		case "LToken":
+			tk := ch.(Token)
+			switch tk.SymbolName() {
+			case "Async":
+				fp.Async = tk
+			case "Multiply":
+				fp.Multiply = tk
+			case "OpenParen":
+				fp.OpenParen = tk
+			case "CloseParen":
+				fp.CloseParen = tk
+
+			default:
+				log.Panicf("%+v\n", ch)
+			}
+		case "PropertyName":
+			fp.PropertyName = ch.(*PropertyName)
+		case "FunctionProperty":
+			fp.FunctionBody = ch.(*FunctionBody)
+		case "FormalParameterList":
+			fp.FormalParameterList = ch.(*FormalParameterList)
+		default:
+			log.Panicf("%+v %s\n", ch, ch.Type())
+
+		}
+
+	}
+	return fp
 }
 
 // arguments

@@ -52,7 +52,10 @@ export default function () { } // also class, function*
 `
 
 	s := time.Now()
+	// code = `var promise = import("promise-module-name");`
 	v := vast.NewVisitor(code)
+	// v.Debug = true
+
 	tree := v.Parser.Program()
 	visit(tree, v)
 	go func() {

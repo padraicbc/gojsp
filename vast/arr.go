@@ -7,38 +7,9 @@ import (
 )
 
 // arrayLiteral
-type ArrayLiteralExpression struct {
-	*SourceInfo
-	Array      *ArrayLiteral
-	firstChild VNode
-	prev, next VNode
-}
-
-var _ VNode = (*ArrayLiteralExpression)(nil)
-
-func (i *ArrayLiteralExpression) Type() string {
-	return "ArrayLiteralExpression"
-}
-func (i *ArrayLiteralExpression) Code() string {
-	return CodeDef(i)
-}
-func (i *ArrayLiteralExpression) Next() VNode {
-	return i.next
-}
-func (i *ArrayLiteralExpression) SetNext(v VNode) {
-	i.next = v
-}
-func (i *ArrayLiteralExpression) Prev() VNode {
-	return i.prev
-}
-func (i *ArrayLiteralExpression) SetPrev(v VNode) {
-	i.prev = v
-}
-func (i *ArrayLiteralExpression) FirstChild() VNode {
-	return i.firstChild
-}
 func (v *Visitor) VisitArrayLiteralExpression(ctx *base.ArrayLiteralExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
+
+	return v.VisitArrayLiteral(ctx.ArrayLiteral().(*base.ArrayLiteralContext))
 }
 
 // arrayLiteral
@@ -87,10 +58,16 @@ func (v *Visitor) VisitArrayLiteral(ctx *base.ArrayLiteralContext) interface{} {
 		log.Println("VisitArrayLiteral", ctx.GetText())
 	}
 	arl := &ArrayLiteral{
-
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if arl.firstChild == nil {
+			arl.firstChild = ch
+		}
+		prev = setSib(prev, ch)
+
+		prev = ch
 
 		switch ch.Type() {
 		case "OpenBracket":
@@ -101,15 +78,7 @@ func (v *Visitor) VisitArrayLiteral(ctx *base.ArrayLiteralContext) interface{} {
 			arl.Elems = ch.(*ElementList)
 
 		}
-		if arl.firstChild == nil {
-			arl.firstChild = ch
-		} else {
-			prev.SetNext(ch)
 
-		}
-		ch.SetPrev(prev)
-
-		prev = ch
 	}
 	return arl
 }
@@ -166,11 +135,8 @@ func (v *Visitor) VisitElementList(ctx *base.ElementListContext) interface{} {
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if el.firstChild == nil {
 			el.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch ch.Type() {
@@ -247,11 +213,8 @@ func (v *Visitor) VisitArrayElement(ctx *base.ArrayElementContext) interface{} {
 		}
 		if ae.firstChild == nil {
 			ae.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 	}

@@ -35,8 +35,8 @@ func singleExp() {
 	tokenStream := antlr.NewCommonTokenStream(v.Lexer, antlr.TokenDefaultChannel)
 	v.Parser.SetInputStream(tokenStream)
 
-	tree2 := v.Parser.Program()
-	exp2 := visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement).FirstChild()
+	tree2 := v.Parser.ExpressionStatement()
+	exp2 := visit(tree2, v).(*vast.ExpressionStatement).FirstChild()
 
 	expc = exp2.FirstChild().(*vast.LRExpression)
 	// can be any singleExpression so any VNode

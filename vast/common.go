@@ -156,11 +156,8 @@ func (v *Visitor) VisitAliasName(ctx *base.AliasNameContext) interface{} {
 	for i, ch := range v.VisitChildren(ctx).([]VNode) {
 		if al.firstChild == nil {
 			al.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		t := ch.(Token)
@@ -210,7 +207,7 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 		// satisifes both interfaces Token and VNode so check Token first as we set extra info specific to Token.
 		case Token:
-			rr.RName(v.ruleNames[node.GetRuleContext().GetRuleIndex()])
+			rr.rname(v.ruleNames[node.GetRuleContext().GetRuleIndex()])
 			result = append(result, rr)
 		case VNode:
 			result = append(result, rr)
@@ -232,4 +229,14 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 	return result
 
+}
+
+func setSib(prev, ch VNode) VNode {
+	// set next and prev. prev will be nil for first node.
+	if prev != nil {
+		prev.SetNext(ch)
+		ch.SetPrev(prev)
+	}
+
+	return ch
 }

@@ -58,11 +58,8 @@ func (v *Visitor) VisitDeclaration(ctx *base.DeclarationContext) interface{} {
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if d.firstChild == nil {
 			d.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 
@@ -116,31 +113,29 @@ func (i *VariableDeclaration) FirstChild() VNode {
 }
 func (v *Visitor) VisitVariableDeclaration(ctx *base.VariableDeclarationContext) interface{} {
 	if v.Debug {
-		log.Println("VisitVariableDeclaration", ctx.GetText())
+		log.Println("VisitVariableDeclaration", ctx.GetText(), ctx.GetChildCount())
 	}
 
 	d := &VariableDeclaration{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
+
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if d.firstChild == nil {
 			d.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch ch.(type) {
-		case *ArrayLiteral: // todo ObjectLiteral":
+		case *ArrayLiteral: // todo ArrayLiteral":
 			d.Assignable = ch
 		case *ObjectLiteral: // todo ObjectLiteral":
 			d.Assignable = ch
 		case *LToken:
 			t := ch.(Token)
-			if t.RName("") == "identifier" {
+			if t.rname("") == "identifier" {
 				d.Assignable = t
 				continue
 			}
@@ -202,16 +197,14 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *base.VariableDeclarationList
 	if v.Debug {
 		log.Println("VisitVariableDeclarationList", ctx.GetText())
 	}
+
 	vdl := &VariableDeclarationList{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if vdl.firstChild == nil {
 			vdl.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
 		}
-		ch.SetPrev(prev)
+		prev = setSib(prev, ch)
 
 		prev = ch
 		switch ch.Type() {
@@ -227,7 +220,7 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *base.VariableDeclarationList
 			case "Var", "Const", "Let":
 				vdl.VarModifier = t
 			default:
-				panic(ch.Type() + t.RName("") + t.SymbolName())
+				panic(ch.Type() + t.rname("") + t.SymbolName())
 			}
 
 		default:
@@ -259,7 +252,7 @@ func (v *Visitor) VisitVarModifier(ctx *base.VarModifierContext) interface{} {
 		return ident(v, ctx.Const().GetSymbol())
 	}
 	panic("VisitVarModifier")
-	return nil
+
 }
 
 // assignable
