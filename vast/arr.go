@@ -8,6 +8,9 @@ import (
 
 // arrayLiteral
 func (v *Visitor) VisitArrayLiteralExpression(ctx *base.ArrayLiteralExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitArrayLiteralExpression", ctx.GetText())
+	}
 
 	return v.VisitArrayLiteral(ctx.ArrayLiteral().(*base.ArrayLiteralContext))
 }
@@ -186,7 +189,6 @@ func (i *ArrayElement) Code() string {
 }
 
 func (i *ArrayElement) FirstChild() VNode {
-
 	return i.firstChild
 
 }
@@ -195,10 +197,14 @@ func (v *Visitor) VisitArrayElement(ctx *base.ArrayElementContext) interface{} {
 		log.Println("VisitArrayElement", ctx.GetText())
 	}
 	ae := ArrayElement{
-
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if ae.firstChild == nil {
+			ae.firstChild = ch
+		}
+		prev = setSib(prev, ch)
 
 		switch ch.Type() {
 		case "Ellipsis":
@@ -206,12 +212,8 @@ func (v *Visitor) VisitArrayElement(ctx *base.ArrayElementContext) interface{} {
 		case "SingleExpression":
 			ae.SingleExpression = ch
 		default:
-			panic(ch.Type())
+			log.Panicf("%+v %s\n", ch, ch.Type())
 		}
-		if ae.firstChild == nil {
-			ae.firstChild = ch
-		}
-		prev = setSib(prev, ch)
 
 	}
 	return ae

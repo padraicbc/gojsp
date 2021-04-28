@@ -54,14 +54,11 @@ export default function () { } // also class, function*
 	s := time.Now()
 	// code = `var promise = import("promise-module-name");`
 	v := vast.NewVisitor(code)
+	go v.DefaultError()
 	// v.Debug = true
 
 	tree := v.Parser.Program()
 	visit(tree, v)
-	go func() {
-		e := <-v.Errors
-		log.Fatal(e)
-	}()
 
 	crun := time.Now().Sub(s)
 	//  Reuse lexer and parser. Can pass new stream altogether. I was too lazy..

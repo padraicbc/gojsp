@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	antlr "github.com/padraicbc/antlr4"
 	"github.com/padraicbc/gojsp/vast"
@@ -13,10 +12,7 @@ func singleExp() {
 	code := `i + j;`
 	v := vast.NewVisitor(code)
 	// do whatever with errors
-	go func() {
-		e := <-v.Errors
-		log.Fatal(e)
-	}()
+	go v.DefaultError()
 	// start at ExpressionSequence
 	tree := v.Parser.ExpressionSequence()
 	exp := visit(tree, v).(*vast.ExpressionSequence)

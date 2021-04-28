@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/padraicbc/gojsp/vast"
 )
@@ -30,17 +29,18 @@ import {
    } from '/modules/my-module.js';
  import { getUsefulContents } from '/modules2/file.js';
  var promise = import("promise-module-name");
- let module = await import('/await/modules/my-module.js');`
+ let module = await import('/await/modules/my-module.js');
+ export default foo;
+ export default function name1()) { } // also class, function*
+export { name1 as default };
+ `
 
 	// all
 
 	v := vast.NewVisitor(code)
 	v.Debug = true
 	// do whatever with errors
-	go func() {
-		e := <-v.Errors
-		log.Fatal(e)
-	}()
+	go v.DefaultError()
 
 	tree := v.Parser.Program()
 	vp := visit(tree, v)

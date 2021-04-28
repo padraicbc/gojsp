@@ -9,6 +9,14 @@ import (
 	"github.com/padraicbc/gojsp/base"
 )
 
+func setThreeSibs(a, b, c VNode) {
+	a.SetNext(b)
+	b.SetNext(c)
+	b.SetPrev(a)
+	c.SetPrev(b)
+
+}
+
 // just pulls original source code info
 func getSourceInfo(ctx antlr.BaseParserRuleContext) *SourceInfo {
 	start, end := ctx.GetStart().GetStart(), ctx.GetStop().GetStop()

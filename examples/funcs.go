@@ -49,16 +49,9 @@ a = 13;
 	v := vast.NewVisitor(code)
 	v.Debug = true
 	// do whatever with errors
-	go func() {
-		e := <-v.Errors
-		log.Fatal(e)
-	}()
+	go v.DefaultError()
 	tree := v.Parser.Program()
 
-	go func() {
-		e := <-v.Errors
-		log.Fatal(e)
-	}()
 	rfs := visit(tree, v).(*vast.Program).Body
 
 	// ExpressionStatement -> ExpressionSequence -> ArrowFunction

@@ -49,12 +49,42 @@ func (i *ImportStatement) FirstChild() VNode {
 
 }
 
+func (v *Visitor) VisitImportStatement(ctx *base.ImportStatementContext) interface{} {
+	if v.Debug {
+		log.Println("VisitImportStatement", ctx.GetText())
+	}
+
+	im := &ImportStatement{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if im.firstChild == nil {
+			im.firstChild = ch
+		}
+		prev = setSib(prev, ch)
+
+		switch ch.Type() {
+		case "LToken":
+			im.Import = ch.(Token)
+
+		case "ImportFromBlock":
+			im.ImportFromBlock = ch.(*ImportFromBlock)
+		default:
+			log.Panicf("%+v\n", ch)
+		}
+
+	}
+
+	return im
+
+}
+
 // importFromBlock
 //     : importDefault? (importNamespace | moduleItems) importFrom eos
 //     | StringLiteral eos
 type ImportFromBlock struct {
 	*SourceInfo
-
 	ImportDefault   *ImportDefault
 	ModuleItems     *ModuleItems
 	ImportNamespace *ImportNamespace
@@ -62,8 +92,7 @@ type ImportFromBlock struct {
 	ImportFrom      *ImportFrom
 	Eos             Token
 	firstChild      VNode
-
-	prev, next VNode
+	prev, next      VNode
 }
 
 var _ VNode = (*ImportFromBlock)(nil)
@@ -95,43 +124,49 @@ func (i *ImportFromBlock) FirstChild() VNode {
 
 }
 
-type ImportFrom struct {
-	*SourceInfo
-	firstChild VNode
+func (v *Visitor) VisitImportFromBlock(ctx *base.ImportFromBlockContext) interface{} {
+	if v.Debug {
+		log.Println("VisitImportFromBlock", ctx.GetText())
+	}
+	imf := &ImportFromBlock{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
-	prev, next VNode
+	var prev VNode
+	// iterate here as some are there, some not.
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if imf.firstChild == nil {
+			imf.firstChild = ch
+		}
+		prev = setSib(prev, ch)
 
-	From Token
-	Path Token
-}
+		switch ch.Type() {
 
-var _ VNode = (*ImportFrom)(nil)
+		case "ImportDefault":
+			imf.ImportDefault = ch.(*ImportDefault)
+		case "ImportNamespace":
+			imf.ImportNamespace = ch.(*ImportNamespace)
+		case "ModuleItems":
+			imf.ModuleItems = ch.(*ModuleItems)
+		case "ImportFrom":
+			imf.ImportFrom = ch.(*ImportFrom)
+		case "LToken":
+			tk := ch.(Token)
+			if tk.SymbolName() == "StringLiteral" {
+				imf.StringLiteral = tk
+				continue
+			}
+			if tk.SymbolName() == "SemiColon" {
+				imf.Eos = tk
+				continue
+			}
 
-func (i *ImportFrom) Next() VNode {
+			log.Panicf("%+v %s\n", ch, ch.Type())
 
-	return i.next
-}
-func (i *ImportFrom) SetNext(v VNode) {
-	i.next = v
-}
-func (i *ImportFrom) Prev() VNode {
+		}
 
-	return i.prev
-}
-func (i *ImportFrom) SetPrev(v VNode) {
-	i.prev = v
-}
-func (i *ImportFrom) Type() string {
-	return "ImportFrom"
-}
+	}
 
-func (i *ImportFrom) Code() string {
-	return CodeDef(i)
-}
-
-func (i *ImportFrom) FirstChild() VNode {
-
-	return i.firstChild
+	return imf
 
 }
 
@@ -175,6 +210,116 @@ func (i *ImportExpression) FirstChild() VNode {
 
 	return i.firstChild
 
+}
+
+func (v *Visitor) VisitImportExpression(ctx *base.ImportExpressionContext) interface{} {
+
+	if v.Debug {
+		log.Println("VisitImportExpression", ctx.GetText(), ctx.GetChildCount())
+	}
+	ime := &ImportExpression{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+
+	// alwyas tokens
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if ime.firstChild == nil {
+			ime.firstChild = ch
+		}
+		prev = setSib(prev, ch)
+
+		t := ch.(Token)
+		switch t.SymbolName() {
+		case "Import":
+			ime.Import = t
+		case "OpenParen":
+			ime.OpenParen = t
+		case "StringLiteral":
+			ime.Module = t
+		case "CloseParen":
+			ime.CloseParen = t
+		default:
+			panic(t.SymbolName())
+		}
+
+	}
+
+	return ime
+}
+
+// importDefault
+//     : aliasName ','
+//     ;
+type ImportDefault struct {
+	*SourceInfo
+	Default    *AliasName
+	Comma      Token
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*ImportDefault)(nil)
+
+func (i *ImportDefault) Next() VNode {
+
+	return i.next
+}
+func (i *ImportDefault) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ImportDefault) Prev() VNode {
+
+	return i.prev
+}
+func (i *ImportDefault) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ImportDefault) Type() string {
+	return "ImportDefault"
+}
+
+func (i *ImportDefault) Code() string {
+	return CodeDef(i)
+}
+func (i *ImportDefault) FirstChild() VNode {
+
+	return i.firstChild
+
+}
+func (v *Visitor) VisitImportDefault(ctx *base.ImportDefaultContext) interface{} {
+	if v.Debug {
+		log.Println("VisitImportDefault", ctx.GetText())
+	}
+	ind := &ImportDefault{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if ind.firstChild == nil {
+			ind.firstChild = ch
+		}
+		prev = setSib(prev, ch)
+
+		switch ch.Type() {
+		case "AliasName":
+			ind.Default = ch.(*AliasName)
+		case "LToken":
+			t := ch.(Token)
+
+			if t.SymbolName() == "Comma" {
+				ind.Comma = t
+				continue
+			}
+			log.Panic(t.SymbolName())
+
+		default:
+
+			log.Panicf("%+v %s\n", ch, ch.Type())
+		}
+
+	}
+	return ind
 }
 
 // importNamespace
@@ -221,201 +366,10 @@ func (i *ImportNamespace) FirstChild() VNode {
 
 }
 
-// importDefault
-// : aliasName ','
-type ImportDefault struct {
-	*SourceInfo
-	Default    *AliasName
-	Comma      Token
-	firstChild VNode
-
-	prev, next VNode
-}
-
-var _ VNode = (*ImportDefault)(nil)
-
-func (i *ImportDefault) Next() VNode {
-
-	return i.next
-}
-func (i *ImportDefault) SetNext(v VNode) {
-	i.next = v
-}
-func (i *ImportDefault) Prev() VNode {
-
-	return i.prev
-}
-func (i *ImportDefault) SetPrev(v VNode) {
-	i.prev = v
-}
-func (i *ImportDefault) Type() string {
-	return "ImportDefault"
-}
-
-func (i *ImportDefault) Code() string {
-	return CodeDef(i)
-}
-func (i *ImportDefault) FirstChild() VNode {
-
-	return i.firstChild
-
-}
-
-func (v *Visitor) VisitImportStatement(ctx *base.ImportStatementContext) interface{} {
-	if v.Debug {
-		log.Println("VisitImportStatement", ctx.GetText())
-	}
-	// could vists and switch check but this is the same thing.
-
-	im := &ImportStatement{
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-	}
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if im.firstChild == nil {
-			im.firstChild = ch
-		}
-		prev = setSib(prev, ch)
-
-		switch ch.Type() {
-		case "LToken":
-			im.Import = ch.(Token)
-
-		case "ImportFromBlock":
-			im.ImportFromBlock = ch.(*ImportFromBlock)
-		default:
-			log.Panicf("%+v\n", ch)
-		}
-
-	}
-
-	return im
-
-}
-
-func (v *Visitor) VisitImportFromBlock(ctx *base.ImportFromBlockContext) interface{} {
-	imf := &ImportFromBlock{
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-
-	var prev VNode
-	// iterate here as some are there, some not.
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if imf.firstChild == nil {
-			imf.firstChild = ch
-		}
-		prev = setSib(prev, ch)
-
-		switch ch.Type() {
-
-		case "ImportDefault":
-			imf.ImportDefault = ch.(*ImportDefault)
-		case "ImportNamespace":
-			imf.ImportNamespace = ch.(*ImportNamespace)
-		case "ModuleItems":
-			imf.ModuleItems = ch.(*ModuleItems)
-		case "ImportFrom":
-			imf.ImportFrom = ch.(*ImportFrom)
-		case "LToken":
-			tk := ch.(Token)
-			if tk.SymbolName() == "StringLiteral" {
-				imf.StringLiteral = tk
-				continue
-			}
-			if tk.SymbolName() == "SemiColon" {
-				imf.Eos = tk
-				continue
-			}
-
-			panic(fmt.Sprintf("%+v %s\n", ch, ch.Type()))
-
-		}
-
-	}
-
-	return imf
-
-}
-
-//  Import '(' singleExpression ')' || Import "whatever"
-func (v *Visitor) VisitImportExpression(ctx *base.ImportExpressionContext) interface{} {
-
-	if v.Debug {
-		log.Println("VisitImportExpression", ctx.GetText(), ctx.GetChildCount())
-	}
-	ime := &ImportExpression{
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-	}
-
-	// alwyas tokens
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if ime.firstChild == nil {
-			ime.firstChild = ch
-		}
-		prev = setSib(prev, ch)
-
-		t := ch.(Token)
-		switch t.SymbolName() {
-		case "Import":
-			ime.Import = t
-		case "OpenParen":
-			ime.OpenParen = t
-		case "StringLiteral":
-			ime.Module = t
-		case "CloseParen":
-			ime.CloseParen = t
-		default:
-			panic(t.SymbolName())
-		}
-
-	}
-
-	return ime
-}
-
-// importDefault
-//     : aliasName ','
-//     ;
-func (v *Visitor) VisitImportDefault(ctx *base.ImportDefaultContext) interface{} {
-	// could iterate over children but this is the same thing.
-	// todo: check types?
-	ind := &ImportDefault{
-		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-	}
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if ind.firstChild == nil {
-			ind.firstChild = ch
-		}
-		prev = setSib(prev, ch)
-
-		switch ch.Type() {
-		case "AliasName":
-			ind.Default = ch.(*AliasName)
-		case "LToken":
-			t := ch.(Token)
-
-			if t.SymbolName() == "Comma" {
-				ind.Comma = t
-				continue
-			}
-			log.Panic(t.SymbolName())
-
-		default:
-
-			log.Panicf("%+v %s\n", ch, ch.Type())
-		}
-
-	}
-	return ind
-}
-
-// importNamespace
-//     : ('*' | identifierName) (As identifierName)?
-//     ;
 func (v *Visitor) VisitImportNamespace(ctx *base.ImportNamespaceContext) interface{} {
-	// log.Println("VisitImportNamespace", ctx.GetText())
-
+	if v.Debug {
+		log.Println("VisitImportNamespace", ctx.GetText())
+	}
 	imn := &ImportNamespace{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
@@ -451,7 +405,49 @@ func (v *Visitor) VisitImportNamespace(ctx *base.ImportNamespaceContext) interfa
 // importFrom
 //     : From StringLiteral
 //     ;
+type ImportFrom struct {
+	*SourceInfo
+	firstChild VNode
+
+	prev, next VNode
+
+	From Token
+	Path Token
+}
+
+var _ VNode = (*ImportFrom)(nil)
+
+func (i *ImportFrom) Next() VNode {
+
+	return i.next
+}
+func (i *ImportFrom) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ImportFrom) Prev() VNode {
+
+	return i.prev
+}
+func (i *ImportFrom) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ImportFrom) Type() string {
+	return "ImportFrom"
+}
+
+func (i *ImportFrom) Code() string {
+	return CodeDef(i)
+}
+
+func (i *ImportFrom) FirstChild() VNode {
+
+	return i.firstChild
+
+}
 func (v *Visitor) VisitImportFrom(ctx *base.ImportFromContext) interface{} {
+	if v.Debug {
+		log.Println("VisitImportFrom", ctx.GetText())
+	}
 	imfr := &ImportFrom{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
@@ -523,6 +519,9 @@ func (m *ModuleItems) FirstChild() VNode {
 }
 
 func (v *Visitor) VisitModuleItems(ctx *base.ModuleItemsContext) interface{} {
+	if v.Debug {
+		log.Println("VisitModuleItems", ctx.GetText())
+	}
 
 	mit := &ModuleItems{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),

@@ -1,6 +1,10 @@
 package vast
 
 import (
+	"fmt"
+	"os"
+	"strings"
+
 	antlr "github.com/padraicbc/antlr4"
 	"github.com/padraicbc/gojsp/base"
 )
@@ -27,8 +31,10 @@ type Visitor struct {
 	Lexer           *base.JavaScriptLexer
 	Parser          *base.JavaScriptParser
 	Stream          *antlr.InputStream
-	SyntaxErrorFunc func(errors chan SynError, recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int,
+	SyntaxErrorFunc func(errors chan SynError, recognizer antlr.Recognizer,
+		offendingSymbol interface{}, line, column int,
 		msg string, e antlr.RecognitionException)
+	DefaultError func()
 }
 
 // TODO:  Should all be on a  differnt "Error" type but easier for now. Plus add fields similar to SyntaxErrorFunc to Visitor so easy to implement
@@ -51,6 +57,7 @@ func (d *Visitor) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.D
 
 func DefaultSyntaxError(errors chan SynError, recognizer antlr.Recognizer, offendingSymbol interface{}, line, column int,
 	msg string, e antlr.RecognitionException) {
+
 	errors <- SynError{Line: line, Column: column, Msg: msg, Exc: e}
 }
 
@@ -66,13 +73,26 @@ func NewVisitor(code string) *Visitor {
 
 	tokenStream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	parser := base.NewJavaScriptParser(tokenStream)
+	// will take as optional args eventuaally but can be overwrittten
+	// also better ways than splitin but ok for now
+	errs := make(chan SynError, 1)
+	defE := func() {
+
+		e := <-errs
+		fmt.Printf("line:%d column:%d\n%s\n%*s^\n", e.Line, e.Column, strings.Split(code, "\n")[e.Line-1][:e.Column+1], e.Column, "^")
+		os.Exit(1)
+
+	}
 
 	symbolicNames, ruleNames := lexer.SymbolicNames, parser.GetRuleNames()
 	vis := &Visitor{symbolicNames: symbolicNames,
 		Lexer:     lexer,
+		Stream:    stream,
 		ruleNames: ruleNames, Parser: parser,
-		Errors: make(chan SynError, 1), Stream: stream,
-		SyntaxErrorFunc: DefaultSyntaxError}
+		Errors:          errs,
+		SyntaxErrorFunc: DefaultSyntaxError,
+		DefaultError:    defE,
+	}
 
 	parser.RemoveErrorListeners()
 	parser.AddErrorListener(vis)
