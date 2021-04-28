@@ -70,7 +70,6 @@ func (v *Visitor) VisitArrowFunction(ctx *base.ArrowFunctionContext) interface{}
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		// log.Printf("%+v\n", ch)
 
 		switch ch.Type() {
@@ -158,8 +157,6 @@ func (v *Visitor) VisitArrowFunctionParameters(ctx *base.ArrowFunctionParameters
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
-
 		switch ch.Type() {
 		case "LToken":
 
@@ -243,7 +240,6 @@ func (v *Visitor) VisitArrowFunctionBody(ctx *base.ArrowFunctionBodyContext) int
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 		case "FunctionBody":
 			afb.FBody = ch.(*FunctionBody)
@@ -314,8 +310,6 @@ func fdecl(fd *FunctionDeclaration, ctx antlr.RuleNode, v *Visitor) interface{} 
 			fd.firstChild = ch
 		}
 		prev = setSib(prev, ch)
-
-		prev = ch
 
 		switch ch.Type() {
 		case "LToken":
@@ -441,8 +435,6 @@ func (v *Visitor) VisitFormalParameterList(ctx *base.FormalParameterListContext)
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
-
 		switch ch.Type() {
 		case "LToken":
 
@@ -518,7 +510,6 @@ func (v *Visitor) VisitFormalParameterArg(ctx *base.FormalParameterArgContext) i
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch tk := ch.(Token); tk.SymbolName() {
 		case "Identifier":
 			fa.Assignable = tk
@@ -640,7 +631,6 @@ func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 		case "LToken":
 			tk := ch.(Token)
@@ -716,7 +706,6 @@ func (v *Visitor) VisitFunctionProperty(ctx *base.FunctionPropertyContext) inter
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 		case "LToken":
 			tk := ch.(Token)

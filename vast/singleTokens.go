@@ -58,7 +58,7 @@ func (v *Visitor) VisitEos(ctx *base.EosContext) interface{} {
 	if v.Debug {
 		log.Println("VisitEos", ctx.GetText())
 	}
-	//  no ; after closing } so empoty string ?
+	//  no ; after closing } so empty string ?
 	if ctx.GetChildCount() == 0 {
 		return errors.New("Optional semicolon not there")
 	}
@@ -69,8 +69,9 @@ func (v *Visitor) VisitEos(ctx *base.EosContext) interface{} {
 	if ctx.SemiColon() != nil {
 		return ident(v, ctx.SemiColon().GetSymbol())
 	}
+	// can be }?
+	return ident(v, ctx.GetChild(0).(antlr.TerminalNode).GetSymbol())
 
-	panic("VisitEos")
 }
 
 // identifier

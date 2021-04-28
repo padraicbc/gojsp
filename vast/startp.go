@@ -22,7 +22,6 @@ func (v *Visitor) VisitProgram(ctx *base.ProgramContext) interface{} {
 
 		}
 
-		prev = ch
 		pg.Body = append(pg.Body, ch)
 
 	}

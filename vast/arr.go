@@ -67,8 +67,6 @@ func (v *Visitor) VisitArrayLiteral(ctx *base.ArrayLiteralContext) interface{} {
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
-
 		switch ch.Type() {
 		case "OpenBracket":
 			arl.OpenBracket = ch.(Token)
@@ -138,7 +136,6 @@ func (v *Visitor) VisitElementList(ctx *base.ElementListContext) interface{} {
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 		case "ArrayElement":
 			el.ArrayElements = append(el.ArrayElements, ch.(*ArrayElement))
@@ -216,7 +213,6 @@ func (v *Visitor) VisitArrayElement(ctx *base.ArrayElementContext) interface{} {
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 	}
 	return ae
 }

@@ -13,13 +13,14 @@ import (
 func main() {
 
 	log.SetFlags(log.Llongfile)
-	coldHot()
+	// coldHot()
 
-	impexp()
-	fs()
+	// impexp()
+	// fs()
+
+	// arrow()
 	toes5()
-	arrow()
-	singleExp()
+	// singleExp()
 }
 
 func visit(tree antlr.ParseTree, v *vast.Visitor) interface{} {

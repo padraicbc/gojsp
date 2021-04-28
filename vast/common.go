@@ -159,7 +159,6 @@ func (v *Visitor) VisitAliasName(ctx *base.AliasNameContext) interface{} {
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		t := ch.(Token)
 
 		switch t.SymbolName() {

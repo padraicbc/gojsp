@@ -66,7 +66,6 @@ func (v *Visitor) VisitLabelledStatement(ctx *base.LabelledStatementContext) int
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 		case "LToken":
 			t := ch.(Token)
@@ -145,7 +144,6 @@ func (v *Visitor) VisitBlock(ctx *base.BlockContext) interface{} {
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 	}
 	return b
 }
@@ -198,12 +196,18 @@ func (v *Visitor) VisitExpressionStatement(ctx *base.ExpressionStatementContext)
 	if v.Debug {
 		log.Println("VisitExpressionStatement", ctx.GetText(), ctx.GetChildCount())
 	}
-	exp := &ExpressionStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	exp := &ExpressionStatement{
+		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+	}
 	exp.ExpSequence = v.VisitExpressionSequence(
 		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
 	exp.firstChild = exp.ExpSequence
+
 	if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
 		exp.Eos = tk
+		exp.ExpSequence.SetNext(tk)
+		tk.SetPrev(exp.ExpSequence)
+
 	}
 
 	return exp
@@ -264,7 +268,6 @@ func (v *Visitor) VisitExpressionSequence(ctx *base.ExpressionSequenceContext) i
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 		case "LToken":
 			// always this?
@@ -540,8 +543,6 @@ func (v *Visitor) VisitReturnStatement(ctx *base.ReturnStatementContext) interfa
 			r.firstChild = ch
 		}
 		prev = setSib(prev, ch)
-
-		prev = ch
 
 		switch ch.Type() {
 		case "LToken":

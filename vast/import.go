@@ -277,7 +277,6 @@ func (v *Visitor) VisitImportStatement(ctx *base.ImportStatementContext) interfa
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 		case "LToken":
 			im.Import = ch.(Token)
@@ -306,7 +305,6 @@ func (v *Visitor) VisitImportFromBlock(ctx *base.ImportFromBlockContext) interfa
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 
 		case "ImportDefault":
@@ -356,7 +354,6 @@ func (v *Visitor) VisitImportExpression(ctx *base.ImportExpressionContext) inter
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "Import":
@@ -391,8 +388,6 @@ func (v *Visitor) VisitImportDefault(ctx *base.ImportDefaultContext) interface{}
 			ind.firstChild = ch
 		}
 		prev = setSib(prev, ch)
-
-		prev = ch
 
 		switch ch.Type() {
 		case "AliasName":
@@ -431,7 +426,6 @@ func (v *Visitor) VisitImportNamespace(ctx *base.ImportNamespaceContext) interfa
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "Identifier":
@@ -468,7 +462,6 @@ func (v *Visitor) VisitImportFrom(ctx *base.ImportFromContext) interface{} {
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		t := ch.(Token)
 		switch t.SymbolName() {
 		case "From":
@@ -540,8 +533,6 @@ func (v *Visitor) VisitModuleItems(ctx *base.ModuleItemsContext) interface{} {
 			mit.firstChild = ch
 		}
 		prev = setSib(prev, ch)
-
-		prev = ch
 
 		switch ch.Type() {
 		case "AliasName":

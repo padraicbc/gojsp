@@ -61,8 +61,6 @@ func (v *Visitor) VisitDeclaration(ctx *base.DeclarationContext) interface{} {
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
-
 	}
 	d.Dec = d.firstChild
 
@@ -127,7 +125,6 @@ func (v *Visitor) VisitVariableDeclaration(ctx *base.VariableDeclarationContext)
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.(type) {
 		case *ArrayLiteral: // todo ArrayLiteral":
 			d.Assignable = ch
@@ -206,7 +203,6 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *base.VariableDeclarationList
 		}
 		prev = setSib(prev, ch)
 
-		prev = ch
 		switch ch.Type() {
 		case "VariableDeclaration":
 			vdl.VariableDeclarations = append(vdl.VariableDeclarations, ch.(*VariableDeclaration))

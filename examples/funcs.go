@@ -47,7 +47,7 @@ a = 13;
 `
 
 	v := vast.NewVisitor(code)
-	// v.Debug = true
+	v.Debug = true
 	// do whatever with errors
 	go func() {
 		e := <-v.Errors
@@ -101,9 +101,9 @@ func toes5() {
 (b) => b + 100;
 
 // 3. Remove the argument parentheses
-c => c 
+c => c;
 
-// Arrow Function
+// // Arrow Function
 (a, b) => {
   let chuck = 42;
   return a + b + chuck;
@@ -115,26 +115,25 @@ c => c
 	// v.Debug = true
 
 	rfs := visit(tree, v).(*vast.Program).Body
-	// Statement -> *ExpressionStatememts -> ExpressionSequence, iterate and check types
+	// Statement ->ExpressionStatememts -> ExpressionSequence
 	for _, fn := range rfs {
-		log.Println(fn.Type())
+
 		var trans string
 		// all with one child
-		af := fn.(*vast.Statement).FirstChild().FirstChild().FirstChild().(*vast.ArrowFunction)
-		fmt.Println("Before ->", af.Code())
-		// either has a fucntion body with {} of a single expression.
-		if af.Body.FirstChild() != nil {
+		af := fn.FirstChild().FirstChild().FirstChild().(*vast.ArrowFunction)
+
+		// either has a function body with {} of a single expression.
+		if af.Body.SingleExpression != nil {
 			// can be there or not
 			var open, close string
 			if af.FunctionParameters.OpenParen == nil {
 				open, close = "(", ")"
 			}
-			log.Println(af.Body.FirstChild().Type(), af.FunctionParameters.Source)
-			trans = fmt.Sprintf("function%s%s%s {\n\treturn %s\n}",
-				open, af.FunctionParameters.Source, close, af.Body.FirstChild().GetInfo().Source)
 
-		}
-		if af.Body != nil {
+			trans = fmt.Sprintf("function%s%s%s {\n\treturn %s;\n}",
+				open, af.FunctionParameters.Source, close, af.Body.SingleExpression.Code())
+
+		} else {
 
 			trans = fmt.Sprintf("function%s %s", af.FunctionParameters.Source, af.Body.Source)
 
