@@ -1111,8 +1111,26 @@ func (v *Visitor) VisitClassTail(ctx *base.ClassTailContext) interface{} {
 //     | emptyStatement_
 //     | '#'? propertyName '=' singleExpression
 //     ;
+// todo: split into 3 types
 type ClassElement struct {
 	*SourceInfo
+	Static           Token
+	Identifier       VNode
+	Async            VNode
+	MethodDefinition *MethodDefinition
+	Assignable       VNode
+	Equals           Token
+	ObjectLiteral    *ObjectLiteral
+
+	// Method
+	EmptyStatement Token
+	PropertyName   *PropertyName
+	// equals ^^
+	SingleExp VNode
+
+	//
+	Hashtag Token
+
 	firstChild VNode
 	prev, next VNode
 }
@@ -1150,23 +1168,200 @@ func (v *Visitor) VisitClassElement(ctx *base.ClassElementContext) interface{} {
 //     | '*'? '#'? getter '(' ')' functionBody
 //     | '*'? '#'? setter '(' formalParameterList? ')' functionBody
 //     ;
+type MethodDefinition struct {
+	*SourceInfo
+	Multiply     Token //Multiply
+	Hashtag      Token
+	PropertyName *PropertyName
+	OpenParen    Token
+	ParamsList   *FormalParameterList
+	CloseParen   Token
+	FunctionBody *FunctionBody
+
+	//
+	Getter *Getter
+	Setter *Setter
+
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*MethodDefinition)(nil)
+
+func (i *MethodDefinition) Type() string {
+	return "MethodDefinition"
+}
+func (i *MethodDefinition) Code() string {
+	return CodeDef(i)
+}
+func (i *MethodDefinition) Next() VNode {
+	return i.next
+}
+func (i *MethodDefinition) SetNext(v VNode) {
+	i.next = v
+}
+func (i *MethodDefinition) Prev() VNode {
+	return i.prev
+}
+func (i *MethodDefinition) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *MethodDefinition) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitMethodDefinition(ctx *base.MethodDefinitionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
+//  '(' expressionSequence ')'
+type ParenthesizedExpression struct {
+	*SourceInfo
+	OpenParen          Token
+	ExpressionSequence *ExpressionSequence
+
+	CloseParen Token
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*ParenthesizedExpression)(nil)
+
+func (i *ParenthesizedExpression) Type() string {
+	return "ParenthesizedExpression"
+}
+func (i *ParenthesizedExpression) Code() string {
+	return CodeDef(i)
+}
+func (i *ParenthesizedExpression) Next() VNode {
+	return i.next
+}
+func (i *ParenthesizedExpression) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ParenthesizedExpression) Prev() VNode {
+	return i.prev
+}
+func (i *ParenthesizedExpression) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ParenthesizedExpression) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitParenthesizedExpression(ctx *base.ParenthesizedExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
+// Await singleExpression
+type AwaitExpression struct {
+	*SourceInfo
+	Await      Token
+	SingleExp  VNode
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*AwaitExpression)(nil)
+
+func (i *AwaitExpression) Type() string {
+	return "AwaitExpression"
+}
+func (i *AwaitExpression) Code() string {
+	return CodeDef(i)
+}
+func (i *AwaitExpression) Next() VNode {
+	return i.next
+}
+func (i *AwaitExpression) SetNext(v VNode) {
+	i.next = v
+}
+func (i *AwaitExpression) Prev() VNode {
+	return i.prev
+}
+func (i *AwaitExpression) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *AwaitExpression) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitAwaitExpression(ctx *base.AwaitExpressionContext) interface{} {
 
 	return v.VisitChildren(ctx)
 }
 
-// not a token
-func (v *Visitor) VisitTerminal(node antlr.TerminalNode) interface{} {
-	return ident(v, node.GetSymbol())
+// getter
+//     : {p.n("get")}? identifier propertyName
+//     ;
+type Getter struct {
+	*SourceInfo
+	Identifier   VNode
+	PropertyName *PropertyName
+	firstChild   VNode
+	prev, next   VNode
+}
 
+var _ VNode = (*Getter)(nil)
+
+func (i *Getter) Type() string {
+	return "Getter"
+}
+func (i *Getter) Code() string {
+	return CodeDef(i)
+}
+func (i *Getter) Next() VNode {
+	return i.next
+}
+func (i *Getter) SetNext(v VNode) {
+	i.next = v
+}
+func (i *Getter) Prev() VNode {
+	return i.prev
+}
+func (i *Getter) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *Getter) FirstChild() VNode {
+	return i.firstChild
+}
+func (v *Visitor) VisitGetter(ctx *base.GetterContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+// setter
+//     : {p.n("set")}? identifier propertyName
+//     ;
+type Setter struct {
+	*SourceInfo
+	Identifier   VNode
+	PropertyName *PropertyName
+	firstChild   VNode
+	prev, next   VNode
+}
+
+var _ VNode = (*Setter)(nil)
+
+func (i *Setter) Type() string {
+	return "Setter"
+}
+func (i *Setter) Code() string {
+	return CodeDef(i)
+}
+func (i *Setter) Next() VNode {
+	return i.next
+}
+func (i *Setter) SetNext(v VNode) {
+	i.next = v
+}
+func (i *Setter) Prev() VNode {
+	return i.prev
+}
+func (i *Setter) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *Setter) FirstChild() VNode {
+	return i.firstChild
+}
+func (v *Visitor) VisitSetter(ctx *base.SetterContext) interface{} {
+	return v.VisitChildren(ctx)
 }

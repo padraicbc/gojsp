@@ -162,8 +162,9 @@ func (v *Visitor) VisitBlock(ctx *base.BlockContext) interface{} {
 type ExpressionStatement struct {
 	*SourceInfo
 	// singlexpression(s)
-	firstChild VNode
-	Eos        Token
+	ExpSequence *ExpressionSequence
+	firstChild  VNode
+	Eos         Token
 
 	prev, next VNode
 }
@@ -204,24 +205,13 @@ func (v *Visitor) VisitExpressionStatement(ctx *base.ExpressionStatementContext)
 		log.Println("VisitExpressionStatement", ctx.GetText(), ctx.GetChildCount())
 	}
 	exp := &ExpressionStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if exp.firstChild == nil {
-			exp.firstChild = ch
-		} else {
-			prev.SetNext(ch)
-
-		}
-		ch.SetPrev(prev)
-
-		prev = ch
-
-		if tk, ok := ch.(Token); ok {
-			exp.Eos = tk
-
-		}
-
+	exp.ExpSequence = v.VisitExpressionSequence(
+		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+	exp.firstChild = exp.ExpSequence
+	if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
+		exp.Eos = tk
 	}
+
 	return exp
 }
 
@@ -374,6 +364,65 @@ func (v *Visitor) VisitDoStatement(ctx *base.DoStatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+// continueStatement
+//     : Continue ({p.notLineTerminator()}? identifier)? eos
+//     ;
+type ContinueStatement struct {
+	*SourceInfo
+	Continue   Token
+	Identifier Token
+	Eos        Token
+
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*ContinueStatement)(nil)
+
+func (i *ContinueStatement) Type() string {
+	return "ContinueStatement"
+}
+func (i *ContinueStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *ContinueStatement) Next() VNode {
+	return i.next
+}
+func (i *ContinueStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ContinueStatement) Prev() VNode {
+	return i.prev
+}
+func (i *ContinueStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ContinueStatement) FirstChild() VNode {
+	return i.firstChild
+}
+
+func (v *Visitor) VisitContinueStatement(ctx *base.ContinueStatementContext) interface{} {
+	c := &ContinueStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
+		Continue: ident(v, ctx.Continue().GetSymbol())}
+	c.firstChild = c.Continue
+	if ctx.Identifier() != nil {
+		c.Identifier = v.VisitIdentifier(ctx.Identifier().(*base.IdentifierContext)).(Token)
+		c.Continue.SetNext(c.Identifier)
+		c.Identifier.SetPrev(c.Continue)
+	}
+	if ctx.Eos() != nil {
+		if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
+			c.Identifier.SetNext(tk)
+			tk.SetPrev(c.Identifier)
+			c.Eos = tk
+
+		}
+
+	}
+
+	return c
+}
+
 func (v *Visitor) VisitWhileStatement(ctx *base.WhileStatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -387,10 +436,6 @@ func (v *Visitor) VisitForInStatement(ctx *base.ForInStatementContext) interface
 }
 
 func (v *Visitor) VisitForOfStatement(ctx *base.ForOfStatementContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitContinueStatement(ctx *base.ContinueStatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

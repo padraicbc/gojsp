@@ -39,19 +39,21 @@ func arrow() {
 
 (a,b) => a + b;
 
-(a, b) => {
-	return a + b;
+(c, d) => {
+	return c + d;
 }
+let a = null;
+a = 13;
 `
 
 	v := vast.NewVisitor(code)
+	v.Debug = true
 	// do whatever with errors
 	go func() {
 		e := <-v.Errors
 		log.Fatal(e)
 	}()
 	tree := v.Parser.Program()
-	// v.Debug = true
 
 	go func() {
 		e := <-v.Errors
@@ -60,8 +62,9 @@ func arrow() {
 	rfs := visit(tree, v).(*vast.Program).Body
 
 	// ExpressionStatement -> ExpressionSequence -> ArrowFunction
+	// either way below can access
 	exp1, exp2 := rfs[0], rfs[1]
-	ar1, ar2 := exp1.FirstChild().FirstChild().(*vast.ArrowFunction),
+	ar1, ar2 := exp1.(*vast.ExpressionStatement).ExpSequence.FirstChild().(*vast.ArrowFunction),
 		exp2.FirstChild().FirstChild().(*vast.ArrowFunction)
 
 	fmt.Println(exp1.Code())
@@ -82,6 +85,7 @@ func arrow() {
 	fmt.Println(exp2.Code())
 	// source stays the same
 	fmt.Println(exp2.GetInfo().Source)
+	log.Println(rfs[2].(*vast.VariableDeclarationList).VarModifier)
 }
 
 func toes5() {

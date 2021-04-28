@@ -18,7 +18,7 @@ func main() {
 	// impexp()
 	// fs()
 	// toes5()
-	// arrow()
+	arrow()
 	// singleExp()
 }
 

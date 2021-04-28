@@ -98,6 +98,47 @@ func (v *Visitor) VisitPropertyShorthand(ctx *base.PropertyShorthandContext) int
 	return v.VisitChildren(ctx)
 }
 
+// propertyName
+//     : identifierName
+//     | StringLiteral
+//     | numericLiteral
+//     | '[' singleExpression ']'
+//     ;
+type PropertyName struct {
+	*SourceInfo
+	Identifier    VNode
+	StringLiteral Token
+	NullLiteral   VNode
+	OpenBracket   Token
+	SingleExp     VNode
+	CloseBracket  Token
+	firstChild    VNode
+	prev, next    VNode
+}
+
+var _ VNode = (*PropertyName)(nil)
+
+func (i *PropertyName) Type() string {
+	return "PropertyName"
+}
+func (i *PropertyName) Code() string {
+	return CodeDef(i)
+}
+func (i *PropertyName) Next() VNode {
+	return i.next
+}
+func (i *PropertyName) SetNext(v VNode) {
+	i.next = v
+}
+func (i *PropertyName) Prev() VNode {
+	return i.prev
+}
+func (i *PropertyName) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *PropertyName) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitPropertyName(ctx *base.PropertyNameContext) interface{} {
 	if v.Debug {
 		log.Println("VisitPropertyName", ctx.GetText())

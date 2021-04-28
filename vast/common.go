@@ -104,86 +104,6 @@ func CodeDef(t VNode) string {
 
 }
 
-type SourceInfo struct {
-	Start, End, Line, Column int
-	Source                   string
-}
-
-func (s *SourceInfo) GetInfo() *SourceInfo {
-	return s
-}
-
-// Parent will have type VNode
-type Token interface {
-	VNode
-	SetValue(string)
-	Value() string
-	RName(string) string
-	SymbolName() string
-}
-
-type LToken struct {
-	value string
-	*SourceInfo
-	// From .. StringLiteral...
-	sn string
-	// rulename .. reservedWord...
-	rn         string
-	prev, next VNode
-}
-
-var _ Token = (*LToken)(nil)
-var _ VNode = (*LToken)(nil)
-
-func (i *LToken) Value() string {
-	return i.value
-}
-func (i *LToken) SetValue(s string) {
-	i.value = s
-}
-func (i *LToken) SymbolName() string {
-	return i.sn
-}
-func (i *LToken) Code() string {
-	return i.value
-}
-func (i *LToken) RName(s string) string {
-	if s != "" {
-		i.rn = s
-		return ""
-	}
-	return i.rn
-}
-func (i *LToken) FirstChild() VNode {
-	return nil
-}
-func (i *LToken) SetChild(ch, prev VNode) {
-	return
-}
-func (i *LToken) Next() VNode {
-
-	return i.next
-}
-func (i *LToken) SetNext(v VNode) {
-	i.next = v
-}
-
-func (i *LToken) Prev() VNode {
-
-	return i.prev
-}
-func (i *LToken) SetPrev(v VNode) {
-	i.prev = v
-}
-
-// keyword, reservedword, identifier
-func (i *LToken) Type() string {
-	return "LToken"
-}
-func (i *LToken) GetInfo() *SourceInfo {
-	return i.SourceInfo
-}
-
 // aliasName
 //     : identifierName (As identifierName)?
 //     ;
@@ -312,18 +232,4 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 	return result
 
-}
-
-// getter
-//     : {p.n("get")}? identifier propertyName
-//     ;
-func (v *Visitor) VisitGetter(ctx *base.GetterContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-// setter
-//     : {p.n("set")}? identifier propertyName
-//     ;
-func (v *Visitor) VisitSetter(ctx *base.SetterContext) interface{} {
-	return v.VisitChildren(ctx)
 }

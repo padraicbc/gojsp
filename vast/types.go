@@ -1,110 +1,81 @@
 package vast
 
-import (
-	"io"
-	"log"
+type SourceInfo struct {
+	Start, End, Line, Column int
+	Source                   string
+}
 
-	"github.com/padraicbc/gojsp/base"
-)
+func (s *SourceInfo) GetInfo() *SourceInfo {
+	return s
+}
 
-type IdentifierName struct {
+// Parent will have type VNode
+type Token interface {
+	VNode
+	SetValue(string)
+	Value() string
+	RName(string) string
+	SymbolName() string
+}
+
+type LToken struct {
+	value string
 	*SourceInfo
-	Identifier Token
+	// From .. StringLiteral...
+	sn string
+	// rulename .. reservedWord...
+	rn         string
 	prev, next VNode
 }
 
-var _ VNode = (*IdentifierName)(nil)
+var _ Token = (*LToken)(nil)
+var _ VNode = (*LToken)(nil)
 
-func (i *IdentifierName) Next() VNode {
+func (i *LToken) Value() string {
+	return i.value
+}
+func (i *LToken) SetValue(s string) {
+	i.value = s
+}
+func (i *LToken) SymbolName() string {
+	return i.sn
+}
+func (i *LToken) Code() string {
+	return i.value
+}
+func (i *LToken) RName(s string) string {
+	if s != "" {
+		i.rn = s
+		return ""
+	}
+	return i.rn
+}
+func (i *LToken) FirstChild() VNode {
+	return nil
+}
+func (i *LToken) SetChild(ch, prev VNode) {
+	return
+}
+func (i *LToken) Next() VNode {
 
 	return i.next
 }
-func (i *IdentifierName) SetNext(v VNode) {
+func (i *LToken) SetNext(v VNode) {
 	i.next = v
 }
-func (i *IdentifierName) Prev() VNode {
+
+func (i *LToken) Prev() VNode {
 
 	return i.prev
 }
-func (i *IdentifierName) SetPrev(v VNode) {
+func (i *LToken) SetPrev(v VNode) {
 	i.prev = v
 }
-func (i *IdentifierName) Code() string {
-	return CodeDef(i)
+
+// keyword, reservedword, identifier
+func (i *LToken) Type() string {
+	return "LToken"
 }
-
-func (i *IdentifierName) Type() string {
-	return "IdentifierName"
-}
-
-func (i *IdentifierName) FirstChild() VNode {
-
-	return i.Identifier
-}
-
-// identifierName
-//     : identifier
-//     | reservedWord
-//     ;
-
-func (v *Visitor) VisitIdentifierName(ctx *base.IdentifierNameContext) interface{} {
-	if v.Debug {
-		log.Println("VisitIdentifierName", ctx.GetText())
-	}
-
-	return v.VisitChildren(ctx)
-	// Maybe just return &IdentifierName ctx.Identifier()...
-
-}
-
-func (v *Visitor) VisitKeyword(ctx *base.KeywordContext) interface{} {
-	if v.Debug {
-		log.Println("VisitKeyword", ctx.GetText())
-	}
-	return v.VisitChildren(ctx)
-
-}
-
-// reservedWord
-//     : keyword
-//     | NullLiteral
-//     | BooleanLiteral
-//     ;
-func (v *Visitor) VisitReservedWord(ctx *base.ReservedWordContext) interface{} {
-	if v.Debug {
-		log.Println("VisitReservedWord", ctx.GetText())
-	}
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitEos(ctx *base.EosContext) interface{} {
-	if v.Debug {
-		log.Println("VisitEos", ctx.GetText())
-	}
-	if ctx.GetChildCount() == 0 || ctx.EOF() != nil {
-		return io.EOF
-	}
-	if v.Debug {
-		log.Println("VisitEos", ctx.GetText(), v.VisitChildren(ctx).([]VNode)[0].Type())
-	}
-	return v.VisitChildren(ctx)
-}
-func (v *Visitor) VisitIdentifierExpression(ctx *base.IdentifierExpressionContext) interface{} {
-	if v.Debug {
-		log.Println("VisitIdentifierExpression", ctx.GetText())
-	}
-	return v.VisitChildren(ctx)
-}
-
-// identifier
-//     : Identifier
-//     | Async
-//     ;
-func (v *Visitor) VisitIdentifier(ctx *base.IdentifierContext) interface{} {
-	// log.Println("VisitIdentifier", ctx.GetText(), ctx.GetChildCount())
-	if v.Debug {
-		log.Println("VisitIdentifier", ctx.GetText())
-	}
-	// VisitChildren would return the same inside a list but we don't need it
-	return v.VisitChildren(ctx)
+func (i *LToken) GetInfo() *SourceInfo {
+	return i.SourceInfo
 }

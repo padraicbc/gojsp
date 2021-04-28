@@ -120,7 +120,6 @@ func (v *Visitor) VisitVariableDeclaration(ctx *base.VariableDeclarationContext)
 	}
 
 	d := &VariableDeclaration{
-
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
 	var prev VNode
@@ -220,15 +219,16 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *base.VariableDeclarationList
 			vdl.VariableDeclarations = append(vdl.VariableDeclarations, ch.(*VariableDeclaration))
 		case "LToken":
 			t := ch.(Token)
-			if t.SymbolName() == "Comma" {
+			switch t.SymbolName() {
+
+			case "Comma":
 				vdl.Commas = append(vdl.Commas, t)
-				continue
-			}
-			if t.RName("") == "varModifier" {
+
+			case "Var", "Const", "Let":
 				vdl.VarModifier = t
-				continue
+			default:
+				panic(ch.Type() + t.RName("") + t.SymbolName())
 			}
-			panic(ch.Type())
 
 		default:
 			panic(ch.Type())
@@ -239,12 +239,27 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *base.VariableDeclarationList
 
 	return vdl
 }
+
+// varModifier  // let, const - ECMAScript 6
+//     : Var
+//     | Let
+//     | Const
+//     ;
 func (v *Visitor) VisitVarModifier(ctx *base.VarModifierContext) interface{} {
 	if v.Debug {
 		log.Println("VisitVarModifier", ctx.GetText())
 	}
-
-	return v.VisitChildren(ctx)
+	if ctx.Let() != nil {
+		return ident(v, ctx.Let().GetSymbol())
+	}
+	if ctx.Var() != nil {
+		return ident(v, ctx.Var().GetSymbol())
+	}
+	if ctx.Const() != nil {
+		return ident(v, ctx.Const().GetSymbol())
+	}
+	panic("VisitVarModifier")
+	return nil
 }
 
 // assignable

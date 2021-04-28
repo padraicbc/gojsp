@@ -346,23 +346,14 @@ func (v *Visitor) VisitLogicalOrExpression(ctx *base.LogicalOrExpressionContext)
 	return exp
 }
 
-// <assoc=right> singleExpression '=' singleExpression
-func (v *Visitor) VisitAssignmentOperator(ctx *base.AssignmentOperatorContext) interface{} {
-	if v.Debug {
-		log.Println("VisitAssignmentOperator", ctx.GetText())
-	}
-	// ctx.GetStart().GetLine() etc.. could be  used directly but still have to switch on a lot of types so as easy do this.
-	return v.VisitChildren(ctx).([]VNode)[0]
-}
-
 // <assoc=right> singleExpression assignmentOperator singleExpression
 func (v *Visitor) VisitAssignmentOperatorExpression(ctx *base.AssignmentOperatorExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitAssignmentOperatorExpression", ctx.GetText())
 	}
 	exp := &LRExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	// ctx.AssignmentOperator().GetText() but we want source info?
-	exp.op = v.Visit(ctx.AssignmentOperator()).(Token)
+	// ident...
+	exp.op = v.VisitAssignmentOperator(ctx.AssignmentOperator().(*base.AssignmentOperatorContext)).(Token)
 	setLR(v, ctx.SingleExpression(0), ctx.SingleExpression(1), exp)
 	return exp
 }
@@ -384,15 +375,6 @@ func (v *Visitor) VisitArgumentsExpression(ctx *base.ArgumentsExpressionContext)
 	return v.VisitChildren(ctx)
 }
 
-// literal
-func (v *Visitor) VisitLiteralExpression(ctx *base.LiteralExpressionContext) interface{} {
-	if v.Debug {
-		log.Println("VisitLiteralExpression", ctx.GetText())
-	}
-
-	return v.VisitChildren(ctx)
-}
-
 func (v *Visitor) VisitPropertyExpressionAssignment(ctx *base.PropertyExpressionAssignmentContext) interface{} {
 	if v.Debug {
 		log.Println("VisitPropertyExpressionAssignment", ctx.GetText())
@@ -406,4 +388,26 @@ func (v *Visitor) VisitComputedPropertyExpressionAssignment(ctx *base.ComputedPr
 		log.Println("VisitComputedPropertyExpressionAssignment", ctx.GetText())
 	}
 	return v.VisitChildren(ctx)
-} // An expression statement, i.e., a statement consisting of a single expression.
+}
+
+// Single node
+func (v *Visitor) VisitLiteralExpression(ctx *base.LiteralExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitLiteralExpression", ctx.GetText())
+	}
+	return v.VisitLiteral(ctx.Literal().(*base.LiteralContext))
+}
+
+// identifierExpression
+// 	identifier
+//     : Identifier
+//     | Async
+//     ;
+func (v *Visitor) VisitIdentifierExpression(ctx *base.IdentifierExpressionContext) interface{} {
+	if v.Debug {
+		log.Println("VisitIdentifierExpression", ctx.GetText())
+	}
+	// Token
+	return v.VisitIdentifier(ctx.Identifier().(*base.IdentifierContext))
+
+}
