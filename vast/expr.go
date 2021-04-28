@@ -6,6 +6,37 @@ import (
 	"github.com/padraicbc/gojsp/base"
 )
 
+// simple helper to add tree pointers when not iterating
+func setLR(v *Visitor, l, r base.ISingleExpressionContext, par ExpI) {
+	left, right := flt(v.Visit(l)), flt(v.Visit(r))
+	par.SetChild(left)
+	left.SetNext(par.OP())
+	par.OP().SetNext(right)
+	par.OP().SetPrev(left)
+	right.SetPrev(par.OP())
+	par.SetLeft(left)
+	par.SetRight(right)
+	// not sure we need +"Expression" as it cannot but be one.
+	// also maybe best to set general types in each visitor
+	par.SetType(par.OP().SymbolName() + "Expression")
+
+}
+
+// temp measure I think as should be concrete single types when all implemented.
+func flt(i interface{}) VNode {
+	switch i.(type) {
+	case []VNode:
+		return i.([]VNode)[0]
+	case VNode:
+		return i.(VNode)
+	default:
+		log.Panicf("%+v\n", i)
+
+	}
+	return nil
+
+}
+
 // one type to catch all left = right expressions
 type ExpI interface {
 	Left() VNode
@@ -23,8 +54,7 @@ type LRExpression struct {
 	op          Token
 	typeOf      string
 	firstChild  VNode
-
-	prev, next VNode
+	prev, next  VNode
 }
 
 func (i *LRExpression) Left() VNode {
@@ -82,39 +112,7 @@ func (i *LRExpression) FirstChild() VNode {
 
 }
 
-// simple helper to add tree pointers when not iterating
-func setLR(v *Visitor, l, r base.ISingleExpressionContext, par ExpI) {
-	left, right := flt(v.Visit(l)), flt(v.Visit(r))
-	par.SetChild(left)
-	left.SetNext(par.OP())
-	par.OP().SetNext(right)
-	par.OP().SetPrev(left)
-	right.SetPrev(par.OP())
-	par.SetLeft(left)
-	par.SetRight(right)
-	// not sure we need +"Expression" as it cannot but be one.
-	// also maybe best to set general types in each visitor
-	par.SetType(par.OP().SymbolName() + "Expression")
-
-}
-
-// temp measure I think as should be concrete single types when all implemented.
-func flt(i interface{}) VNode {
-	switch i.(type) {
-	case []VNode:
-		return i.([]VNode)[0]
-	case VNode:
-		return i.(VNode)
-	default:
-		log.Panicf("%+v\n", i)
-
-	}
-	return nil
-
-}
-
 // <assoc=right> singleExpression '=' singleExpression
-
 func (v *Visitor) VisitAssignmentExpression(ctx *base.AssignmentExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitAssignmentExpression", ctx.GetText())
@@ -359,11 +357,89 @@ func (v *Visitor) VisitAssignmentOperatorExpression(ctx *base.AssignmentOperator
 }
 
 //  singleExpression '?' singleExpression ':' singleExpression
+type TernaryExpression struct {
+	*SourceInfo
+	Test         VNode
+	Colon        Token
+	Alternate    VNode
+	QuestionMark Token
+	Consequent   VNode
+	firstChild   VNode
+	prev, next   VNode
+}
+
+var _ VNode = (*TernaryExpression)(nil)
+
+func (i *TernaryExpression) Type() string {
+	return "TernaryExpression"
+}
+func (i *TernaryExpression) Code() string {
+	return CodeDef(i)
+}
+func (i *TernaryExpression) Next() VNode {
+	return i.next
+}
+func (i *TernaryExpression) SetNext(v VNode) {
+	i.next = v
+}
+func (i *TernaryExpression) Prev() VNode {
+	return i.prev
+}
+func (i *TernaryExpression) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *TernaryExpression) FirstChild() VNode {
+	return i.firstChild
+}
+
+//  singleExpression '?' singleExpression ':' singleExpression
 func (v *Visitor) VisitTernaryExpression(ctx *base.TernaryExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitTernaryExpression", ctx.GetText())
 	}
-	return v.VisitChildren(ctx)
+	te := &TernaryExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	te.Test = v.Visit(ctx.SingleExpression(0)).(VNode)
+	te.firstChild = te.Test
+	te.Consequent = v.Visit(ctx.SingleExpression(1)).(VNode)
+	te.Alternate = v.Visit(ctx.SingleExpression(2)).(VNode)
+	te.Colon = ident(v, ctx.Colon().GetSymbol())
+	te.QuestionMark = ident(v, ctx.QuestionMark().GetSymbol())
+	setAllSibs(te.Test, te.QuestionMark, te.Consequent, te.Colon, te.Alternate)
+
+	return te
+
+}
+
+type ArgumentsExpression struct {
+	*SourceInfo
+	SingleExp  VNode
+	Arguments  *Arguments
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*ArgumentsExpression)(nil)
+
+func (i *ArgumentsExpression) Type() string {
+	return "ArgumentsExpression"
+}
+func (i *ArgumentsExpression) Code() string {
+	return CodeDef(i)
+}
+func (i *ArgumentsExpression) Next() VNode {
+	return i.next
+}
+func (i *ArgumentsExpression) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ArgumentsExpression) Prev() VNode {
+	return i.prev
+}
+func (i *ArgumentsExpression) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ArgumentsExpression) FirstChild() VNode {
+	return i.firstChild
 }
 
 //  singleExpression arguments
@@ -372,21 +448,111 @@ func (v *Visitor) VisitArgumentsExpression(ctx *base.ArgumentsExpressionContext)
 		log.Println("VisitArgumentsExpression", ctx.GetText())
 	}
 
-	return v.VisitChildren(ctx)
+	a := &ArgumentsExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
+	a.SingleExp = v.Visit(ctx.SingleExpression()).(VNode)
+	a.firstChild = a.SingleExp
+	a.Arguments = v.VisitArguments(ctx.Arguments().(*base.ArgumentsContext)).(*Arguments)
+	setAllSibs(a.SingleExp, a.Arguments)
+
+	return a
 }
 
+// propertyAssignment
+//     : propertyName ':' singleExpression
+type PropertyExpressionAssignment struct {
+	*SourceInfo
+	PropertyName *PropertyName
+	SingleExp    VNode
+	firstChild   VNode
+	prev, next   VNode
+}
+
+var _ VNode = (*PropertyExpressionAssignment)(nil)
+
+func (i *PropertyExpressionAssignment) Type() string {
+	return "PropertyExpressionAssignment"
+}
+func (i *PropertyExpressionAssignment) Code() string {
+	return CodeDef(i)
+}
+func (i *PropertyExpressionAssignment) Next() VNode {
+	return i.next
+}
+func (i *PropertyExpressionAssignment) SetNext(v VNode) {
+	i.next = v
+}
+func (i *PropertyExpressionAssignment) Prev() VNode {
+	return i.prev
+}
+func (i *PropertyExpressionAssignment) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *PropertyExpressionAssignment) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitPropertyExpressionAssignment(ctx *base.PropertyExpressionAssignmentContext) interface{} {
 	if v.Debug {
 		log.Println("VisitPropertyExpressionAssignment", ctx.GetText())
 	}
+	pa := &PropertyExpressionAssignment{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	pa.PropertyName = v.VisitPropertyName(ctx.PropertyName().(*base.PropertyNameContext)).(*PropertyName)
+	pa.firstChild = pa.PropertyName
+	pa.SingleExp = v.Visit(ctx.SingleExpression()).(VNode)
 
-	return v.VisitChildren(ctx)
+	setAllSibs(pa.PropertyName, pa.SingleExp)
+
+	return pa
 }
 
+// [' singleExpression ']' ':' singleExpression
+type ComputedPropertyExpressionAssignment struct {
+	*SourceInfo
+	OpenBracket  Token
+	Key          VNode
+	Colon        Token
+	Val          VNode
+	CloseBracket Token
+	firstChild   VNode
+	prev, next   VNode
+}
+
+var _ VNode = (*ComputedPropertyExpressionAssignment)(nil)
+
+func (i *ComputedPropertyExpressionAssignment) Type() string {
+	return "ComputedPropertyExpressionAssignment"
+}
+func (i *ComputedPropertyExpressionAssignment) Code() string {
+	return CodeDef(i)
+}
+func (i *ComputedPropertyExpressionAssignment) Next() VNode {
+	return i.next
+}
+func (i *ComputedPropertyExpressionAssignment) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ComputedPropertyExpressionAssignment) Prev() VNode {
+	return i.prev
+}
+func (i *ComputedPropertyExpressionAssignment) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ComputedPropertyExpressionAssignment) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitComputedPropertyExpressionAssignment(ctx *base.ComputedPropertyExpressionAssignmentContext) interface{} {
 	if v.Debug {
 		log.Println("VisitComputedPropertyExpressionAssignment", ctx.GetText())
 	}
+	cp := &ComputedPropertyExpressionAssignment{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	cp.OpenBracket = ident(v, ctx.OpenBracket().GetSymbol())
+	cp.Key = v.Visit(ctx.SingleExpression(0)).(VNode)
+	cp.CloseBracket = ident(v, ctx.CloseBracket().GetSymbol())
+	cp.Colon = ident(v, ctx.Colon().GetSymbol())
+	cp.Val = v.Visit(ctx.SingleExpression(1)).(VNode)
+	cp.firstChild = cp.OpenBracket
+	setAllSibs(cp.OpenBracket, cp.Key, cp.CloseBracket, cp.Colon, cp.Val)
+
 	return v.VisitChildren(ctx)
 }
 

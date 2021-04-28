@@ -127,7 +127,7 @@ func (v *Visitor) VisitExportDefaultDeclaration(ctx *base.ExportDefaultDeclarati
 	ed.Export = ident(v, ctx.Export().GetSymbol())
 	ed.Default = ident(v, ctx.Default().GetSymbol())
 	ed.SingleExp = v.Visit(ctx.SingleExpression()).(VNode)
-	setThreeSibs(ed.Export, ed.Default, ed.SingleExp)
+	setAllSibs(ed.Export, ed.Default, ed.SingleExp)
 
 	return ed
 }

@@ -9,3 +9,6 @@
 .history/
 **/*.history
 .antlr
+*.txt
+.idea
+.vscode

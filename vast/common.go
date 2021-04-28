@@ -9,11 +9,18 @@ import (
 	"github.com/padraicbc/gojsp/base"
 )
 
-func setThreeSibs(a, b, c VNode) {
-	a.SetNext(b)
-	b.SetNext(c)
-	b.SetPrev(a)
-	c.SetPrev(b)
+// todo: add setFirstChild method and do all here
+func setAllSibs(nodes ...VNode) {
+
+	var prev VNode
+	for _, n := range nodes {
+		if prev != nil {
+			prev.SetNext(n)
+			n.SetPrev(prev)
+		}
+		prev = n
+
+	}
 
 }
 
