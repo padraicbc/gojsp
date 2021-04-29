@@ -147,7 +147,7 @@ ifStatement
 iterationStatement
     : Do statement While '(' expressionSequence ')' eos                                                                       # DoStatement
     | While '(' expressionSequence ')' statement                                                                              # WhileStatement
-    | For '(' (expressionSequence | variableDeclarationList)? ';' expressionSequence? ';' expressionSequence? ')' statement   # ForStatement
+    | For '(' (Init=expressionSequence | variableDeclarationList)? ';' Test=expressionSequence? ';' Update=expressionSequence? ')' Body=statement   # ForStatement
     | For '(' (singleExpression | variableDeclarationList) In expressionSequence ')' statement                                # ForInStatement
     // strange, 'of' is an identifier. and p.p("of") not work in sometime.
     | For Await? '(' (singleExpression | variableDeclarationList) identifier{p.p("of")}? expressionSequence ')' statement  # ForOfStatement
@@ -184,7 +184,7 @@ switchStatement
     ;
 
 caseBlock
-    : '{' caseClauses? (defaultClause caseClauses?)? '}'
+    : '{' Main=caseClauses? (defaultClause Def=caseClauses?)? '}'
     ;
 
 caseClauses

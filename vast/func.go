@@ -647,8 +647,13 @@ func (v *Visitor) VisitLastFormalParameterArg(ctx *base.LastFormalParameterArgCo
 	if v.Debug {
 		log.Println("VisitFormalParameterArg", ctx.GetText())
 	}
+	lf := &LastFormalParameterArg{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	lf.Ellipsis = ident(v, ctx.Ellipsis().GetSymbol())
+	lf.firstChild = lf.Ellipsis
+	lf.SingleExpression = v.Visit(ctx.SingleExpression()).(VNode)
 
-	return v.VisitChildren(ctx)
+	setAllSibs(lf.Ellipsis, lf.SingleExpression)
+	return lf
 }
 
 // functionBody
@@ -772,7 +777,6 @@ func (v *Visitor) VisitArguments(ctx *base.ArgumentsContext) interface{} {
 	if v.Debug {
 		log.Println("VisitArguments", ctx.GetText())
 	}
-	log.Println("VisitArguments", ctx.GetText())
 
 	args := &Arguments{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
@@ -846,7 +850,6 @@ func (i *Argument) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitArgument(ctx *base.ArgumentContext) interface{} {
-	log.Println("VisitArgument")
 	a := &Argument{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	if ctx.Ellipsis() != nil {
 		a.Ellipsis = ident(v, ctx.Ellipsis().GetSymbol())

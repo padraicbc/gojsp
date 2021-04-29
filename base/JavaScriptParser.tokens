@@ -121,6 +121,7 @@ LineTerminator=120
 HtmlComment=121
 CDataComment=122
 UnexpectedCharacter=123
+ANY=124
 '['=5
 ']'=6
 '('=7

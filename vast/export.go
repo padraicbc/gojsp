@@ -74,14 +74,13 @@ func (v *Visitor) VisitExportDeclaration(ctx *base.ExportDeclarationContext) int
 				ed.Eos = tk
 			}
 
-			log.Panicf("%+v %s\n", ch, ch.Type())
 		default:
 			log.Panicf("%+v %s\n", ch, ch.Type())
 
 		}
 	}
 
-	return v.VisitChildren(ctx)
+	return ed
 
 }
 

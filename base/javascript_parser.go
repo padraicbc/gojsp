@@ -15,7 +15,7 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 125, 957,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 126, 957,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
 	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 4, 13,
 	9, 13, 4, 14, 9, 14, 4, 15, 9, 15, 4, 16, 9, 16, 4, 17, 9, 17, 4, 18, 9,
@@ -509,6 +509,7 @@ var symbolicNames = []string{
 	"Private", "Public", "Interface", "Package", "Protected", "Static", "Yield",
 	"Identifier", "StringLiteral", "TemplateStringLiteral", "WhiteSpaces",
 	"LineTerminator", "HtmlComment", "CDataComment", "UnexpectedCharacter",
+	"ANY",
 }
 
 var ruleNames = []string{
@@ -685,6 +686,7 @@ const (
 	JavaScriptParserHtmlComment                = 121
 	JavaScriptParserCDataComment               = 122
 	JavaScriptParserUnexpectedCharacter        = 123
+	JavaScriptParserANY                        = 124
 )
 
 // JavaScriptParser rules.
@@ -4074,6 +4076,10 @@ func (s *WhileStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface
 
 type ForStatementContext struct {
 	*IterationStatementContext
+	Init   IExpressionSequenceContext
+	Test   IExpressionSequenceContext
+	Update IExpressionSequenceContext
+	Body   IStatementContext
 }
 
 func NewForStatementContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ForStatementContext {
@@ -4085,6 +4091,22 @@ func NewForStatementContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *F
 
 	return p
 }
+
+func (s *ForStatementContext) GetInit() IExpressionSequenceContext { return s.Init }
+
+func (s *ForStatementContext) GetTest() IExpressionSequenceContext { return s.Test }
+
+func (s *ForStatementContext) GetUpdate() IExpressionSequenceContext { return s.Update }
+
+func (s *ForStatementContext) GetBody() IStatementContext { return s.Body }
+
+func (s *ForStatementContext) SetInit(v IExpressionSequenceContext) { s.Init = v }
+
+func (s *ForStatementContext) SetTest(v IExpressionSequenceContext) { s.Test = v }
+
+func (s *ForStatementContext) SetUpdate(v IExpressionSequenceContext) { s.Update = v }
+
+func (s *ForStatementContext) SetBody(v IStatementContext) { s.Body = v }
 
 func (s *ForStatementContext) GetRuleContext() antlr.RuleContext {
 	return s
@@ -4120,6 +4142,16 @@ func (s *ForStatementContext) Statement() IStatementContext {
 	return t.(IStatementContext)
 }
 
+func (s *ForStatementContext) VariableDeclarationList() IVariableDeclarationListContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IVariableDeclarationListContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IVariableDeclarationListContext)
+}
+
 func (s *ForStatementContext) AllExpressionSequence() []IExpressionSequenceContext {
 	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*IExpressionSequenceContext)(nil)).Elem())
 	var tst = make([]IExpressionSequenceContext, len(ts))
@@ -4141,16 +4173,6 @@ func (s *ForStatementContext) ExpressionSequence(i int) IExpressionSequenceConte
 	}
 
 	return t.(IExpressionSequenceContext)
-}
-
-func (s *ForStatementContext) VariableDeclarationList() IVariableDeclarationListContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IVariableDeclarationListContext)(nil)).Elem(), 0)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IVariableDeclarationListContext)
 }
 
 func (s *ForStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
@@ -4439,7 +4461,10 @@ func (p *JavaScriptParser) IterationStatement() (localctx IIterationStatementCon
 		case JavaScriptParserRegularExpressionLiteral, JavaScriptParserOpenBracket, JavaScriptParserOpenParen, JavaScriptParserOpenBrace, JavaScriptParserPlusPlus, JavaScriptParserMinusMinus, JavaScriptParserPlus, JavaScriptParserMinus, JavaScriptParserBitNot, JavaScriptParserNot, JavaScriptParserNullLiteral, JavaScriptParserBooleanLiteral, JavaScriptParserDecimalLiteral, JavaScriptParserHexIntegerLiteral, JavaScriptParserOctalIntegerLiteral, JavaScriptParserOctalIntegerLiteral2, JavaScriptParserBinaryIntegerLiteral, JavaScriptParserBigHexIntegerLiteral, JavaScriptParserBigOctalIntegerLiteral, JavaScriptParserBigBinaryIntegerLiteral, JavaScriptParserBigDecimalIntegerLiteral, JavaScriptParserTypeof, JavaScriptParserNew, JavaScriptParserVoid, JavaScriptParserFunction, JavaScriptParserThis, JavaScriptParserDelete, JavaScriptParserClass, JavaScriptParserSuper, JavaScriptParserImport, JavaScriptParserAsync, JavaScriptParserAwait, JavaScriptParserYield, JavaScriptParserIdentifier, JavaScriptParserStringLiteral, JavaScriptParserTemplateStringLiteral:
 			{
 				p.SetState(323)
-				p.ExpressionSequence()
+
+				var _x = p.ExpressionSequence()
+
+				localctx.(*ForStatementContext).Init = _x
 			}
 
 		case JavaScriptParserVar, JavaScriptParserConst, JavaScriptParserLet:
@@ -4463,7 +4488,10 @@ func (p *JavaScriptParser) IterationStatement() (localctx IIterationStatementCon
 		if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptParserVoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
 			{
 				p.SetState(328)
-				p.ExpressionSequence()
+
+				var _x = p.ExpressionSequence()
+
+				localctx.(*ForStatementContext).Test = _x
 			}
 
 		}
@@ -4478,7 +4506,10 @@ func (p *JavaScriptParser) IterationStatement() (localctx IIterationStatementCon
 		if (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<JavaScriptParserRegularExpressionLiteral)|(1<<JavaScriptParserOpenBracket)|(1<<JavaScriptParserOpenParen)|(1<<JavaScriptParserOpenBrace)|(1<<JavaScriptParserPlusPlus)|(1<<JavaScriptParserMinusMinus)|(1<<JavaScriptParserPlus)|(1<<JavaScriptParserMinus)|(1<<JavaScriptParserBitNot)|(1<<JavaScriptParserNot))) != 0) || (((_la-59)&-(0x1f+1)) == 0 && ((1<<uint((_la-59)))&((1<<(JavaScriptParserNullLiteral-59))|(1<<(JavaScriptParserBooleanLiteral-59))|(1<<(JavaScriptParserDecimalLiteral-59))|(1<<(JavaScriptParserHexIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral-59))|(1<<(JavaScriptParserOctalIntegerLiteral2-59))|(1<<(JavaScriptParserBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigHexIntegerLiteral-59))|(1<<(JavaScriptParserBigOctalIntegerLiteral-59))|(1<<(JavaScriptParserBigBinaryIntegerLiteral-59))|(1<<(JavaScriptParserBigDecimalIntegerLiteral-59))|(1<<(JavaScriptParserTypeof-59))|(1<<(JavaScriptParserNew-59))|(1<<(JavaScriptParserVoid-59))|(1<<(JavaScriptParserFunction-59))|(1<<(JavaScriptParserThis-59)))) != 0) || (((_la-93)&-(0x1f+1)) == 0 && ((1<<uint((_la-93)))&((1<<(JavaScriptParserDelete-93))|(1<<(JavaScriptParserClass-93))|(1<<(JavaScriptParserSuper-93))|(1<<(JavaScriptParserImport-93))|(1<<(JavaScriptParserAsync-93))|(1<<(JavaScriptParserAwait-93))|(1<<(JavaScriptParserYield-93))|(1<<(JavaScriptParserIdentifier-93))|(1<<(JavaScriptParserStringLiteral-93))|(1<<(JavaScriptParserTemplateStringLiteral-93)))) != 0) {
 			{
 				p.SetState(332)
-				p.ExpressionSequence()
+
+				var _x = p.ExpressionSequence()
+
+				localctx.(*ForStatementContext).Update = _x
 			}
 
 		}
@@ -4488,7 +4519,10 @@ func (p *JavaScriptParser) IterationStatement() (localctx IIterationStatementCon
 		}
 		{
 			p.SetState(336)
-			p.Statement()
+
+			var _x = p.Statement()
+
+			localctx.(*ForStatementContext).Body = _x
 		}
 
 	case 4:
@@ -4583,6 +4617,7 @@ func (p *JavaScriptParser) IterationStatement() (localctx IIterationStatementCon
 			p.SetState(357)
 			p.Identifier()
 		}
+		
 		p.SetState(358)
 
 		if !(p.p("of")) {
@@ -5496,6 +5531,18 @@ type ICaseBlockContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetMain returns the Main rule contexts.
+	GetMain() ICaseClausesContext
+
+	// GetDef returns the Def rule contexts.
+	GetDef() ICaseClausesContext
+
+	// SetMain sets the Main rule contexts.
+	SetMain(ICaseClausesContext)
+
+	// SetDef sets the Def rule contexts.
+	SetDef(ICaseClausesContext)
+
 	// IsCaseBlockContext differentiates from other interfaces.
 	IsCaseBlockContext()
 }
@@ -5503,6 +5550,8 @@ type ICaseBlockContext interface {
 type CaseBlockContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	Main   ICaseClausesContext
+	Def    ICaseClausesContext
 }
 
 func NewEmptyCaseBlockContext() *CaseBlockContext {
@@ -5527,12 +5576,30 @@ func NewCaseBlockContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 
 func (s *CaseBlockContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *CaseBlockContext) GetMain() ICaseClausesContext { return s.Main }
+
+func (s *CaseBlockContext) GetDef() ICaseClausesContext { return s.Def }
+
+func (s *CaseBlockContext) SetMain(v ICaseClausesContext) { s.Main = v }
+
+func (s *CaseBlockContext) SetDef(v ICaseClausesContext) { s.Def = v }
+
 func (s *CaseBlockContext) OpenBrace() antlr.TerminalNode {
 	return s.GetToken(JavaScriptParserOpenBrace, 0)
 }
 
 func (s *CaseBlockContext) CloseBrace() antlr.TerminalNode {
 	return s.GetToken(JavaScriptParserCloseBrace, 0)
+}
+
+func (s *CaseBlockContext) DefaultClause() IDefaultClauseContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IDefaultClauseContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IDefaultClauseContext)
 }
 
 func (s *CaseBlockContext) AllCaseClauses() []ICaseClausesContext {
@@ -5556,16 +5623,6 @@ func (s *CaseBlockContext) CaseClauses(i int) ICaseClausesContext {
 	}
 
 	return t.(ICaseClausesContext)
-}
-
-func (s *CaseBlockContext) DefaultClause() IDefaultClauseContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IDefaultClauseContext)(nil)).Elem(), 0)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IDefaultClauseContext)
 }
 
 func (s *CaseBlockContext) GetRuleContext() antlr.RuleContext {
@@ -5619,7 +5676,10 @@ func (p *JavaScriptParser) CaseBlock() (localctx ICaseBlockContext) {
 	if _la == JavaScriptParserCase {
 		{
 			p.SetState(408)
-			p.CaseClauses()
+
+			var _x = p.CaseClauses()
+
+			localctx.(*CaseBlockContext).Main = _x
 		}
 
 	}
@@ -5639,7 +5699,10 @@ func (p *JavaScriptParser) CaseBlock() (localctx ICaseBlockContext) {
 		if _la == JavaScriptParserCase {
 			{
 				p.SetState(412)
-				p.CaseClauses()
+
+				var _x = p.CaseClauses()
+
+				localctx.(*CaseBlockContext).Def = _x
 			}
 
 		}

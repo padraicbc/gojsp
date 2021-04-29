@@ -56,7 +56,7 @@ a = 13;
 	// ExpressionStatement -> ExpressionSequence -> ArrowFunction
 	// either way below can access
 	exp1, exp2 := rfs[0], rfs[1]
-	ar1, ar2 := exp1.(*vast.Statement).FirstChild().(*vast.ExpressionStatement).ExpSequence.FirstChild().(*vast.ArrowFunction),
+	ar1, ar2 := exp1.(*vast.Statement).FirstChild().(*vast.ExpressionStatement).ExpressionSequence.FirstChild().(*vast.ArrowFunction),
 		exp2.FirstChild().FirstChild().FirstChild().(*vast.ArrowFunction)
 
 	fmt.Println(exp1.Code())
@@ -73,7 +73,7 @@ a = 13;
 	// FirstChild() -> .Next() = brace then return
 	ret := bdy.FirstChild().Next().FirstChild().(*vast.ReturnStatement)
 	// is a left/right with single token expressions
-	ret.ExpSeq.FirstChild().(*vast.LRExpression).OP().SetValue("/")
+	ret.ExpressionSequence.FirstChild().(*vast.LRExpression).OP().SetValue("/")
 	fmt.Println(exp2.Code())
 	// source stays the same
 	fmt.Println(exp2.GetInfo().Source)

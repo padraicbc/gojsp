@@ -154,9 +154,9 @@ func (v *Visitor) VisitBlock(ctx *base.BlockContext) interface{} {
 type ExpressionStatement struct {
 	*SourceInfo
 	// singlexpression(s)
-	ExpSequence *ExpressionSequence
-	firstChild  VNode
-	Eos         Token
+	ExpressionSequence *ExpressionSequence
+	firstChild         VNode
+	Eos                Token
 
 	prev, next VNode
 }
@@ -199,14 +199,14 @@ func (v *Visitor) VisitExpressionStatement(ctx *base.ExpressionStatementContext)
 	exp := &ExpressionStatement{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
-	exp.ExpSequence = v.VisitExpressionSequence(
+	exp.ExpressionSequence = v.VisitExpressionSequence(
 		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
-	exp.firstChild = exp.ExpSequence
+	exp.firstChild = exp.ExpressionSequence
 
 	if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
 		exp.Eos = tk
-		exp.ExpSequence.SetNext(tk)
-		tk.SetPrev(exp.ExpSequence)
+		exp.ExpressionSequence.SetNext(tk)
+		tk.SetPrev(exp.ExpressionSequence)
 
 	}
 
@@ -301,21 +301,75 @@ func (v *Visitor) VisitEmptyStatement_(ctx *base.EmptyStatement_Context) interfa
 // ifStatement
 //     : If '(' expressionSequence ')' statement (Else statement)?
 //     ;
-func (v *Visitor) VisitIfStatement(ctx *base.IfStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+type IfStatement struct {
+	*SourceInfo
+	If         Token
+	OpenParen  Token
+	Test       *ExpressionSequence
+	CloseParen Token
+	Consequent VNode
+	Else       Token
+	Alternate  VNode
+	firstChild VNode
+	prev, next VNode
 }
 
-// iterationStatement
-//     : Do statement While '(' expressionSequence ')' eos                                                                       # DoStatement
-//    ....
+var _ VNode = (*IfStatement)(nil)
+
+func (i *IfStatement) Type() string {
+	return "IfStatement"
+}
+func (i *IfStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *IfStatement) Next() VNode {
+	return i.next
+}
+func (i *IfStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *IfStatement) Prev() VNode {
+	return i.prev
+}
+func (i *IfStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *IfStatement) FirstChild() VNode {
+	return i.firstChild
+}
+func (v *Visitor) VisitIfStatement(ctx *base.IfStatementContext) interface{} {
+	if v.Debug {
+		log.Println("VisitIfStatement", ctx.GetText())
+	}
+	ifs := &IfStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	ifs.If = ident(v, ctx.If().GetSymbol())
+	ifs.firstChild = ifs.If
+	ifs.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
+	ifs.Test = v.VisitExpressionSequence(
+		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+	ifs.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
+	ifs.Consequent = v.Visit(ctx.Statement(0)).(VNode)
+	if ctx.Else() != nil {
+		ifs.Else = ident(v, ctx.Else().GetSymbol())
+	}
+	if st2 := ctx.Statement(1); st2 != nil {
+		ifs.Alternate = v.Visit(st2).(VNode)
+	}
+
+	setAllSibs(ifs.If, ifs.OpenParen, ifs.Test, ifs.CloseParen, ifs.Consequent, ifs.Else, ifs.Alternate)
+	return ifs
+}
+
+//  Do statement While '(' expressionSequence ')' eos                                                                       # DoStatement
 type DoStatement struct {
 	*SourceInfo
 	Do                 Token
 	Statement          VNode
 	While              Token
 	OpenParen          Token
-	CloseParen         Token
 	ExpressionSequence *ExpressionSequence
+	CloseParen         Token
+	Eos                Token
 
 	firstChild VNode
 
@@ -358,8 +412,20 @@ func (v *Visitor) VisitDoStatement(ctx *base.DoStatementContext) interface{} {
 		log.Println("VisitDoStatement", ctx.GetText())
 	}
 	d := &DoStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	_ = d
-	return v.VisitChildren(ctx)
+	d.Do = ident(v, ctx.Do().GetSymbol())
+	d.firstChild = d.Do
+	d.Statement = v.Visit(ctx.Statement()).(VNode)
+	d.While = ident(v, ctx.While().GetSymbol())
+	d.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
+	d.ExpressionSequence = v.VisitExpressionSequence(
+		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+	d.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
+	if ctx.Eos() != nil {
+		d.Eos = v.VisitEos(ctx.Eos().(*base.EosContext)).(Token)
+	}
+	setAllSibs(d.Do, d.Statement, d.While, d.OpenParen, d.ExpressionSequence, d.CloseParen, d.Eos)
+
+	return d
 }
 
 // continueStatement
@@ -407,18 +473,16 @@ func (v *Visitor) VisitContinueStatement(ctx *base.ContinueStatementContext) int
 	c.firstChild = c.Continue
 	if ctx.Identifier() != nil {
 		c.Identifier = v.VisitIdentifier(ctx.Identifier().(*base.IdentifierContext)).(Token)
-		c.Continue.SetNext(c.Identifier)
-		c.Identifier.SetPrev(c.Continue)
+
 	}
 	if ctx.Eos() != nil {
 		if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
-			c.Identifier.SetNext(tk)
-			tk.SetPrev(c.Identifier)
 			c.Eos = tk
 
 		}
 
 	}
+	setAllSibs(c.Continue, c.Identifier, c.Eos)
 
 	return c
 }
@@ -426,13 +490,13 @@ func (v *Visitor) VisitContinueStatement(ctx *base.ContinueStatementContext) int
 // While '(' expressionSequence ')' statement
 type WhileStatement struct {
 	*SourceInfo
-	While       Token
-	OpenParen   Token
-	ExpSequence *ExpressionSequence
-	Statement   VNode
-	CloseParen  Token
-	firstChild  VNode
-	prev, next  VNode
+	While              Token
+	OpenParen          Token
+	ExpressionSequence *ExpressionSequence
+	Statement          VNode
+	CloseParen         Token
+	firstChild         VNode
+	prev, next         VNode
 }
 
 var _ VNode = (*WhileStatement)(nil)
@@ -466,27 +530,292 @@ func (v *Visitor) VisitWhileStatement(ctx *base.WhileStatementContext) interface
 	wh.firstChild = wh.While
 
 	wh.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
-	wh.ExpSequence = v.VisitExpressionSequence(
+	wh.ExpressionSequence = v.VisitExpressionSequence(
 		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
 	wh.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
 	wh.Statement = v.VisitStatement(ctx.Statement().(*base.StatementContext)).(VNode)
+	setAllSibs(wh.While, wh.OpenParen, wh.ExpressionSequence, wh.CloseParen, wh.Statement)
 	return wh
 }
 
+// For '(' (expressionSequence | variableDeclarationList)? ';' expressionSequence? ';' expressionSequence? ')' statement
+type ForStatement struct {
+	*SourceInfo
+	For       Token
+	OpenParen Token
+	// Init VNode  for both?
+	VariableDeclarationList *VariableDeclarationList
+	ExpressionSequence      *ExpressionSequence
+
+	SemiCol1 Token
+	SemiCol2 Token
+
+	CloseParen Token
+
+	Test       *ExpressionSequence
+	Update     *ExpressionSequence
+	Body       *Statement
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*ForStatement)(nil)
+
+func (i *ForStatement) Type() string {
+	return "ForStatement"
+}
+func (i *ForStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *ForStatement) Next() VNode {
+	return i.next
+}
+func (i *ForStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ForStatement) Prev() VNode {
+	return i.prev
+}
+func (i *ForStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ForStatement) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitForStatement(ctx *base.ForStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+	f := &ForStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	f.For = ident(v, ctx.For().GetSymbol())
+	f.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
+	if ctx.VariableDeclarationList() != nil {
+		f.VariableDeclarationList = v.VisitVariableDeclarationList(
+			ctx.VariableDeclarationList().(*base.VariableDeclarationListContext)).(*VariableDeclarationList)
+		// use test as way to differentiate expressions
+	} else if ctx.Test != nil {
+		f.ExpressionSequence = v.VisitExpressionSequence(
+			ctx.Test.(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+
+	}
+	if ctx.Update != nil {
+		f.Update = v.VisitExpressionSequence(
+			ctx.Update.(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+
+	}
+
+	f.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
+	// should neevr be nil?
+	if s1 := ctx.SemiColon(0); s1 != nil {
+		f.SemiCol1 = ident(v, s1.GetSymbol())
+	}
+	if s1 := ctx.SemiColon(1); s1 != nil {
+		f.SemiCol1 = ident(v, s1.GetSymbol())
+	}
+
+	f.Body = v.VisitStatement(ctx.Body.(*base.StatementContext)).(*Statement)
+
+	setAllSibs(
+		f.For,
+		f.OpenParen,
+		f.ExpressionSequence,
+		f.VariableDeclarationList,
+		f.SemiCol1,
+		f.Test,
+		f.SemiCol2,
+		f.Update,
+		f.CloseParen,
+		f.Body)
+	return f
 }
 
+// For '(' (singleExpression | variableDeclarationList) In expressionSequence ')' statement
+type ForInStatement struct {
+	*SourceInfo
+	For       Token
+	OpenParen Token
+
+	// Left for both?
+	SingleExp               VNode
+	VariableDeclarationList *VariableDeclarationList
+
+	In Token
+	// Right?
+	ExpressionSequence *ExpressionSequence
+	CloseParen         Token
+
+	Body       *Statement
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*ForInStatement)(nil)
+
+func (i *ForInStatement) Type() string {
+	return "ForInStatement"
+}
+func (i *ForInStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *ForInStatement) Next() VNode {
+	return i.next
+}
+func (i *ForInStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ForInStatement) Prev() VNode {
+	return i.prev
+}
+func (i *ForInStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ForInStatement) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitForInStatement(ctx *base.ForInStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+	f := &ForInStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
+	f.For = ident(v, ctx.For().GetSymbol())
+	f.firstChild = f.For
+	f.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
+
+	if ctx.SingleExpression() != nil {
+		f.SingleExp = v.Visit(ctx.SingleExpression()).(VNode)
+	} else if ctx.VariableDeclarationList() != nil {
+		f.VariableDeclarationList = v.VisitVariableDeclarationList(
+			ctx.VariableDeclarationList().(*base.VariableDeclarationListContext)).(*VariableDeclarationList)
+	}
+	f.In = ident(v, ctx.In().GetSymbol())
+	f.ExpressionSequence = v.VisitExpressionSequence(
+		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+	f.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
+
+	f.Body = v.VisitStatement(ctx.Statement().(*base.StatementContext)).(*Statement)
+	setAllSibs(f.For,
+		f.OpenParen,
+		f.SingleExp, f.VariableDeclarationList, f.In, f.ExpressionSequence,
+		f.CloseParen,
+		f.Body)
+	return f
 }
 
+// todo: check this works as "strange, 'of' is an identifier. and p.p("of") not work in sometime." notr in grammar
+// For Await? '(' (singleExpression | variableDeclarationList) identifier{p.p("of")}? expressionSequence ')' statement
+type ForOfStatement struct {
+	*SourceInfo
+	For                     Token
+	Await                   Token
+	OpenParen               Token
+	SingleExp               VNode
+	VariableDeclarationList *VariableDeclarationList
+	Of                      Token
+	ExpressionSequence      *ExpressionSequence
+	CloseParen              Token
+	Body                    *Statement
+	firstChild              VNode
+	prev, next              VNode
+}
+
+var _ VNode = (*ForOfStatement)(nil)
+
+func (i *ForOfStatement) Type() string {
+	return "ForOfStatement"
+}
+func (i *ForOfStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *ForOfStatement) Next() VNode {
+	return i.next
+}
+func (i *ForOfStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *ForOfStatement) Prev() VNode {
+	return i.prev
+}
+func (i *ForOfStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *ForOfStatement) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitForOfStatement(ctx *base.ForOfStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+	f := &ForOfStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
+	f.For = ident(v, ctx.For().GetSymbol())
+	f.firstChild = f.For
+	if ctx.Await() != nil {
+		f.Await = ident(v, ctx.Await().GetSymbol())
+	}
+
+	f.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
+
+	if ctx.SingleExpression() != nil {
+		f.SingleExp = v.Visit(ctx.SingleExpression()).(VNode)
+	} else if ctx.VariableDeclarationList() != nil {
+		f.VariableDeclarationList = v.VisitVariableDeclarationList(
+			ctx.VariableDeclarationList().(*base.VariableDeclarationListContext)).(*VariableDeclarationList)
+	}
+
+	f.Of = v.VisitIdentifier(ctx.Identifier().(*base.IdentifierContext)).(Token)
+	f.ExpressionSequence = v.VisitExpressionSequence(
+		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+	f.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
+
+	f.Body = v.VisitStatement(ctx.Statement().(*base.StatementContext)).(*Statement)
+	setAllSibs(f.For,
+		f.Await,
+		f.OpenParen,
+		f.SingleExp, f.VariableDeclarationList, f.Of, f.ExpressionSequence,
+		f.CloseParen,
+		f.Body)
+	return f
 }
 
+// breakStatement
+//     : Break ({p.notLineTerminator()}? identifier)? eos
+//     ;
+type BreakStatement struct {
+	*SourceInfo
+	Break      Token
+	Identifier Token
+	Eos        Token
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*BreakStatement)(nil)
+
+func (i *BreakStatement) Type() string {
+	return "BreakStatement"
+}
+func (i *BreakStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *BreakStatement) Next() VNode {
+	return i.next
+}
+func (i *BreakStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *BreakStatement) Prev() VNode {
+	return i.prev
+}
+func (i *BreakStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *BreakStatement) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitBreakStatement(ctx *base.BreakStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+	b := &BreakStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	b.Break = ident(v, ctx.Break().GetSymbol())
+	b.firstChild = b.Break
+	if ctx.Identifier() != nil {
+		b.Identifier = v.VisitIdentifier(ctx.Identifier().(*base.IdentifierContext)).(Token)
+	}
+	if ctx.Eos() != nil {
+		b.Eos = v.VisitEos(ctx.Eos().(*base.EosContext)).(Token)
+	}
+	setAllSibs(b.Break, b.Identifier, b.Eos)
+	return b
 }
 
 // returnStatement
@@ -496,8 +825,8 @@ type ReturnStatement struct {
 	*SourceInfo
 	Return Token
 
-	ExpSeq *ExpressionSequence
-	Eos    Token
+	ExpressionSequence *ExpressionSequence
+	Eos                Token
 
 	firstChild VNode
 
@@ -535,63 +864,129 @@ func (i *ReturnStatement) FirstChild() VNode {
 
 }
 
+// returnStatement
+//     : Return ({p.notLineTerminator()}? expressionSequence)? eos
+//     ;
 func (v *Visitor) VisitReturnStatement(ctx *base.ReturnStatementContext) interface{} {
 	if v.Debug {
 		log.Println("VisitReturnStatement", ctx.GetText())
 	}
 	r := &ReturnStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if r.firstChild == nil {
-			r.firstChild = ch
-		}
-		prev = setSib(prev, ch)
-
-		switch ch.Type() {
-		case "LToken":
-			tk := ch.(Token)
-			switch tk.SymbolName() {
-			case "Return":
-				r.Return = tk
-
-			case "SemiColon":
-
-				r.Eos = tk
-
-			default:
-				log.Panicf("%+v\n", ch)
-			}
-		case "ExpressionSequence":
-			r.ExpSeq = ch.(*ExpressionSequence)
-
-		default:
-
-			log.Panicf("%+v %s\n", ch, ch.Type())
-
-		}
+	r.Return = ident(v, ctx.Return().GetSymbol())
+	r.firstChild = r.Return
+	if ctx.ExpressionSequence() != nil {
+		r.ExpressionSequence = v.VisitExpressionSequence(
+			ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
 
 	}
+	if ctx.Eos() != nil {
+		r.Eos = v.VisitEos(ctx.Eos().(*base.EosContext)).(Token)
+	}
+	setAllSibs(r.Return, r.ExpressionSequence, r.Eos)
+
 	return r
 }
 
 // yieldStatement
 // : Yield ({p.notLineTerminator()}? expressionSequence)? eos
 // ;
+type YieldStatement struct {
+	*SourceInfo
+	Yield              Token
+	ExpressionSequence *ExpressionSequence
+	Eos                Token
+	firstChild         VNode
+	prev, next         VNode
+}
+
+var _ VNode = (*YieldStatement)(nil)
+
+func (i *YieldStatement) Type() string {
+	return "YieldStatement"
+}
+func (i *YieldStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *YieldStatement) Next() VNode {
+	return i.next
+}
+func (i *YieldStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *YieldStatement) Prev() VNode {
+	return i.prev
+}
+func (i *YieldStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *YieldStatement) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitYieldStatement(ctx *base.YieldStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+	r := &YieldStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	r.Yield = ident(v, ctx.Yield().GetSymbol())
+	r.firstChild = r.Yield
+	if ctx.ExpressionSequence() != nil {
+		r.ExpressionSequence = v.VisitExpressionSequence(
+			ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+
+	}
+	if ctx.Eos() != nil {
+		r.Eos = v.VisitEos(ctx.Eos().(*base.EosContext)).(Token)
+	}
+	setAllSibs(r.Yield, r.ExpressionSequence, r.Eos)
+
+	return r
 }
 
 // withStatement
 //     : With '(' expressionSequence ')' statement
 //     ;
-func (v *Visitor) VisitWithStatement(ctx *base.WithStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+type WithStatement struct {
+	*SourceInfo
+	With               Token
+	OpenParen          Token
+	ExpressionSequence *ExpressionSequence
+	CloseParen         Token
+	Body               *Statement
+	firstChild         VNode
+	prev, next         VNode
 }
 
-// switchStatement
-//     : Switch '(' expressionSequence ')' caseBlock
-//     ;
-func (v *Visitor) VisitSwitchStatement(ctx *base.SwitchStatementContext) interface{} {
-	return v.VisitChildren(ctx)
+var _ VNode = (*WithStatement)(nil)
+
+func (i *WithStatement) Type() string {
+	return "WithStatement"
+}
+func (i *WithStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *WithStatement) Next() VNode {
+	return i.next
+}
+func (i *WithStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *WithStatement) Prev() VNode {
+	return i.prev
+}
+func (i *WithStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *WithStatement) FirstChild() VNode {
+	return i.firstChild
+}
+func (v *Visitor) VisitWithStatement(ctx *base.WithStatementContext) interface{} {
+	r := &WithStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	r.With = ident(v, ctx.With().GetSymbol())
+	r.firstChild = r.With
+	r.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
+
+	r.ExpressionSequence = v.VisitExpressionSequence(
+		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+	r.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
+	r.Body = v.VisitStatement(ctx.Statement().(*base.StatementContext)).(*Statement)
+	setAllSibs(r.With, r.OpenParen, r.ExpressionSequence, r.CloseParen, r.Body)
+
+	return r
 }
