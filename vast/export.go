@@ -91,6 +91,7 @@ type ExportDefaultDeclaration struct {
 	Export     Token
 	Default    Token
 	SingleExp  VNode
+	Eos        Token
 	firstChild VNode
 	prev, next VNode
 }
@@ -127,8 +128,12 @@ func (v *Visitor) VisitExportDefaultDeclaration(ctx *base.ExportDefaultDeclarati
 	ed.Export = ident(v, ctx.Export().GetSymbol())
 	ed.Default = ident(v, ctx.Default().GetSymbol())
 	ed.SingleExp = v.Visit(ctx.SingleExpression()).(VNode)
-	setAllSibs(ed.Export, ed.Default, ed.SingleExp)
 
+	if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
+		ed.Eos = tk
+
+	}
+	setAllSibs(ed.Export, ed.Default, ed.SingleExp, ed.Eos)
 	return ed
 }
 

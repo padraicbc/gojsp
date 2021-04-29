@@ -3,6 +3,7 @@ package vast
 import (
 	"log"
 
+	antlr "github.com/padraicbc/antlr4"
 	"github.com/padraicbc/gojsp/base"
 )
 
@@ -132,7 +133,7 @@ func (v *Visitor) VisitVariableDeclaration(ctx *base.VariableDeclarationContext)
 			d.Assignable = ch
 		case *LToken:
 			t := ch.(Token)
-			if t.rname("") == "identifier" {
+			if t.RName("") == "identifier" {
 				d.Assignable = t
 				continue
 			}
@@ -216,7 +217,7 @@ func (v *Visitor) VisitVariableDeclarationList(ctx *base.VariableDeclarationList
 			case "Var", "Const", "Let":
 				vdl.VarModifier = t
 			default:
-				panic(ch.Type() + t.rname("") + t.SymbolName())
+				panic(ch.Type() + t.RName("") + t.SymbolName())
 			}
 
 		default:
@@ -261,5 +262,6 @@ func (v *Visitor) VisitAssignable(ctx *base.AssignableContext) interface{} {
 	if v.Debug {
 		log.Println("VisitAssignable", ctx.GetText())
 	}
-	return v.VisitChildren(ctx)
+
+	return v.Visit(ctx.GetChild(0).(antlr.ParseTree)).(VNode)
 }

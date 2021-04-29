@@ -14,7 +14,7 @@ type Token interface {
 	VNode
 	SetValue(string)
 	Value() string
-	rname(string) string
+	RName(string) string
 	SymbolName() string
 }
 
@@ -43,7 +43,7 @@ func (i *LToken) SymbolName() string {
 func (i *LToken) Code() string {
 	return i.value
 }
-func (i *LToken) rname(s string) string {
+func (i *LToken) RName(s string) string {
 	if s != "" {
 		i.rn = s
 		return ""

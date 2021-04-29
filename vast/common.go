@@ -14,6 +14,10 @@ func setAllSibs(nodes ...VNode) {
 
 	var prev VNode
 	for _, n := range nodes {
+		// catch optional/nil children here
+		if n == nil {
+			continue
+		}
 		if prev != nil {
 			prev.SetNext(n)
 			n.SetPrev(prev)
@@ -163,12 +167,14 @@ func (i *AliasName) FirstChild() VNode {
 
 }
 
+// todo: call visits directly
 func (v *Visitor) VisitAliasName(ctx *base.AliasNameContext) interface{} {
 	al := &AliasName{
 
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
 	var prev VNode
-	for i, ch := range v.VisitChildren(ctx).([]VNode) {
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
 		if al.firstChild == nil {
 			al.firstChild = ch
 		}
@@ -179,15 +185,13 @@ func (v *Visitor) VisitAliasName(ctx *base.AliasNameContext) interface{} {
 		switch t.SymbolName() {
 
 		case "Identifier":
-			// always there
-			if i == 0 {
-				al.IdentifierName = t
-				// > 0 means alias
-			} else {
-				al.Alias = t
-			}
+
+			al.IdentifierName = t
+
 		case "As":
 			al.As = t
+		case "Default":
+			al.IdentifierName = t
 		default:
 			panic(t.SymbolName())
 
@@ -221,11 +225,12 @@ func (v *Visitor) VisitChildren(node antlr.RuleNode) interface{} {
 
 		// satisifes both interfaces Token and VNode so check Token first as we set extra info specific to Token.
 		case Token:
-			rr.rname(v.ruleNames[node.GetRuleContext().GetRuleIndex()])
+			rr.RName(v.ruleNames[node.GetRuleContext().GetRuleIndex()])
 			result = append(result, rr)
 		case VNode:
 			result = append(result, rr)
 		case []VNode:
+
 			result = append(result, rr...)
 		case error:
 			// eof

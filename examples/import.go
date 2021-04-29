@@ -7,7 +7,8 @@ import (
 )
 
 func impexp() {
-	code := `import foo as name from "star-module-name";
+	code := `
+	import foo as name from "star-module-name";
 import defaultExport from "default-module-name";
 import defaultname, { export1, export2 as alias} from "module-name";
 import "module-name";
@@ -31,14 +32,14 @@ import {
  var promise = import("promise-module-name");
  let module = await import('/await/modules/my-module.js');
  export default foo;
- export default function name1()) { } // also class, function*
+ export default function name1() { } // also class, function*
 export { name1 as default };
  `
 
 	// all
 
 	v := vast.NewVisitor(code)
-	v.Debug = true
+	// v.Debug = true
 	// do whatever with errors
 	go v.DefaultError()
 
@@ -46,7 +47,7 @@ export { name1 as default };
 	vp := visit(tree, v)
 
 	for _, ch := range vp.(*vast.Program).Body {
-
+		ch = ch.FirstChild()
 		switch ch.Type() {
 		case "ImportStatement":
 
@@ -65,14 +66,15 @@ export { name1 as default };
 				fmt.Println(ims.ImportFromBlock.ImportFrom.Path.Value())
 			}
 			fmt.Println("After code", ch.Code())
+			fmt.Println()
 		case "VariableDeclarationList":
 			vl := ch.(*vast.VariableDeclarationList)
-			refT(vl)
+			fmt.Println(vl.VarModifier.Value())
+			fmt.Println()
 		default:
-			fmt.Printf("%+v %s\n", ch, ch.Type())
+			// fmt.Printf("%+v %s\n", ch, ch.Type())
 
 		}
-		fmt.Println()
 
 	}
 

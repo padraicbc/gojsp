@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/padraicbc/gojsp/vast"
 )
@@ -78,7 +77,7 @@ a = 13;
 	fmt.Println(exp2.Code())
 	// source stays the same
 	fmt.Println(exp2.GetInfo().Source)
-	log.Println(rfs[2].FirstChild().(*vast.VariableDeclarationList).VarModifier)
+	fmt.Println(rfs[2].FirstChild().(*vast.VariableDeclarationList).VarModifier)
 }
 
 func toes5() {

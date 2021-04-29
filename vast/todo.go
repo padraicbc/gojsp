@@ -1,6 +1,8 @@
 package vast
 
 import (
+	"log"
+
 	antlr "github.com/padraicbc/antlr4"
 	"github.com/padraicbc/gojsp/base"
 )
@@ -156,6 +158,7 @@ func (i *DefaultClause) FirstChild() VNode {
 }
 
 func (v *Visitor) VisitDefaultClause(ctx *base.DefaultClauseContext) interface{} {
+	log.Println("VisitDefaultClause")
 	return v.VisitChildren(ctx)
 }
 
@@ -387,6 +390,7 @@ func (i *TemplateStringExpression) FirstChild() VNode {
 }
 
 func (v *Visitor) VisitTemplateStringExpression(ctx *base.TemplateStringExpressionContext) interface{} {
+	log.Println("VisitTemplateStringExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -460,6 +464,7 @@ func (i *MetaExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitMetaExpression(ctx *base.MetaExpressionContext) interface{} {
+	log.Println("VisitMetaExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -496,6 +501,7 @@ func (i *NotExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitNotExpression(ctx *base.NotExpressionContext) interface{} {
+	log.Println("VisitNotExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -532,6 +538,7 @@ func (i *PreDecreaseExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitPreDecreaseExpression(ctx *base.PreDecreaseExpressionContext) interface{} {
+	log.Println("VisitPreDecreaseExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -566,6 +573,7 @@ func (i *ThisExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitThisExpression(ctx *base.ThisExpressionContext) interface{} {
+	log.Println("VisitThisExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -603,6 +611,7 @@ func (i *UnaryMinusExpression) FirstChild() VNode {
 }
 
 func (v *Visitor) VisitUnaryMinusExpression(ctx *base.UnaryMinusExpressionContext) interface{} {
+	log.Println("VisitUnaryMinusExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -639,6 +648,7 @@ func (i *UnaryPlusExpression) FirstChild() VNode {
 }
 
 func (v *Visitor) VisitUnaryPlusExpression(ctx *base.UnaryPlusExpressionContext) interface{} {
+	log.Println("VisitUnaryPlusExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -675,6 +685,7 @@ func (i *PostDecreaseExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitPostDecreaseExpression(ctx *base.PostDecreaseExpressionContext) interface{} {
+	log.Println("VisitPostDecreaseExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -711,6 +722,7 @@ func (i *TypeofExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitTypeofExpression(ctx *base.TypeofExpressionContext) interface{} {
+	log.Println("VisitTypeofExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -747,6 +759,7 @@ func (i *DeleteExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitDeleteExpression(ctx *base.DeleteExpressionContext) interface{} {
+	log.Println("VisitDeleteExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -781,6 +794,7 @@ func (i *SuperExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitSuperExpression(ctx *base.SuperExpressionContext) interface{} {
+	log.Println("VisitSuperExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -817,6 +831,7 @@ func (i *PostIncrementExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitPostIncrementExpression(ctx *base.PostIncrementExpressionContext) interface{} {
+	log.Println("VisitPostIncrementExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -853,6 +868,7 @@ func (i *YieldExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitYieldExpression(ctx *base.YieldExpressionContext) interface{} {
+	log.Println("VisitYieldExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -889,6 +905,7 @@ func (i *BitNotExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitBitNotExpression(ctx *base.BitNotExpressionContext) interface{} {
+	log.Println("VisitBitNotExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -926,6 +943,7 @@ func (i *NewExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitNewExpression(ctx *base.NewExpressionContext) interface{} {
+	log.Println("VisitNewExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -963,54 +981,17 @@ func (i *ClassExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitClassExpression(ctx *base.ClassExpressionContext) interface{} {
+	log.Println("VisitClassExpression")
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitMemberIndexExpression(ctx *base.MemberIndexExpressionContext) interface{} {
+	log.Println("VisitMemberIndexExpression")
 	return v.VisitChildren(ctx)
 }
 
 func (v *Visitor) VisitVoidExpression(ctx *base.VoidExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-// argument
-//     : Ellipsis? (singleExpression | identifier)
-//     ;
-type Argument struct {
-	*SourceInfo
-	Ellipsis   Token
-	SingleExp  VNode
-	Identifier VNode
-	firstChild VNode
-	prev, next VNode
-}
-
-var _ VNode = (*Argument)(nil)
-
-func (i *Argument) Type() string {
-	return "Argument"
-}
-func (i *Argument) Code() string {
-	return CodeDef(i)
-}
-func (i *Argument) Next() VNode {
-	return i.next
-}
-func (i *Argument) SetNext(v VNode) {
-	i.next = v
-}
-func (i *Argument) Prev() VNode {
-	return i.prev
-}
-func (i *Argument) SetPrev(v VNode) {
-	i.prev = v
-}
-func (i *Argument) FirstChild() VNode {
-	return i.firstChild
-}
-func (v *Visitor) VisitArgument(ctx *base.ArgumentContext) interface{} {
-
+	log.Println("VisitVoidExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -1031,11 +1012,13 @@ func (v *Visitor) Visit(tree antlr.ParseTree) interface{} {
 // VisitSourceElements is called when production sourceElements is entered.
 // Program -> this -> SourceElement
 func (v *Visitor) VisitSourceElements(ctx *base.SourceElementsContext) interface{} {
+	// log.Println("VisitSourceElements")
 	return v.VisitChildren(ctx)
 }
 
 // maybe make an a files on Visitor and non nil implementation gets called...
 func (v *Visitor) ShouldVisitNextChild(node antlr.RuleNode, currentResult interface{}) bool {
+
 	return true
 }
 
@@ -1060,7 +1043,7 @@ func (v *Visitor) VisitVariableStatement(ctx *base.VariableStatementContext) int
 //     ;
 
 func (v *Visitor) VisitClassDeclaration(ctx *base.ClassDeclarationContext) interface{} {
-
+	log.Println("VisitClassDeclaration")
 	return v.VisitChildren(ctx)
 }
 
@@ -1102,7 +1085,7 @@ func (i *ClassTail) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitClassTail(ctx *base.ClassTailContext) interface{} {
-
+	log.Println("VisitClassTail")
 	return v.VisitChildren(ctx)
 }
 
@@ -1159,7 +1142,7 @@ func (i *ClassElement) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitClassElement(ctx *base.ClassElementContext) interface{} {
-
+	log.Println("VisitClassElement")
 	return v.VisitChildren(ctx)
 }
 
@@ -1210,7 +1193,7 @@ func (i *MethodDefinition) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitMethodDefinition(ctx *base.MethodDefinitionContext) interface{} {
-
+	log.Println("VisitMethodDefinition")
 	return v.VisitChildren(ctx)
 }
 
@@ -1249,8 +1232,13 @@ func (i *ParenthesizedExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitParenthesizedExpression(ctx *base.ParenthesizedExpressionContext) interface{} {
-
-	return v.VisitChildren(ctx)
+	log.Println("VisitParenthesizedExpression")
+	vp := &ParenthesizedExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	vp.OpenParen = ident(v, ctx.OpenParen().GetSymbol())
+	vp.firstChild = vp.OpenParen
+	vp.ExpressionSequence = v.VisitExpressionSequence(ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
+	setAllSibs(vp.OpenParen, vp.ExpressionSequence, vp.CloseParen)
+	return vp
 }
 
 // Await singleExpression
@@ -1286,7 +1274,7 @@ func (i *AwaitExpression) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitAwaitExpression(ctx *base.AwaitExpressionContext) interface{} {
-
+	// log.Println("VisitAwaitExpression")
 	return v.VisitChildren(ctx)
 }
 
@@ -1325,6 +1313,7 @@ func (i *Getter) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitGetter(ctx *base.GetterContext) interface{} {
+	log.Println("VisitGetter")
 	return v.VisitChildren(ctx)
 }
 
@@ -1363,5 +1352,6 @@ func (i *Setter) FirstChild() VNode {
 	return i.firstChild
 }
 func (v *Visitor) VisitSetter(ctx *base.SetterContext) interface{} {
+	log.Println("VisitSetter")
 	return v.VisitChildren(ctx)
 }

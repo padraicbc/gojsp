@@ -410,6 +410,7 @@ func (v *Visitor) VisitTernaryExpression(ctx *base.TernaryExpressionContext) int
 
 }
 
+// singleExpression arguments
 type ArgumentsExpression struct {
 	*SourceInfo
 	SingleExp  VNode
@@ -553,7 +554,7 @@ func (v *Visitor) VisitComputedPropertyExpressionAssignment(ctx *base.ComputedPr
 	cp.firstChild = cp.OpenBracket
 	setAllSibs(cp.OpenBracket, cp.Key, cp.CloseBracket, cp.Colon, cp.Val)
 
-	return v.VisitChildren(ctx)
+	return cp
 }
 
 // Single node

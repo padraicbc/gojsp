@@ -29,9 +29,10 @@ func (v *Visitor) VisitIdentifierName(ctx *base.IdentifierNameContext) interface
 
 func (v *Visitor) VisitKeyword(ctx *base.KeywordContext) interface{} {
 	if v.Debug {
-		log.Println("VisitKeyword", ctx.GetText())
+		log.Println("VisitKeyword", ctx.GetText(), ctx.GetChildCount())
 	}
-	return v.VisitChildren(ctx).([]VNode)[0].(Token)
+
+	return v.Visit(ctx.GetChild(0).(antlr.ParseTree)).(VNode)
 
 }
 
@@ -42,10 +43,19 @@ func (v *Visitor) VisitKeyword(ctx *base.KeywordContext) interface{} {
 //     ;
 func (v *Visitor) VisitReservedWord(ctx *base.ReservedWordContext) interface{} {
 	if v.Debug {
-		log.Println("VisitReservedWord", ctx.GetText())
+		log.Println("VisitReservedWord", ctx.GetText(), ctx.GetChildCount())
+	}
+	if ctx.Keyword() != nil {
+		return v.VisitKeyword(ctx.Keyword().(*base.KeywordContext)).(VNode)
+	}
+	if ctx.NullLiteral() != nil {
+		return ident(v, ctx.NullLiteral().GetSymbol())
+	}
+	if ctx.BooleanLiteral() != nil {
+		return ident(v, ctx.BooleanLiteral().GetSymbol())
 	}
 
-	return ident(v, ctx.GetChild(0).(antlr.TerminalNode).GetSymbol())
+	panic("")
 }
 
 // eos

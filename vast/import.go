@@ -227,6 +227,7 @@ func (v *Visitor) VisitImportExpression(ctx *base.ImportExpressionContext) inter
 		if ime.firstChild == nil {
 			ime.firstChild = ch
 		}
+
 		prev = setSib(prev, ch)
 
 		t := ch.(Token)

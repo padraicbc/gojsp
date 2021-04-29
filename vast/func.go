@@ -3,7 +3,6 @@ package vast
 import (
 	"log"
 
-	antlr "github.com/padraicbc/antlr4"
 	"github.com/padraicbc/gojsp/base"
 )
 
@@ -258,16 +257,16 @@ func (v *Visitor) VisitArrowFunctionBody(ctx *base.ArrowFunctionBodyContext) int
 //     ;
 type FunctionDeclaration struct {
 	*SourceInfo
-	Async        Token
-	Function     Token
-	Star         Token
-	FunctionBody *FunctionBody
-	typeOf       string
+	Async    Token
+	Function Token
+	Star     Token
 
-	Identifier Token
-	OpenParen  Token
-	PList      *FormalParameterList
-	CloseParen Token
+	Identifier   Token
+	OpenParen    Token
+	PList        *FormalParameterList
+	CloseParen   Token
+	FunctionBody *FunctionBody
+
 	firstChild VNode
 
 	prev, next VNode
@@ -276,7 +275,7 @@ type FunctionDeclaration struct {
 var _ VNode = (*FunctionDeclaration)(nil)
 
 func (i *FunctionDeclaration) Type() string {
-	return i.typeOf
+	return "FunctionDeclaration"
 }
 func (i *FunctionDeclaration) Code() string {
 	return CodeDef(i)
@@ -302,7 +301,14 @@ func (i *FunctionDeclaration) FirstChild() VNode {
 
 }
 
-func fdecl(fd *FunctionDeclaration, ctx antlr.RuleNode, v *Visitor) interface{} {
+// functionDeclaration
+// : Async? Function '*'? identifier '(' formalParameterList? ')' functionBody
+// ;
+func (v *Visitor) VisitFunctionDeclaration(ctx *base.FunctionDeclarationContext) interface{} {
+	if v.Debug {
+		log.Println("VisitFunctionDeclaration", ctx.GetText(), ctx.GetChildCount())
+	}
+	fd := &FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
@@ -335,33 +341,22 @@ func fdecl(fd *FunctionDeclaration, ctx antlr.RuleNode, v *Visitor) interface{} 
 			fd.PList = ch.(*FormalParameterList)
 		case "FunctionBody":
 			fd.FunctionBody = ch.(*FunctionBody)
+
 		default:
-			log.Panicf("%+v %s\n", ch, ch.Type())
+			log.Printf("%+v %s\n", ch, ch.Type())
 
 		}
 	}
 	return fd
 }
 
-// functionDeclaration
-// : Async? Function '*'? identifier '(' formalParameterList? ')' functionBody
-// ;
-func (v *Visitor) VisitFunctionDeclaration(ctx *base.FunctionDeclarationContext) interface{} {
-	if v.Debug {
-		log.Println("VisitFunctionDeclaration", ctx.GetText())
-	}
-
-	return fdecl(&FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext), typeOf: "FunctionDeclaration"}, ctx, v)
-
-}
-
 func (v *Visitor) VisitFunctionDecl(ctx *base.FunctionDeclContext) interface{} {
 	if v.Debug {
 		log.Println("VisitFunctionDecl", ctx.GetText())
 	}
-	// log.Println(ctx)
-	return fdecl(&FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-		typeOf: "AnonymousFunctionDeclaration"}, ctx, v)
+
+	return v.VisitFunctionDeclaration(
+		ctx.FunctionDeclaration().(*base.FunctionDeclarationContext)).(*FunctionDeclaration)
 }
 
 // same as any fun dec
@@ -370,13 +365,95 @@ func (v *Visitor) VisitFunctionDecl(ctx *base.FunctionDeclContext) interface{} {
 //     | Async? Function '*'? '(' formalParameterList? ')' functionBody    # AnoymousFunctionDecl
 //     | Async? arrowFunctionParameters '=>' arrowFunctionBody                     # ArrowFunction
 //     ;
+type AnoymousFunctionDecl struct {
+	*SourceInfo
+	Async    Token
+	Function Token
+	Star     Token
+
+	OpenParen    Token
+	PList        *FormalParameterList
+	CloseParen   Token
+	FunctionBody *FunctionBody
+
+	firstChild VNode
+
+	prev, next VNode
+}
+
+var _ VNode = (*AnoymousFunctionDecl)(nil)
+
+func (i *AnoymousFunctionDecl) Type() string {
+	return "AnoymousFunctionDecl"
+}
+func (i *AnoymousFunctionDecl) Code() string {
+	return CodeDef(i)
+}
+func (i *AnoymousFunctionDecl) Next() VNode {
+
+	return i.next
+}
+func (i *AnoymousFunctionDecl) SetNext(v VNode) {
+	i.next = v
+}
+func (i *AnoymousFunctionDecl) Prev() VNode {
+
+	return i.prev
+}
+func (i *AnoymousFunctionDecl) SetPrev(v VNode) {
+	i.prev = v
+}
+
+func (i *AnoymousFunctionDecl) FirstChild() VNode {
+
+	return i.firstChild
+
+}
+
 func (v *Visitor) VisitAnoymousFunctionDecl(ctx *base.AnoymousFunctionDeclContext) interface{} {
 	if v.Debug {
 		log.Println("VisitAnoymousFunctionDecl", ctx.GetText())
 	}
 
-	return fdecl(&FunctionDeclaration{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
-		typeOf: "AnoymousFunctionDecl"}, ctx, v)
+	a := &AnoymousFunctionDecl{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if a.firstChild == nil {
+			a.firstChild = ch
+		}
+		prev = setSib(prev, ch)
+
+		switch ch.Type() {
+		case "LToken":
+
+			switch tk := ch.(Token); tk.SymbolName() {
+			case "Multiply":
+				a.Star = tk
+			case "Function":
+				a.Function = tk
+
+			case "OpenParen":
+				a.OpenParen = tk
+			case "CloseParen":
+				a.CloseParen = tk
+			case "Async":
+				a.Async = tk
+			default:
+				log.Panicf("%+v %s\n", ch, ch.Type())
+			}
+
+		case "FormalParameterList":
+			a.PList = ch.(*FormalParameterList)
+		case "FunctionBody":
+			a.FunctionBody = ch.(*FunctionBody)
+
+		default:
+			log.Printf("%+v %s\n", ch, ch.Type())
+
+		}
+	}
+	return a
 }
 
 // formalParameterList
@@ -655,95 +732,14 @@ func (v *Visitor) VisitFunctionBody(ctx *base.FunctionBodyContext) interface{} {
 	return fb
 }
 
-// Async? '*'? propertyName '(' formalParameterList?  ')'  functionBody
-type FunctionProperty struct {
-	*SourceInfo
-	Async               Token
-	Multiply            Token
-	PropertyName        *PropertyName
-	OpenParen           Token
-	FormalParameterList *FormalParameterList
-	CloseParen          Token
-	FunctionBody        *FunctionBody
-
-	firstChild VNode
-	prev, next VNode
-}
-
-var _ VNode = (*FunctionProperty)(nil)
-
-func (i *FunctionProperty) Type() string {
-	return "FunctionProperty"
-}
-func (i *FunctionProperty) Code() string {
-	return CodeDef(i)
-}
-func (i *FunctionProperty) Next() VNode {
-	return i.next
-}
-func (i *FunctionProperty) SetNext(v VNode) {
-	i.next = v
-}
-func (i *FunctionProperty) Prev() VNode {
-	return i.prev
-}
-func (i *FunctionProperty) SetPrev(v VNode) {
-	i.prev = v
-}
-func (i *FunctionProperty) FirstChild() VNode {
-	return i.firstChild
-}
-
-func (v *Visitor) VisitFunctionProperty(ctx *base.FunctionPropertyContext) interface{} {
-	if v.Debug {
-		log.Println("VisitFunctionProperty", ctx.GetText())
-	}
-	fp := &FunctionProperty{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if fp.firstChild == nil {
-			fp.firstChild = ch
-		}
-		prev = setSib(prev, ch)
-
-		switch ch.Type() {
-		case "LToken":
-			tk := ch.(Token)
-			switch tk.SymbolName() {
-			case "Async":
-				fp.Async = tk
-			case "Multiply":
-				fp.Multiply = tk
-			case "OpenParen":
-				fp.OpenParen = tk
-			case "CloseParen":
-				fp.CloseParen = tk
-
-			default:
-				log.Panicf("%+v\n", ch)
-			}
-		case "PropertyName":
-			fp.PropertyName = ch.(*PropertyName)
-		case "FunctionProperty":
-			fp.FunctionBody = ch.(*FunctionBody)
-		case "FormalParameterList":
-			fp.FormalParameterList = ch.(*FormalParameterList)
-		default:
-			log.Panicf("%+v %s\n", ch, ch.Type())
-
-		}
-
-	}
-	return fp
-}
-
 // arguments
 //     : '('(argument (',' argument)* ','?)?')'
 //     ;
 type Arguments struct {
 	*SourceInfo
-	OpenBrace  Token
-	Args       *Argument
+	OpenParen  Token
+	Args       []*Argument
+	Commas     []Token
 	CloseParen Token
 	firstChild VNode
 	prev, next VNode
@@ -776,25 +772,170 @@ func (v *Visitor) VisitArguments(ctx *base.ArgumentsContext) interface{} {
 	if v.Debug {
 		log.Println("VisitArguments", ctx.GetText())
 	}
+	log.Println("VisitArguments", ctx.GetText())
 
-	return v.VisitChildren(ctx)
+	args := &Arguments{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+
+	var prev VNode
+	for _, ch := range v.VisitChildren(ctx).([]VNode) {
+		if args.firstChild == nil {
+			args.firstChild = ch
+		}
+		prev = setSib(prev, ch)
+
+		switch ch.Type() {
+		case "Argument":
+			args.Args = append(args.Args, ch.(*Argument))
+
+		case "LToken":
+
+			switch tk := ch.(Token); tk.SymbolName() {
+			case "Comma":
+				args.Commas = append(args.Commas, tk)
+			case "OpenParen":
+				args.OpenParen = tk
+			case "CloseParen":
+				args.CloseParen = tk
+
+			default:
+				log.Panicf("%+v %s\n", ch, ch.Type())
+			}
+		default:
+			log.Panicf("%+v %s\n", ch, ch.Type())
+
+		}
+	}
+
+	return args
+
+}
+
+// argument
+//     : Ellipsis? (singleExpression | identifier)
+//     ;
+type Argument struct {
+	*SourceInfo
+	Ellipsis   Token
+	SingleExp  VNode
+	Identifier VNode
+	firstChild VNode
+	prev, next VNode
+}
+
+var _ VNode = (*Argument)(nil)
+
+func (i *Argument) Type() string {
+	return "Argument"
+}
+func (i *Argument) Code() string {
+	return CodeDef(i)
+}
+func (i *Argument) Next() VNode {
+	return i.next
+}
+func (i *Argument) SetNext(v VNode) {
+	i.next = v
+}
+func (i *Argument) Prev() VNode {
+	return i.prev
+}
+func (i *Argument) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *Argument) FirstChild() VNode {
+	return i.firstChild
+}
+func (v *Visitor) VisitArgument(ctx *base.ArgumentContext) interface{} {
+	log.Println("VisitArgument")
+	a := &Argument{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	if ctx.Ellipsis() != nil {
+		a.Ellipsis = ident(v, ctx.Ellipsis().GetSymbol())
+		a.firstChild = a.Ellipsis
+	}
+	if ctx.SingleExpression() != nil {
+		a.SingleExp = v.Visit(ctx.SingleExpression()).(VNode)
+		if a.firstChild == nil {
+			a.firstChild = a.SingleExp
+		}
+	}
+	if ctx.Identifier() != nil {
+		a.Identifier = v.VisitIdentifier(ctx.Identifier().(*base.IdentifierContext)).(Token)
+		if a.firstChild == nil {
+			a.firstChild = a.Identifier
+		}
+	}
+	setAllSibs(a.Ellipsis, a.SingleExp, a.Identifier)
+
+	return a
 }
 
 // singleExpression '?'? '.' '#'? identifierName
+type MemberDotExpression struct {
+	*SourceInfo
+	SingleExp      VNode
+	QuestionMark   Token
+	Dot            Token
+	Hashtag        Token
+	IdentifierName Token
+	firstChild     VNode
+	prev, next     VNode
+}
+
+var _ VNode = (*MemberDotExpression)(nil)
+
+func (i *MemberDotExpression) Type() string {
+	return "MemberDotExpression"
+}
+func (i *MemberDotExpression) Code() string {
+	return CodeDef(i)
+}
+func (i *MemberDotExpression) Next() VNode {
+	return i.next
+}
+func (i *MemberDotExpression) SetNext(v VNode) {
+	i.next = v
+}
+func (i *MemberDotExpression) Prev() VNode {
+	return i.prev
+}
+func (i *MemberDotExpression) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *MemberDotExpression) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitMemberDotExpression(ctx *base.MemberDotExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitMemberDotExpression", ctx.GetText())
 	}
+	md := &MemberDotExpression{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 
-	return v.VisitChildren(ctx)
+	md.SingleExp = v.Visit(ctx.SingleExpression()).(VNode)
+	md.firstChild = md.SingleExp
+
+	if ctx.QuestionMark() != nil {
+		md.QuestionMark = ident(v, ctx.QuestionMark().GetSymbol())
+	}
+	if ctx.Dot() != nil {
+		md.Dot = ident(v, ctx.Dot().GetSymbol())
+	}
+	if ctx.Hashtag() != nil {
+		md.Hashtag = ident(v, ctx.Hashtag().GetSymbol())
+	}
+	md.IdentifierName = v.VisitIdentifierName(ctx.IdentifierName().(*base.IdentifierNameContext)).(Token)
+
+	setAllSibs(md.SingleExp, md.QuestionMark, md.Dot, md.Hashtag, md.IdentifierName)
+
+	return md
+
 }
 
 // singleExpression
-//     : anoymousFunction                                                      # FunctionExpression
+//     : anoymousFunction                                                       # FunctionExpression
 func (v *Visitor) VisitFunctionExpression(ctx *base.FunctionExpressionContext) interface{} {
 	if v.Debug {
 		log.Println("VisitFunctionExpression", ctx.GetText())
 	}
-
-	return v.VisitChildren(ctx)
+	// todo: check what can be run
+	return v.VisitChildren(ctx).([]VNode)[0]
 }

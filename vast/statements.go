@@ -219,8 +219,9 @@ func (v *Visitor) VisitExpressionStatement(ctx *base.ExpressionStatementContext)
 type ExpressionSequence struct {
 	*SourceInfo
 	// 1-n singleexpressions
-	Commas     []Token
-	firstChild VNode
+	Commas      []Token
+	Expressions []VNode
+	firstChild  VNode
 
 	prev, next VNode
 }
@@ -259,6 +260,7 @@ func (v *Visitor) VisitExpressionSequence(ctx *base.ExpressionSequenceContext) i
 	if v.Debug {
 		log.Println("VisitExpressionSequence", ctx.GetText())
 	}
+
 	e := &ExpressionSequence{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
 	var prev VNode
 	for _, ch := range v.VisitChildren(ctx).([]VNode) {
@@ -266,17 +268,19 @@ func (v *Visitor) VisitExpressionSequence(ctx *base.ExpressionSequenceContext) i
 		if e.firstChild == nil {
 			e.firstChild = ch
 		}
+
 		prev = setSib(prev, ch)
 
-		switch ch.Type() {
-		case "LToken":
+		switch rr := ch.(type) {
+		case *LToken:
 			// always this?
-			e.Commas = append(e.Commas, ch.(Token))
-
+			e.Commas = append(e.Commas, rr)
 			// todo: leave as is or add specific SinglesExpressions?
 			// also maybe type all singleExpressions.
+		case VNode:
+			e.Expressions = append(e.Expressions, ch)
 		default:
-			// log.Println(ch.Type())
+			log.Panic(ch.Type())
 			// ArrowFunction
 			// PlusExpression
 
