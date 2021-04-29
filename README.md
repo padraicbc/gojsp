@@ -15,14 +15,11 @@ Thre are a few example functions in the exampls folder including how to parse an
     )
 
 
-    code := `i + j;`
+    
+	code := `i + j;`
 	v := vast.NewVisitor(code)
 	// do whatever with errors
-	go func() {
-		e := <-v.Errors
-		log.Fatal(e)
-	}()
-
+	go v.DefaultError()
 	// start at ExpressionSequence
 	tree := v.Parser.ExpressionSequence()
 	exp := visit(tree, v).(*vast.ExpressionSequence)
@@ -35,17 +32,18 @@ Thre are a few example functions in the exampls folder including how to parse an
 	expc.Right().(vast.Token).SetValue("1000")
 	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
-
-
-    //  reuse the lexer and parser(faster)
-	// can pass new/different antlrStream too antlr.NewInputStream(code) imn place of v.Stream.Seek(0)...
+	// reuse lexer and parser
 	v.Stream.Seek(0)
 	v.Lexer.SetInputStream(v.Stream)
 	tokenStream := antlr.NewCommonTokenStream(v.Lexer, antlr.TokenDefaultChannel)
 	v.Parser.SetInputStream(tokenStream)
 
-	tree2 := v.Parser.Program()
-	exp2 := visit(tree2, v).(*vast.Program).Body[0].(*vast.ExpressionStatement).FirstChild()
+	tree2 := v.Parser.ExpressionStatement()
+	exp2 := visit(tree2, v).(*vast.ExpressionStatement).FirstChild()
+
+	expc = exp2.FirstChild().(*vast.LRExpression)
+	// can be any singleExpression so any VNode
+	fmt.Println(expc.Left().(vast.Token).Value(), expc.OP().Value(), expc.Right().(vast.Token).Value())
 
 	expc = exp2.FirstChild().(*vast.LRExpression)
 	// can be any singleExpression so any VNode
@@ -75,29 +73,29 @@ And a very incomplete conversion from arrow to es5 functions but it shows the ge
 
 	v := vast.NewVisitor(code)
 	tree := v.Parser.Program()
+	go v.DefaultError()
 	// v.Debug = true
 
 	rfs := visit(tree, v).(*vast.Program).Body
-	// *ExpressionStatememts -> ExpressionSequence, iterate and check types
+	// Statement ->ExpressionStatememts -> ExpressionSequence
 	for _, fn := range rfs {
-		log.Println(fn.Type())
+
 		var trans string
 		// all with one child
-		af := fn.FirstChild().FirstChild().(*vast.ArrowFunction)
-		fmt.Println("Before ->", af.Code())
-		// either has a fucntion body with {} of a single expression.
-		if af.Body.FirstChild() != nil {
+		af := fn.FirstChild().FirstChild().FirstChild().(*vast.ArrowFunction)
+
+		// either has a function body with {} of a single expression.
+		if af.Body.SingleExpression != nil {
 			// can be there or not
 			var open, close string
 			if af.FunctionParameters.OpenParen == nil {
 				open, close = "(", ")"
 			}
-			log.Println(af.Body.FirstChild().Type(), af.FunctionParameters.Source)
-			trans = fmt.Sprintf("function%s%s%s {\n\treturn %s\n}",
-				open, af.FunctionParameters.Source, close, af.Body.FirstChild().GetInfo().Source)
 
-		}
-		if af.Body != nil {
+			trans = fmt.Sprintf("function%s%s%s {\n\treturn %s;\n}",
+				open, af.FunctionParameters.Source, close, af.Body.SingleExpression.Code())
+
+		} else {
 
 			trans = fmt.Sprintf("function%s %s", af.FunctionParameters.Source, af.Body.Source)
 

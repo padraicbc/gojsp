@@ -22,6 +22,7 @@ func fs() {
 	// tree := p.Program()
 
 	v := vast.NewVisitor(code)
+	go v.DefaultError()
 	tree := v.Parser.FunctionDeclaration()
 	// other way to go
 	// tree := p.Program()
@@ -105,6 +106,7 @@ c => c;
 
 	v := vast.NewVisitor(code)
 	tree := v.Parser.Program()
+	go v.DefaultError()
 	// v.Debug = true
 
 	rfs := visit(tree, v).(*vast.Program).Body
