@@ -166,10 +166,11 @@ func (v *Visitor) VisitFunctionProperty(ctx *base.FunctionPropertyContext) inter
 			}
 		case "PropertyName":
 			fp.PropertyName = ch.(*PropertyName)
-		case "FunctionProperty":
+		case "FunctionBody":
 			fp.FunctionBody = ch.(*FunctionBody)
 		case "FormalParameterList":
 			fp.FormalParameterList = ch.(*FormalParameterList)
+
 		default:
 			log.Panicf("%+v %s\n", ch, ch.Type())
 

@@ -63,24 +63,12 @@ func (v *Visitor) VisitArrayLiteral(ctx *base.ArrayLiteralContext) interface{} {
 	arl := &ArrayLiteral{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if arl.firstChild == nil {
-			arl.firstChild = ch
-		}
-		prev = setSib(prev, ch)
-
-		switch ch.Type() {
-		case "OpenBracket":
-			arl.OpenBracket = ch.(Token)
-		case "CloseBracket":
-			arl.CloseBracket = ch.(Token)
-		case "ElementList":
-			arl.Elems = ch.(*ElementList)
-
-		}
-
-	}
+	arl.OpenBracket = ident(v, ctx.OpenBracket().GetSymbol())
+	arl.firstChild = arl.OpenBracket
+	arl.Elems = v.VisitElementList(
+		ctx.ElementList().(*base.ElementListContext)).(*ElementList)
+	arl.CloseBracket = ident(v, ctx.CloseBracket().GetSymbol())
+	setAllSibs(arl.OpenBracket, arl.Elems, arl.CloseBracket)
 	return arl
 }
 
@@ -142,10 +130,14 @@ func (v *Visitor) VisitElementList(ctx *base.ElementListContext) interface{} {
 		switch ch.Type() {
 		case "ArrayElement":
 			el.ArrayElements = append(el.ArrayElements, ch.(*ArrayElement))
-		case "Comma":
+		case "LToken":
+			tk := ch.(Token)
+			if tk.SymbolName() != "Comma" {
+				log.Panicf("%+v %s\n", tk, tk.SymbolName())
+			}
 			el.Commas = append(el.Commas, ch.(Token))
 		default:
-			panic(ch.Type())
+			log.Panicf("%+v %s\n", ch, ch.Type())
 
 		}
 
@@ -196,25 +188,19 @@ func (v *Visitor) VisitArrayElement(ctx *base.ArrayElementContext) interface{} {
 	if v.Debug {
 		log.Println("VisitArrayElement", ctx.GetText())
 	}
-	ae := ArrayElement{
+	ae := &ArrayElement{
 		SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext),
 	}
-	var prev VNode
-	for _, ch := range v.VisitChildren(ctx).([]VNode) {
-		if ae.firstChild == nil {
-			ae.firstChild = ch
-		}
-		prev = setSib(prev, ch)
+	if ctx.Ellipsis() != nil {
 
-		switch ch.Type() {
-		case "Ellipsis":
-			ae.Ellipsis = ch.(Token)
-		case "SingleExpression":
-			ae.SingleExpression = ch
-		default:
-			log.Panicf("%+v %s\n", ch, ch.Type())
-		}
-
+		ae.Ellipsis = ident(v, ctx.Ellipsis().GetSymbol())
+		ae.firstChild = ae.Ellipsis
 	}
+	ae.SingleExpression = v.Visit(ctx.SingleExpression()).(VNode)
+	if ae.firstChild == nil {
+		ae.firstChild = ae.SingleExpression
+	}
+	setAllSibs(ae.Ellipsis, ae.SingleExpression)
+
 	return ae
 }

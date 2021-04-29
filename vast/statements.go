@@ -421,7 +421,9 @@ func (v *Visitor) VisitDoStatement(ctx *base.DoStatementContext) interface{} {
 		ctx.ExpressionSequence().(*base.ExpressionSequenceContext)).(*ExpressionSequence)
 	d.CloseParen = ident(v, ctx.CloseParen().GetSymbol())
 	if ctx.Eos() != nil {
-		d.Eos = v.VisitEos(ctx.Eos().(*base.EosContext)).(Token)
+		if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
+			d.Eos = tk
+		}
 	}
 	setAllSibs(d.Do, d.Statement, d.While, d.OpenParen, d.ExpressionSequence, d.CloseParen, d.Eos)
 
@@ -812,7 +814,9 @@ func (v *Visitor) VisitBreakStatement(ctx *base.BreakStatementContext) interface
 		b.Identifier = v.VisitIdentifier(ctx.Identifier().(*base.IdentifierContext)).(Token)
 	}
 	if ctx.Eos() != nil {
-		b.Eos = v.VisitEos(ctx.Eos().(*base.EosContext)).(Token)
+		if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
+			b.Eos = tk
+		}
 	}
 	setAllSibs(b.Break, b.Identifier, b.Eos)
 	return b
@@ -880,7 +884,9 @@ func (v *Visitor) VisitReturnStatement(ctx *base.ReturnStatementContext) interfa
 
 	}
 	if ctx.Eos() != nil {
-		r.Eos = v.VisitEos(ctx.Eos().(*base.EosContext)).(Token)
+		if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
+			r.Eos = tk
+		}
 	}
 	setAllSibs(r.Return, r.ExpressionSequence, r.Eos)
 
@@ -932,7 +938,9 @@ func (v *Visitor) VisitYieldStatement(ctx *base.YieldStatementContext) interface
 
 	}
 	if ctx.Eos() != nil {
-		r.Eos = v.VisitEos(ctx.Eos().(*base.EosContext)).(Token)
+		if tk, ok := v.VisitEos(ctx.Eos().(*base.EosContext)).(Token); ok {
+			r.Eos = tk
+		}
 	}
 	setAllSibs(r.Yield, r.ExpressionSequence, r.Eos)
 

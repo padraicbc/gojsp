@@ -876,11 +876,42 @@ func (v *Visitor) VisitErrorNode(node antlr.ErrorNode) interface{} {
 //     ;
 type VariableStatement struct {
 	*SourceInfo
+	VariableDeclarationList *VariableDeclarationList
+	Eos                     Token
+	firstChild              VNode
+	prev, next              VNode
 }
 
+var _ VNode = (*VariableStatement)(nil)
+
+func (i *VariableStatement) Type() string {
+	return "VariableStatement"
+}
+func (i *VariableStatement) Code() string {
+	return CodeDef(i)
+}
+func (i *VariableStatement) Next() VNode {
+	return i.next
+}
+func (i *VariableStatement) SetNext(v VNode) {
+	i.next = v
+}
+func (i *VariableStatement) Prev() VNode {
+	return i.prev
+}
+func (i *VariableStatement) SetPrev(v VNode) {
+	i.prev = v
+}
+func (i *VariableStatement) FirstChild() VNode {
+	return i.firstChild
+}
 func (v *Visitor) VisitVariableStatement(ctx *base.VariableStatementContext) interface{} {
 	// log.Println("VisitVariableStatement", ctx.GetText())
-	return v.VisitChildren(ctx)
+	d := &VariableStatement{SourceInfo: getSourceInfo(*ctx.BaseParserRuleContext)}
+	d.VariableDeclarationList = v.VisitVariableDeclarationList(
+		ctx.VariableDeclarationList().(*base.VariableDeclarationListContext)).(*VariableDeclarationList)
+	d.firstChild = d.VariableDeclarationList
+	return d
 }
 
 // classDeclaration

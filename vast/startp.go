@@ -125,7 +125,7 @@ func (i *Statement) FirstChild() VNode {
 	return i.firstChild
 }
 
-// not sure if just returning .Children() would be enough..
+// maybe add type dynamically bases on child?
 func (v *Visitor) VisitStatement(ctx *base.StatementContext) interface{} {
 	if v.Debug {
 		log.Println("VisitStatement", ctx.GetText(), ctx.GetChildCount())
