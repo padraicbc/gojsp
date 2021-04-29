@@ -77,7 +77,8 @@ a = 13;
 	fmt.Println(exp2.Code())
 	// source stays the same
 	fmt.Println(exp2.GetInfo().Source)
-	fmt.Println(rfs[2].FirstChild().(*vast.VariableDeclarationList).VarModifier)
+	// statement -> VariableStatment -> VariableDeclarationList
+	fmt.Println(rfs[2].FirstChild().FirstChild().(*vast.VariableDeclarationList).VarModifier)
 }
 
 func toes5() {

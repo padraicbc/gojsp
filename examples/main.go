@@ -15,14 +15,14 @@ func main() {
 	log.SetFlags(log.Llongfile)
 	//
 	it()
-	// coldHot()
+	coldHot()
 
-	// impexp()
-	// fs()
+	impexp()
+	fs()
 
-	// arrow()
-	// toes5()
-	// singleExp()
+	arrow()
+	toes5()
+	singleExp()
 }
 
 func visit(tree antlr.ParseTree, v *vast.Visitor) interface{} {
